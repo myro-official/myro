@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MYRO — Make Yourself, Reflect On</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Inter:wght@100..900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #050a14;
+            --bg-secondary: #081020;
+            --surface: #0c1628;
+            --text-primary: #ffffff;
+            --text-muted: #8892b0;
+            --text-faint: #475569;
+            --accent: #ffffff;
+            --overlay-dark: rgba(5, 10, 20, 0.45);
+            --overlay-deep: rgba(5, 10, 20, 0.75);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        html { 
+            scroll-behavior: smooth; 
+            font-size: 16px; 
+            overflow-x: hidden; 
+            max-width: 100%; 
+            width: 100%;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            word-break: keep-all;
+            max-width: 100%;
+            width: 100%;
+            position: relative;
+        }
+
+        /* ── Scroll Reveal ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.03); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: rgba(5,10,20,0); backdrop-filter: blur(0px);
+            transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+            border-bottom: 1px solid rgba(255,255,255,0);
+        }
+        nav.scrolled {
+            background: rgba(5,10,20,0.85); backdrop-filter: blur(20px);
+            padding: 0.8rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-logo, .nav-menu, .nav-cta {
+            opacity: 0; visibility: hidden; transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        nav.scrolled .nav-logo, nav.scrolled .nav-menu, nav.scrolled .nav-cta {
+            opacity: 1; visibility: visible; transform: translateY(0);
+        }
+        .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--text-primary); text-decoration: none; letter-spacing: 0.15em; }
+        .nav-menu { display: flex; align-items: center; gap: 1.5rem; }
+        .nav-links { display: none; gap: 1.5rem; }
+        @media (min-width: 1024px) { .nav-links { display: flex; } }
+        .nav-link { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-decoration: none; letter-spacing: 0.02em; transition: color 0.3s ease; }
+        .nav-link:hover { color: var(--text-primary); }
+        .nav-cta { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-primary); text-decoration: none; border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1rem; letter-spacing: 0.1em; transition: all 0.3s ease; }
+        .menu-toggle { display: block; background: none; border: none; color: #fff; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; padding: 0.5rem; }
+        @media (min-width: 1024px) { .menu-toggle { display: none; } }
+
+        .mobile-menu {
+            position: fixed; top: 0; right: -100%; width: 85%; height: 100vh;
+            background: var(--bg-primary); z-index: 1100;
+            display: flex; flex-direction: column; padding: 6rem 2.5rem;
+            transition: right 0.5s cubic-bezier(0.16,1,0.3,1);
+            box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; }
+        .mobile-nav-link { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; color: #fff; text-decoration: none; margin-bottom: 2.5rem; letter-spacing: -0.02em; }
+        .mobile-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 1050; display: none; }
+        .mobile-menu-overlay.active { display: block; }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-start;
+            position: relative; overflow: hidden;
+            padding-top: 2rem; padding-bottom: 4rem;
+        }
+        .hero-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%,-50%); z-index: 0; object-fit: cover; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, var(--overlay-dark) 0%, var(--bg-primary) 100%); z-index: 1; }
+        .mega-logo-container { width: 100%; position: relative; z-index: 2; overflow: visible; margin-bottom: 1rem; }
+        .mega-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(8rem, 55vw, 50rem);
+            line-height: 0.7; letter-spacing: -0.06em;
+            text-align: center; display: block; color: #ffffff;
+            text-shadow: 0 0 50px rgba(0,0,0,0.5);
+            pointer-events: none; width: 100%; white-space: nowrap; margin-left: -2%;
+            animation: heroLogoIn 1.4s cubic-bezier(0.2,0.8,0.2,1) forwards;
+        }
+        @keyframes heroLogoIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-content {
+            position: relative; z-index: 10; text-align: center;
+            padding: 0 1.5rem; width: 100%; max-width: 800px; margin-top: 1rem;
+            animation: heroContentIn 1.6s 0.3s cubic-bezier(0.2,0.8,0.2,1) both;
+        }
+        @keyframes heroContentIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-title { font-family: 'Outfit', sans-serif; font-size: clamp(0.75rem, 3.8vw, 1.3rem); font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 1.5rem; color: var(--text-primary); text-shadow: 0 2px 10px rgba(0,0,0,0.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .hero-copy { font-size: clamp(0.9rem, 3.5vw, 1.15rem); font-weight: 300; color: var(--text-muted); margin-bottom: 4rem; letter-spacing: 0.02em; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .hero-cta { display: inline-block; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; color: var(--bg-primary); background: var(--text-primary); padding: 1.3rem 3.5rem; text-decoration: none; letter-spacing: 0.15em; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+
+        /* ── 추구미란? 섹션 ── */
+        .chugumi-intro {
+            padding: clamp(8rem, 18vw, 11rem) 1.5rem clamp(4rem, 10vw, 7rem);
+            background: var(--bg-primary);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .chugumi-intro::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .chugumi-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(4rem, 18vw, 12rem);
+            letter-spacing: 0.05em;
+            line-height: 1;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            /* 페이드인 + 블러 선명 애니메이션 */
+            opacity: 0;
+            filter: blur(12px);
+            transform: translateY(20px);
+            transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        filter 1s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .chugumi-title.visible {
+            opacity: 1;
+            filter: blur(0px);
+            transform: translateY(0);
+        }
+        /* reveal 기본 transition 오버라이드 */
+        .chugumi-title.reveal {
+            transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        filter 1s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .chugumi-title span {
+            color: #fff;
+        }
+        .chugumi-def {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1rem, 3.5vw, 1.4rem);
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.9;
+            max-width: 680px;
+            margin: 0 auto 5rem auto;
+        }
+        br.mobile-br { display: none; }
+        @media (max-width: 768px) {
+            br.mobile-br { display: block; }
+        }
+        .chugumi-def strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* 사진 4장 가로 병렬 */
+        .chugumi-photos {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+            max-width: 1200px;
+            margin: 0 auto 5rem auto;
+            align-items: end;
+        }
+        @media (max-width: 768px) {
+            .chugumi-photos {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+        }
+        .chugumi-photo-wrap {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        /* 높이 변주로 감각적인 구도 */
+        .chugumi-photo-wrap:nth-child(1) { height: clamp(260px, 38vw, 480px); }
+        .chugumi-photo-wrap:nth-child(2) { height: clamp(220px, 30vw, 380px); }
+        .chugumi-photo-wrap:nth-child(3) { height: clamp(280px, 42vw, 520px); }
+        .chugumi-photo-wrap:nth-child(4) { height: clamp(200px, 28vw, 340px); }
+
+        .chugumi-photo-wrap img {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: top center;
+            display: block;
+            transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1), filter 0.5s ease;
+            filter: grayscale(20%);
+        }
+        .chugumi-photo-wrap:hover img {
+            transform: scale(1.06);
+            filter: grayscale(0%);
+        }
+        .chugumi-photo-label {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 1.5rem 1rem 1rem;
+            background: linear-gradient(to top, rgba(5,10,20,0.85) 0%, transparent 100%);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #fff;
+            transform: translateY(6px);
+            transition: transform 0.4s ease;
+        }
+        .chugumi-photo-wrap:hover .chugumi-photo-label {
+            transform: translateY(0);
+        }
+
+        /* MYRO 연결 문구 */
+        .chugumi-connect {
+            max-width: 760px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .chugumi-connect-line {
+            display: block;
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3));
+            margin: 0 auto 2.5rem auto;
+        }
+        .chugumi-connect p {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.1rem, 4vw, 1.6rem);
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        .chugumi-connect p strong {
+            color: #fff;
+            font-weight: 700;
+            display: block;
+            font-size: clamp(1.3rem, 5vw, 2rem);
+            margin-top: 0.5rem;
+        }
+
+        /* Naming Section */
+        .naming-section { padding: clamp(6rem, 15vw, 12rem) 1.5rem; position: relative; overflow: hidden; background-color: var(--bg-primary); }
+        .naming-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%,-50%); z-index: 0; object-fit: cover; opacity: 0.6; }
+        .naming-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--overlay-deep); backdrop-filter: blur(5px); z-index: 1; }
+        .naming-container { position: relative; z-index: 2; }
+        .naming-main-text { font-family: 'Outfit', sans-serif; font-size: clamp(2.5rem, 12vw, 6.5rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: clamp(3rem, 8vw, 6rem); text-align: center; }
+        .naming-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem; margin-bottom: clamp(4rem, 10vw, 8rem); }
+        @media (max-width: 768px) {
+            .naming-grid { grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem; }
+            .naming-item { display: grid; grid-template-columns: 100px 1fr; gap: 1.5rem; align-items: start; text-align: left; }
+            .naming-item div:first-child { height: 100px !important; margin-bottom: 0 !important; }
+            .naming-item img { height: 100px !important; }
+            .naming-item p { font-size: 0.85rem; line-height: 1.5; }
+            .naming-main-text { margin-bottom: 2rem; }
+        }
+        .naming-item .highlight { color: var(--text-primary); font-weight: 600; display: block; margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .naming-item p { font-size: 0.95rem; font-weight: 300; color: var(--text-muted); line-height: 1.8; }
+        .naming-story-box { text-align: center; }
+        .naming-story-box blockquote { font-family: 'Outfit', sans-serif; font-size: clamp(1.3rem, 5vw, 1.8rem); font-weight: 300; line-height: 1.5; font-style: italic; margin-bottom: 2.5rem; color: var(--text-primary); }
+        .naming-story-box .story-en { font-size: 0.95rem; font-weight: 300; color: var(--text-muted); line-height: 1.8; max-width: 750px; margin: 0 auto 2.5rem auto; }
+        .naming-story-box .story-ko { font-size: clamp(1rem, 3.5vw, 1.15rem); font-weight: 400; color: var(--text-primary); line-height: 1.9; max-width: 850px; margin: 0 auto; }
+
+        /* Social Proof */
+        .social-proof { background: var(--bg-secondary); padding: 2.5rem 1.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .social-proof p { font-size: 0.9rem; color: var(--text-muted); }
+        .social-proof span { color: var(--text-primary); font-weight: 800; }
+
+        /* Quiz Section */
+        .quiz-section {
+            padding: clamp(6rem, 15vw, 10rem) 1.5rem;
+            position: relative;
+            background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/NkEMaYOeNWUwSoYD.png');
+            background-size: cover; background-position: center; background-attachment: scroll;
+        }
+        @media (min-width: 1024px) { .quiz-section { background-attachment: fixed; } }
+        .quiz-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--overlay-deep); backdrop-filter: blur(5px); z-index: 1; }
+        .quiz-container { position: relative; z-index: 2; }
+        .section-title { font-family: 'Outfit', sans-serif; font-size: clamp(2.2rem, 8vw, 4rem); font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
+        .section-desc { font-size: 0.95rem; font-weight: 300; color: var(--text-muted); margin-bottom: 4rem; }
+
+        .quiz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+
+        .quiz-card {
+            position: relative;
+            height: clamp(320px, 50vw, 520px);
+            overflow: hidden;
+            background: #000;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+        }
+        .quiz-card:hover { transform: translateY(-8px); }
+        .quiz-card-photo {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease, filter 0.5s ease;
+            filter: brightness(0.7) grayscale(20%);
+        }
+        .quiz-card:hover .quiz-card-photo { transform: scale(1.05); filter: brightness(0.9) grayscale(0%); }
+        .quiz-card-photo-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, rgba(5,10,20,0.95) 15%, rgba(5,10,20,0.4) 50%, transparent 100%);
+        }
+        .quiz-card-body {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 2.5rem; color: #fff;
+            transform: translateY(0);
+            transition: transform 0.5s ease;
+        }
+        .quiz-card h3 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .quiz-card-slogan { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: #fff; }
+        .quiz-card-celebs { font-size: 0.8rem; font-weight: 600; opacity: 0.6; margin-bottom: 1.2rem; }
+        .quiz-card-desc { font-size: 0.9rem; font-weight: 300; line-height: 1.6; opacity: 0; transform: translateY(10px); transition: all 0.5s ease; }
+        .quiz-card:hover .quiz-card-desc { opacity: 0.85; transform: translateY(0); }
+
+        /* 모바일 터치 안내 문구 */
+        .quiz-card-touch-hint { display: none; }
+        @media (max-width: 768px) {
+            .quiz-card-touch-hint {
+                display: block;
+                margin-top: 1rem;
+                padding: 0.5rem 0.8rem;
+                font-size: 0.72rem;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: #fff;
+                background: rgba(255,255,255,0.12);
+                border: 1px solid rgba(255,255,255,0.25);
+                border-radius: 50px;
+                text-align: center;
+                opacity: 0;
+                transform: translateY(6px);
+                transition: all 0.4s ease 0.15s;
+            }
+        }
+
+        /* 모바일 터치 인터랙션 */
+        @media (max-width: 768px) {
+            /* 모바일에서는 hover 효과 비활성화 */
+            .quiz-card:hover { transform: none; }
+            .quiz-card:hover .quiz-card-photo { transform: none; filter: brightness(0.7) grayscale(20%); }
+            .quiz-card:hover .quiz-card-desc { opacity: 0; transform: translateY(10px); }
+            /* 1차 터치: desc + 안내 문구 표시 상태 (특이도 우선) */
+            .quiz-grid .quiz-card.mobile-desc-open .quiz-card-desc { opacity: 0.85 !important; transform: translateY(0) !important; }
+            .quiz-grid .quiz-card.mobile-desc-open .quiz-card-touch-hint { opacity: 1 !important; transform: translateY(0) !important; }
+            .quiz-grid .quiz-card.mobile-desc-open .quiz-card-photo { filter: brightness(0.9) grayscale(0%) !important; }
+            .quiz-grid .quiz-card.mobile-desc-open { transform: translateY(-4px) !important; }
+        }
+
+        .expansion-notice {
+            margin-top: 4rem;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        /* Mockup */
+        .mockup-section { background: var(--bg-secondary); padding: clamp(6rem, 15vw, 10rem) 1.5rem; }
+        .mockup-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: clamp(3rem, 8vw, 6rem); align-items: center; max-width: 1200px; margin: 0 auto; }
+        .mockup-visual { background: #000; border-radius: 30px 30px 0 0; padding: 2rem; box-shadow: 0 40px 80px rgba(0,0,0,0.6); }
+        .mockup-screen { background: var(--bg-primary); border-radius: 15px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+        .mockup-item { padding: 1rem 1.2rem; background: rgba(255, 255, 255, 0.05); border: 1px solid #fff; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #fff; cursor: pointer; transition: all 0.3s ease; }
+        .mockup-item:hover { background: #fff !important; color: #000 !important; transform: translateX(5px); border-color: #fff; }
+        .mockup-item.active { background: rgba(255, 255, 255, 0.2); border-color: #fff; color: #fff; }
+
+        /* Image Content */
+        .image-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); min-height: 80vh; }
+        .image-side { 
+            background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/yXgUzrMHKoKQCHrO.png'); 
+            background-size: cover; background-position: center; min-height: 400px; 
+        }
+        .content-side { padding: clamp(3rem, 8vw, 8rem) clamp(1.5rem, 5vw, 4rem); background: var(--bg-primary); display: flex; flex-direction: column; justify-content: center; }
+        .content-side p { font-size: 1rem; color: var(--text-muted); margin-bottom: 2rem; }
+
+        /* Final CTA */
+        .final-cta {
+            text-align: center;
+            position: relative;
+            padding: clamp(5rem, 10vw, 8rem) 1.5rem;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .final-cta-video {
+            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%,-50%); z-index: 0; object-fit: cover;
+        }
+        .final-cta::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--overlay-deep); z-index: 1; }
+        .cta-content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; width: 100%; }
+        
+        /* ── 스크린샷 디자인 복원: 검은색 반투명 박스 ── */
+        .cta-text-bg { 
+            display: inline-block; 
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .email-form { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+        @media (min-width: 640px) { .email-form { flex-direction: row; } }
+        .email-input { 
+            flex: 1; 
+            background: transparent; 
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 1.1rem 0; 
+            color: #fff; 
+            outline: none; 
+            border-radius: 0;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .email-input:focus { border-color: #fff; }
+        .email-submit { 
+            background: transparent; 
+            color: #fff; 
+            border: 1px solid #fff; 
+            padding: 1.1rem 2.5rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            border-radius: 0;
+            transition: all 0.3s ease;
+            letter-spacing: 0.15em;
+        }
+        .email-submit:hover { background: #fff; color: #000; }
+
+        /* Routine Modal */
+        .routine-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .routine-modal.active { opacity: 1; visibility: visible; }
+        .routine-modal-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 10, 20, 0.85); backdrop-filter: blur(10px);
+        }
+        .routine-modal-content {
+            position: relative; z-index: 2; width: 95%; max-width: 700px;
+            background: var(--surface); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px; padding: clamp(1.5rem, 5vw, 3.5rem);
+            transform: translateY(20px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .routine-modal.active .routine-modal-content { transform: translateY(0); }
+        .modal-close {
+            position: absolute; top: 1.5rem; right: 1.5rem;
+            background: none; border: none; color: var(--text-muted);
+            font-size: 1.5rem; cursor: pointer; transition: color 0.3s ease;
+        }
+        .modal-close:hover { color: #fff; }
+        .modal-category {
+            font-family: 'Outfit', sans-serif; font-size: 0.75rem; font-weight: 700;
+            letter-spacing: 0.15em; color: var(--text-muted); text-transform: uppercase;
+            margin-bottom: 0.5rem; display: block;
+        }
+        .modal-title {
+            font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800;
+            margin-bottom: 2rem; line-height: 1.3; color: #fff;
+        }
+        .modal-details { list-style: none; }
+        .modal-details li {
+            position: relative; padding-left: 1.5rem; margin-bottom: 1.8rem;
+            font-size: 1.15rem; font-weight: 500; color: var(--text-primary); line-height: 1.5;
+            white-space: nowrap;
+        }
+        @media (max-width: 1024px) { 
+            .modal-details li { white-space: normal; font-size: 1rem; } 
+            .modal-title { font-size: 1.5rem; }
+        }
+        .modal-details li::before {
+            content: ''; position: absolute; left: 0; top: 0.7rem;
+            width: 6px; height: 1px; background: #fff;
+        }
+        .modal-details li strong { color: #fff; font-weight: 600; }
+        .modal-footer { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        .modal-cta {
+            display: block; width: 100%; text-align: center;
+            background: #fff; color: #000; padding: 1rem;
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
+            text-decoration: none; letter-spacing: 0.1em; transition: all 0.3s ease;
+        }
+        .modal-cta:hover { background: var(--text-muted); color: #fff; }
+
+        /* Footer */
+        footer { padding: 4rem 1.5rem; background: #000; }
+        .footer-content { display: flex; flex-direction: column; align-items: center; gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
+        @media (min-width: 768px) { .footer-content { flex-direction: row; justify-content: space-between; } }
+        .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.15em; color: #fff; text-decoration: none; }
+        .footer-links { display: flex; gap: 1.2rem 2rem; flex-wrap: wrap; justify-content: center; }
+        @media (min-width: 768px) { .footer-links { justify-content: flex-end; } }
+        .footer-link { color: var(--text-muted); text-decoration: none; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; transition: color 0.3s ease; cursor: pointer; border: none; background: none; }
+        .footer-link:hover { color: #fff; }
+        .copyright { margin-top: 3rem; font-size: 0.65rem; color: #444; text-align: center; text-transform: uppercase; }
+
+    </style>
+</head>
+<body>
+    <!-- Routine Modal Structure -->
+    <div class="routine-modal" id="routineModal">
+        <div class="routine-modal-overlay" onclick="closeModal()"></div>
+        <div class="routine-modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <span class="modal-category" id="modalCategory">Category</span>
+            <h3 class="modal-title" id="modalTitle">Routine Title</h3>
+            <ul class="modal-details" id="modalDetails">
+                <!-- Details will be injected here -->
+            </ul>
+            <div class="modal-footer">
+                <a href="#beta-section" class="modal-cta" onclick="closeModal()">나만의 맞춤 루틴 받기</a>
+            </div>
+        </div>
+    </div>
+
+    <nav id="navbar">
+        <a href="#" class="nav-logo">MYRO</a>
+        <div class="nav-menu">
+            <div class="nav-links">
+                <a href="#naming-section" class="nav-link">Brand Story</a>
+                <a href="#chugumi-section" class="nav-link">What's 추구미?</a>
+                <a href="#quiz-section" class="nav-link">추구미 선택</a>
+                <a href="#beta-section" class="nav-link">베타 서비스 신청</a>
+            </div>
+            <button class="menu-toggle" onclick="toggleMenu()">Menu</button>
+            <a href="#beta-section" class="nav-cta">Apply</a>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="toggleMenu()">×</button>
+        <a href="#naming-section" class="mobile-nav-link" onclick="toggleMenu()">Brand Story</a>
+        <a href="#chugumi-section" class="mobile-nav-link" onclick="toggleMenu()">What's 추구미?</a>
+        <a href="#quiz-section" class="mobile-nav-link" onclick="toggleMenu()">추구미 선택</a>
+        <a href="#beta-section" class="mobile-nav-link" onclick="toggleMenu()">베타 서비스 신청</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <video id="heroVideo" class="hero-video" autoplay muted loop playsinline preload="auto" poster="">
+            <source src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/ksXQNViyYMgPaVFY.mp4" type="video/mp4">
+        </video>
+        <div class="mega-logo-container">
+            <span class="mega-logo">MYRO</span>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Make Yourself, Reflect On</h1>
+            <p class="hero-copy">당신의 본질을 마주하고, 가장 세련된 루틴을 완성하세요.</p>
+            <a href="#chugumi-section" class="hero-cta">Explore the Mirror</a>
+        </div>
+    </section>
+
+    <!-- ── 추구미란? 섹션 ── -->
+    <section class="chugumi-intro reveal" id="chugumi-section">
+        <div class="container">
+            <h2 class="chugumi-title reveal">WHAT'S <span>추구미?</span></h2>
+            <p class="chugumi-def">
+                추구미는 내가 <strong>추구</strong>하는 <strong>미</strong>(美, 아름다움)이자<br class="mobile-br"> 모습을 뜻합니다.<br class="mobile-br">
+                단순히 남을 따라가는 것이 아니라,<br class="mobile-br">
+                당신이 되고 싶은 당신의 모습을<br class="mobile-br">
+                구체화하고 실천하는 과정입니다.
+            </p>
+
+            <div class="chugumi-photos">
+                <div class="chugumi-photo-wrap reveal reveal-delay-1">
+                    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/vuTitFQipieyMIOa.jpg" alt="Classic">
+                    <div class="chugumi-photo-label">CLASSIC</div>
+                </div>
+                <div class="chugumi-photo-wrap reveal reveal-delay-2">
+                    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/hBcShCYXVPMRfBdP.jpg" alt="Minimal">
+                    <div class="chugumi-photo-label">MINIMAL</div>
+                </div>
+                <div class="chugumi-photo-wrap reveal reveal-delay-3">
+                    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/cpwKRFcONpYOnKtq.webp" alt="Modern">
+                    <div class="chugumi-photo-label">MODERN</div>
+                </div>
+                <div class="chugumi-photo-wrap reveal reveal-delay-4">
+                    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/myYrILYHfBKshyLh.jpg" alt="Edge">
+                    <div class="chugumi-photo-label">EDGE</div>
+                </div>
+            </div>
+
+            <div class="chugumi-connect reveal">
+                <span class="chugumi-connect-line"></span>
+                <p>
+                    각자의 추구미는 다르지만, 그것을 완성하는 방법은 하나여야 합니다.<br>
+                    <strong>당신의 추구미를 실현할 단 하나의 서사, MYRO.</strong>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Naming Section -->
+    <section class="naming-section" id="naming-section">
+        <video id="storyVideo" class="naming-video" autoplay muted loop playsinline preload="auto">
+            <source src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/CynFSyMONttkIljQ.mp4" type="video/mp4">
+        </video>
+        <div class="container naming-container">
+            <h2 class="naming-main-text reveal">MY MIRROR, <br>MYRO.</h2>
+            <div class="naming-grid">
+                <div class="naming-item reveal reveal-delay-1">
+                    <div style="margin-bottom: 2rem; overflow: hidden; border-radius: 4px;">
+                        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/ZeYYIiMLuDjPjqiI.avif" alt="Mirror" style="width: 100%; height: 350px; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);">
+                    </div>
+                    <p><span class="highlight">거울 속의 나.</span> Mirror. 매일 아침 거울을 보며 더 나은 자신을 마주하고 싶어 하는 그 찰나의 순간에서 시작되었습니다.</p>
+                </div>
+                <div class="naming-item reveal reveal-delay-2">
+                    <div style="margin-bottom: 2rem; overflow: hidden; border-radius: 4px;">
+                        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/smqKoUXTKxZAFiNN.avif" alt="Myron" style="width: 100%; height: 350px; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);">
+                    </div>
+                    <p><span class="highlight">가장 오래된 향유.</span> Myron. 고대 남성들이 자신을 가꾸기 위해 몸에 바르던 신성한 기름(μύρον)에서 이름을 따왔습니다.</p>
+                </div>
+                <div class="naming-item reveal reveal-delay-3">
+                    <div style="margin-bottom: 2rem; overflow: hidden; border-radius: 4px;">
+                        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/wMAYwDVKvYJzQkHg.avif" alt="Reflection" style="width: 100%; height: 350px; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);">
+                    </div>
+                    <p><span class="highlight">나를 비추는 힘.</span> MY Reflection, Reflect On. 나 자신을 만들고(Make), 그 본질을 온전히 비춰내는(Reflect) 과정의 함축입니다.</p>
+                </div>
+            </div>
+            <div class="naming-story-box reveal">
+                <blockquote>"MYRO is your reflection — the version of you that's been waiting to be seen."</blockquote>
+                <div class="story-en">
+                    MYRO comes from the mirror — that moment every morning when you face yourself and want to be better.
+                    The name also traces back to ancient Greek 'Myron', a sacred oil men used to care for themselves centuries ago.
+                    Self-care isn't new. We just made it yours.
+                </div>
+                <div class="story-ko">
+                    MYRO는 고대 그리스어 'Myron(μύρον)'에서 왔습니다.<br>
+                    수천 년 전, 남성들이 몸을 가꾸기 위해 바르던 향유(香油).<br>
+                    자기관리의 가장 오래된 언어입니다.<br>
+                    우리는 그 이름을 가져와, 당신의 것으로 만들었습니다.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="social-proof">
+        <div class="container">
+            <p>이미 <span>4,674명</span>의 남성이 MYRO와 함께할 준비를 마쳤습니다.</p>
+        </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <section class="quiz-section" id="quiz-section">
+        <div class="container quiz-container">
+            <div class="text-center">
+                <h2 class="section-title reveal">Define Your Essence</h2>
+                <p class="section-desc reveal reveal-delay-1" style="margin-bottom: 1rem;">당신이 지향하는 추구미를 선택하세요. 그에 맞는 모든 루틴이 정렬됩니다.</p>
+                <p class="reveal reveal-delay-2" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 3rem; opacity: 0.8;">
+                    * 베타 서비스 이후 10대부터 50대까지 아우르는 연령대별 다양한 추구미 유형과 정교한 루틴들을 제공할 예정입니다.
+                </p>
+            </div>
+            <!-- Highlighted Guidance -->
+            <div class="reveal" style="text-align: center; margin-bottom: 3rem;">
+                <p style="display: inline-block; padding: 0.8rem 2rem; background: rgba(255, 50, 50, 0.15); border: 1px solid rgba(255, 50, 50, 0.5); border-radius: 50px; color: #ff4d4d; font-weight: 700; font-size: 1rem; letter-spacing: 0.05em; animation: pulse 2s infinite;">
+                    원하시는 추구미를 터치하거나 선택하여 루틴을 확인해보세요!
+                </p>
+            </div>
+
+            <div class="quiz-grid">
+                <div class="quiz-card reveal reveal-delay-1" data-style="MUSCLE" onclick="handleCardClick(event, this, 'MUSCLE')">
+                    <img class="quiz-card-photo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/RLOUTMRniepnNSeP.jpg" alt="몸으로 말하는 남자">
+                    <div class="quiz-card-photo-overlay"></div>
+                    <div class="quiz-card-body">
+                        <h3>몸으로 말하는 남자</h3>
+                        <div class="quiz-card-slogan">"반팔 입으면 자동 머슬핏, 폼 미쳤다"</div>
+                        <div class="quiz-card-celebs">이준호 · 윤성빈 · 정국</div>
+                        <div class="quiz-card-desc">두꺼운 프레임과 실전 압축 근육으로 남성미가 폭발하는 피지컬. 요즘 2030 남자들이 헬스장에서 가장 자극받는 체형. 흰 티에 청바지만 입어도 끝나는 로망의 몸.</div>
+                        <div class="quiz-card-touch-hint">한 번 더 터치하면 루틴 확인 →</div>
+                    </div>
+                </div>
+                <div class="quiz-card reveal reveal-delay-2" data-style="CLEAN" onclick="handleCardClick(event, this, 'CLEAN')">
+                    <img class="quiz-card-photo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/VdyJOkAVeljxKDEr.jpg" alt="느좋남">
+                    <div class="quiz-card-photo-overlay"></div>
+                    <div class="quiz-card-body">
+                        <h3>느좋남</h3>
+                        <div class="quiz-card-slogan">"딱히 뭐가 아닌데 전체적으로 느낌 좋은"</div>
+                        <div class="quiz-card-celebs">남주혁 · 변우석 · 박서준</div>
+                        <div class="quiz-card-desc">과하게 꾸미지 않아도 비율과 깔끔함, 정돈된 피부, 좋은 향기가 느껴지는 스타일. 인스타 남친룩의 정석.</div>
+                        <div class="quiz-card-touch-hint">한 번 더 터치하면 루틴 확인 →</div>
+                    </div>
+                </div>
+                <div class="quiz-card reveal reveal-delay-3" data-style="ROUTINE" onclick="handleCardClick(event, this, 'ROUTINE')">
+                    <img class="quiz-card-photo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/iofSYHcWTEHmPJCw.jpg" alt="갓생남">
+                    <div class="quiz-card-photo-overlay"></div>
+                    <div class="quiz-card-body">
+                        <h3>갓생남</h3>
+                        <div class="quiz-card-slogan">"운동·루틴·자기관리 다 챙기는 찐 갓생러"</div>
+                        <div class="quiz-card-celebs">박보검 · 덱스 · 유지태</div>
+                        <div class="quiz-card-desc">억지로 꾸민 게 아니라 생활 습관 자체가 비주얼이 된 사람. 슬림 탄탄한 라인, 맑고 건강한 안색.</div>
+                        <div class="quiz-card-touch-hint">한 번 더 터치하면 루틴 확인 →</div>
+                    </div>
+                </div>
+                <div class="quiz-card reveal reveal-delay-4" data-style="HIP" onclick="handleCardClick(event, this, 'HIP')">
+                    <img class="quiz-card-photo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/jpvUYYwJvXhqeytT.jpg" alt="힙흘남">
+                    <div class="quiz-card-photo-overlay"></div>
+                    <div class="quiz-card-body">
+                        <h3>힙흘남</h3>
+                        <div class="quiz-card-slogan">"힙하려는 게 아닌데 그냥 힙이 흘러나오는"</div>
+                        <div class="quiz-card-celebs">류준열 · 이동휘 · 주우재 · 코드쿤스트</div>
+                        <div class="quiz-card-desc">패션 커뮤니티와 유튜브에서 "남자 사복 패션" 조회수 압도적 1위. 자신만의 확고한 패션 세계로 트렌드를 선도하는 스타일.</div>
+                        <div class="quiz-card-touch-hint">한 번 더 터치하면 루틴 확인 →</div>
+                    </div>
+                </div>
+            </div>
+            
+
+
+            <div class="expansion-notice reveal">
+                <h4>Beyond Beta</h4>
+                <p>베타 테스트 이후, 연령대별 더욱 다양한 추구미 유형과 정교한 루틴들을 제공할 예정입니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mockup Preview Section -->
+    <section class="mockup-section">
+        <div class="container">
+            <div class="mockup-container">
+                <div class="mockup-text">
+                    <h2 class="section-title reveal">All Routines, <br>One Perspective.</h2>
+                    <p class="reveal reveal-delay-1" style="text-align: left; margin-bottom: 2rem; font-size: 1.1rem; color: #fff; line-height: 1.8;">
+                        찾아 헤매는 시간은 끝났습니다.<br><br>
+                        MYRO는 당신이 선택한 추구미에 맞춰<br>
+                        운동, 패션, 스킨케어 루틴을<br>
+                        단 하나의 서사로 정렬합니다.
+                    </p>
+                </div>
+                <div class="mockup-visual reveal reveal-delay-2">
+                    <p id="personal-message" style="color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 1.5rem; line-height: 1.6; opacity: 1; transition: opacity 0.5s ease; text-align: center;">
+                        위에서 당신이 원하는 추구미를 선택하고,<br>나만을 위해 설계된 맞춤형 루틴 예시를 확인해보세요.
+                    </p>
+                    <div class="mockup-screen">
+                        <div class="mockup-item" id="mockup-workout" onclick="openModal('workout')">WORKOUT: 머슬핏 완성을 위한 3분할 웨이트</div>
+                        <div class="mockup-item" id="mockup-fashion" onclick="openModal('fashion')">FASHION: 흰 티 & 테이퍼드 데님 핏 가이드</div>
+                        <div class="mockup-item" id="mockup-skin" onclick="openModal('skin')">SKINCARE: 운동 후 딥 클렌징 루틴</div>
+                        <div class="mockup-item" id="mockup-hair" onclick="openModal('hair')">HAIR: 짧고 강렬한 크롭컷 스타일링</div>
+                        <div class="mockup-item" id="mockup-grooming" onclick="openModal('grooming')">GROOMING: 묵직한 우디 계열 퍼퓸</div>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 1rem; text-align: center; letter-spacing: 0.05em; opacity: 0.8;">
+                        * 각 영역을 클릭하거나 터치하여 상세 가이드를 확인해보세요.
+                    </p>
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <a href="#quiz-section" class="nav-link" style="display: inline-block; padding: 0.8rem 1.5rem; border: 1px solid rgba(255,255,255,0.2); font-size: 0.8rem; letter-spacing: 0.1em; color: #fff; text-decoration: none; transition: all 0.3s ease;">
+                            다른 추구미의 루틴도 확인해보세요 ↑
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="image-content">
+        <div class="image-side"></div>
+        <div class="content-side">
+            <h2 class="section-title reveal">Narrative.</h2>
+            <p class="reveal reveal-delay-1">운동, 패션, 그루밍. 각기 다른 곳에서 찾던 정보들을 이제 한 화면에서 마주하세요. 당신이 선택한 추구미에 맞춰 모든 루틴이 완벽하게 정렬됩니다.</p>
+            <p class="reveal reveal-delay-2" style="font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.1em;">"Self-care is not a task, <br>it's a story of yourself."</p>
+        </div>
+    </section>
+
+    <!-- Final CTA / Beta Section -->
+    <section class="final-cta" id="beta-section">
+        <video id="finalVideo" class="final-cta-video" autoplay muted loop playsinline preload="auto">
+            <source src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/OXEZUMGMxNdwuHpg.mp4" type="video/mp4">
+        </video>
+        <div class="cta-content">
+            <h2 class="section-title reveal" style="margin-bottom: 3rem;"><span class="cta-text-bg" style="font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; padding: 1rem 2rem;">Define Your Mirror.</span></h2>
+            
+            <div class="benefits-list" style="width: 100%; text-align: center; margin-bottom: 3rem;">
+                <div class="benefit-row reveal reveal-delay-1" style="margin-bottom: 1.5rem;">
+                    <span class="cta-text-bg" style="font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">EARLY BIRD ACCESS</span>
+                    <span class="cta-text-bg" style="font-size: 0.85rem; font-weight: 300; margin-left: 0.5rem; opacity: 0.9;">베타 테스터 전용 평생 할인 혜택</span>
+                </div>
+                <div class="benefit-row reveal reveal-delay-2" style="margin-bottom: 1.5rem;">
+                    <span class="cta-text-bg" style="font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">EXCLUSIVE GROOMING KIT</span>
+                    <span class="cta-text-bg" style="font-size: 0.85rem; font-weight: 300; margin-left: 0.5rem; opacity: 0.9;">한정판 그루밍 가이드북 및 스타터 키트</span>
+                </div>
+                <div class="benefit-row reveal reveal-delay-3" style="margin-bottom: 1.5rem;">
+                    <span class="cta-text-bg" style="font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">PRIVATE COMMUNITY</span>
+                    <span class="cta-text-bg" style="font-size: 0.85rem; font-weight: 300; margin-left: 0.5rem; opacity: 0.9;">프리미엄 자기관리 멤버십 커뮤니티 초대</span>
+                </div>
+            </div>
+
+            <p class="reveal reveal-delay-4" style="margin-bottom: 2rem;"><span class="cta-text-bg" style="letter-spacing: 0.1em; opacity: 0.9; font-size: 0.95rem;">지금 신청하고 MYRO의 첫 번째 주인공이 되세요.</span></p>
+            
+            <div class="reveal reveal-delay-5">
+                <form class="email-form" id="g-sheet-form">
+                    <input type="email" name="email" class="email-input" placeholder="ENTER YOUR EMAIL ADDRESS" required>
+                    <button type="submit" class="email-submit" id="submit-btn">Apply Now</button>
+                </form>
+                <p style="margin-top: 1rem; font-size: 0.72rem; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; line-height: 1.6;">
+                    입력하신 이메일은 MYRO 베타 서비스 출시 안내 목적으로만 사용되며, 제3자에게 제공되지 않습니다.
+                    자세한 내용은 <button onclick="showPrivacy()" style="background:none; border:none; color:rgba(255,255,255,0.5); font-size:0.72rem; font-weight:700; text-decoration:underline; cursor:pointer; padding:0; letter-spacing:0.04em;">개인정보 처리방침</button>을 확인하세요.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- 커스텀 알림 모달 -->
+    <div id="alertModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; align-items:center; justify-content:center;">
+        <div onclick="closeAlertModal()" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(5,10,20,0.85); backdrop-filter:blur(10px);"></div>
+        <div style="position:relative; z-index:2; background:#0c1628; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:2.5rem 2rem; max-width:420px; width:90%; box-shadow:0 40px 80px rgba(0,0,0,0.7);">
+            <p id="alertModalTitle" style="font-family:'Outfit',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.15em; color:#8892b0; text-transform:uppercase; margin-bottom:0.8rem;"></p>
+            <p id="alertModalText" style="font-size:0.95rem; font-weight:300; color:#fff; line-height:1.8;"></p>
+            <button onclick="closeAlertModal()" style="margin-top:2rem; width:100%; padding:0.9rem; background:#fff; color:#000; border:none; font-size:0.8rem; font-weight:800; text-transform:uppercase; letter-spacing:0.15em; cursor:pointer; border-radius:4px;">확인</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="footer-logo">MYRO</a>
+            <div class="footer-links">
+                <a href="https://www.instagram.com/be.myro?igsh=eXV4YnY5ZnRmcHJs&utm_source=qr" target="_blank" class="footer-link">Instagram</a>
+                <a href="https://www.threads.com/@j1kangeun?igshid=NTc4MTIwNjQ2YQ==" target="_blank" class="footer-link">Threads</a>
+                <a href="#" target="_blank" class="footer-link" id="kakao-link">KakaoTalk</a>
+                <a href="mailto:myro.official.t@gmail.com" class="footer-link">Contact</a>
+                <button onclick="showPrivacy()" class="footer-link">Privacy</button>
+            </div>
+        </div>
+        <p class="copyright">© 2026 MYRO. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        const G_SHEET_URL = "https://script.google.com/macros/s/AKfycbxY8MgetOS_7W0dp46eEAsuk7PDTofDj9AjnY8Ag2W-n3qRBghedZ_lokDef-AI13fP3w/exec";
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // 비디오 자동재생
+            document.querySelectorAll('video').forEach(video => {
+                video.play().catch(() => {
+                    const play = () => { video.play(); document.removeEventListener('click', play); document.removeEventListener('touchstart', play); };
+                    document.addEventListener('click', play);
+                    document.addEventListener('touchstart', play);
+                });
+            });
+
+            // Scroll Reveal — 모바일/PC 모두 스크롤 시 반복 애니메이션
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        // 화면 밖으로 완전히 나가면 다시 애니메이션 준비 상태로 되돌림
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            }, {
+                threshold: 0.08,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            // 초기 로딩 시 루틴 아이템에 이벤트 리스너 등록
+            const categories = ['workout', 'fashion', 'skin', 'hair', 'grooming'];
+            const ids = ['mockup-workout', 'mockup-fashion', 'mockup-skin', 'mockup-hair', 'mockup-grooming'];
+            ids.forEach((id, i) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.onclick = function() { openModal(categories[i]); };
+                }
+            });
+        });
+
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+            document.getElementById('menuOverlay').classList.toggle('active');
+        }
+
+        function openAlertModal(title, text) {
+            document.getElementById('alertModalTitle').innerText = title;
+            document.getElementById('alertModalText').innerText = text;
+            const modal = document.getElementById('alertModal');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAlertModal() {
+            document.getElementById('alertModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function showPrivacy() {
+            openAlertModal(
+                'Privacy Policy',
+                '입력하신 이메일 주소는 MYRO 베타 서비스 출시 소식 전달 및 서비스 관련 안내 목적으로만 안전하게 사용되며, 그 외의 용도로는 절대 활용되지 않습니다.'
+            );
+        }
+
+        // KakaoTalk 채널 링크 안내
+        document.getElementById('kakao-link').addEventListener('click', function(e) {
+            if (this.getAttribute('href') === '#') {
+                e.preventDefault();
+                openAlertModal(
+                    'KakaoTalk',
+                    '카카오톡 채널이 곧 개설될 예정입니다. 잠시만 기다려 주세요!'
+                );
+            }
+        });
+
+        const form = document.getElementById('g-sheet-form');
+        const submitBtn = document.getElementById('submit-btn');
+        if (form) {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Sending...";
+                const qs = new URLSearchParams(new FormData(form)).toString();
+                fetch(`${G_SHEET_URL}?${qs}`, { method: 'POST', mode: 'no-cors' })
+                    .then(() => { openAlertModal('MYRO', '신청되었습니다.\n출시 소식을 가장 먼저 알려드릴게요!'); form.reset(); })
+                    .catch(err => { console.error(err); openAlertModal('Error', '오류가 발생했습니다. 다시 시도해 주세요.'); })
+                    .finally(() => { submitBtn.disabled = false; submitBtn.innerText = "Apply Now"; });
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        let currentStyle = 'MUSCLE'; // 기본값
+
+        const routineDetails = {
+            "MUSCLE": {
+                "workout": { "title": "머슬핏 완성을 위한 단계별 웨이트", "sections": [{ "subtitle": "📅 1주일: 적응기", "content": "기초 체력 증진 및 올바른 자세 확립 (주 4회)" }, { "subtitle": "🚀 3개월: 근비대기", "content": "점진적 과부하 적용, 3분할 루틴으로 근육량 극대화" }, { "subtitle": "🏆 6개월: 완성기", "content": "부위별 디테일 강화 및 체지방 컷팅 병행" }, { "subtitle": "💡 라이프스타일 팁", "content": "충분한 단백질 섭취와 7시간 이상의 숙면 필수" }] },
+                "fashion": { "title": "강인함을 드러내는 머슬핏 큐레이션", "sections": [{ "subtitle": "🏷️ 추천 브랜드", "content": "젝시믹스 맨즈, HDEX, 덤브스트럭" }, { "subtitle": "👕 코디 아이템", "content": "어깨 라인이 강조되는 머슬핏 반팔, 테이퍼드 조거 팬츠" }, { "subtitle": "📸 스타일 팁", "content": "상체는 피트하게, 하체는 여유 있게 매치하여 역삼각형 실루엣 강조" }] },
+                "skin": { "title": "운동인을 위한 고기능성 스킨케어", "sections": [{ "subtitle": "🧴 추천 제품", "content": "닥터지 레드 블레미쉬 클리어 수딩 크림 (가성비), 키엘 울트라 페이셜 크림 (프리미엄)" }, { "subtitle": "💆 관리 루틴", "content": "운동 직후 쿨링 팩으로 피부 열감 배출 및 수분 보충" }, { "subtitle": "✅ 피부 타입", "content": "지복합성 피부에 최적화된 유수분 밸런스 케어" }] },
+                "hair": { "title": "활동적이고 강렬한 헤어 스타일링", "sections": [{ "subtitle": "💇 추천 스타일", "content": "아이비리그 컷, 짧은 드롭컷 (미용실 방문 시 사진 필수!)" }, { "subtitle": "✨ 스타일링 팁", "content": "매트한 왁스로 질감을 살리고 가스형 스프레이로 강력 고정" }, { "subtitle": "🧼 추천 제품", "content": "다슈 매트 왁스, 아모스 디자이닝 스프레이" }] },
+                "grooming": { "title": "남성미를 완성하는 묵직한 우디 향", "sections": [{ "subtitle": "👃 추천 향수", "content": "톰포드 오드우드 (프리미엄), 조말론 우드세이지 (데일리)" }, { "subtitle": "✨ 그루밍 팁", "content": "체온이 높은 손목과 귀 뒤에 착향하여 은은하게 지속" }] }
+            },
+            "CLEAN": {
+                "workout": { "title": "슬림 탄탄 비율을 위한 코어 루틴", "sections": [{ "subtitle": "📅 1주일: 유연성기", "content": "전신 스트레칭 및 기초 코어 근육 활성화" }, { "subtitle": "🚀 3개월: 라인 형성기", "content": "인터벌 러닝과 맨몸 운동 위주의 슬림 근육 강화" }, { "subtitle": "🏆 6개월: 유지기", "content": "데피니션 강화 및 균형 잡힌 비율 완성" }, { "subtitle": "💡 라이프스타일 팁", "content": "정제 탄수화물을 줄이고 클린 식단 유지" }] },
+                "fashion": { "title": "깨끗하고 세련된 미니멀 룩 큐레이션", "sections": [{ "subtitle": "🏷️ 추천 브랜드", "content": "코스(COS), 무신사 스탠다드, 쿠어(Coor)" }, { "subtitle": "👕 코디 아이템", "content": "화이트 린넨 셔츠, 베이지 와이드 슬랙스, 가죽 로퍼" }, { "subtitle": "📸 스타일 팁", "content": "톤온톤 배색으로 깔끔하고 길어 보이는 실루엣 연출" }] },
+                "skin": { "title": "투명한 피부를 위한 저자극 케어", "sections": [{ "subtitle": "🧴 추천 제품", "content": "라운드랩 독도 토너 (가성비), 에스티로더 갈색병 (프리미엄)" }, { "subtitle": "💆 관리 루틴", "content": "아침 톤업 선크림 필수, 저녁 꼼꼼한 이중 세안" }, { "subtitle": "✅ 피부 타입", "content": "민감성 피부를 위한 진정 중심 제품 추천" }] },
+                "hair": { "title": "부드러운 인상의 내추럴 헤어", "sections": [{ "subtitle": "💇 추천 스타일", "content": "시스루 댄디 컷, 가르마 펌 (자연스러운 컬이 핵심)" }, { "subtitle": "✨ 스타일링 팁", "content": "드라이 시 뿌리 볼륨을 살리고 컬 크림으로 가볍게 마무리" }, { "subtitle": "🧼 추천 제품", "content": "아모스 컬 크림, 커리쉴 헤어 에센스" }] },
+                "grooming": { "title": "청결함을 전하는 은은한 비누 향", "sections": [{ "subtitle": "👃 추천 향수", "content": "바이레도 블랑쉬 (프리미엄), 클린 웜 코튼 (데일리)" }, { "subtitle": "✨ 그루밍 팁", "content": "외출 30분 전 옷깃 안쪽에 뿌려 자연스러운 잔향 연출" }] }
+            },
+            "ROUTINE": {
+                "workout": { "title": "지속 가능한 갓생 데일리 루틴", "sections": [{ "subtitle": "📅 1주일: 습관 형성기", "content": "매일 같은 시간 20분 가벼운 운동 습관화" }, { "subtitle": "🚀 3개월: 체력 강화기", "content": "유산소와 근력 운동의 황금 비율 조합" }, { "subtitle": "🏆 6개월: 라이프스타일화", "content": "운동이 일상이 되는 고효율 루틴 완성" }, { "subtitle": "💡 라이프스타일 팁", "content": "미라클 모닝과 연계한 아침 운동 추천" }] },
+                "fashion": { "title": "활기차고 신뢰감 있는 데일리 룩", "sections": [{ "subtitle": "🏷️ 추천 브랜드", "content": "폴로 랄프로렌, 빈폴, 유니클로" }, { "subtitle": "👕 코디 아이템", "content": "옥스퍼드 셔츠, 치노 팬츠, 깔끔한 레더 스니커즈" }, { "subtitle": "📸 스타일 팁", "content": "단정한 핏과 깨끗한 다림질로 신뢰감 있는 이미지 구축" }] },
+                "skin": { "title": "건강한 안색을 위한 데일리 루틴", "sections": [{ "subtitle": "🧴 추천 제품", "content": "이니스프리 그린티 씨드 세럼 (가성비), SK-II 피테라 에센스 (프리미엄)" }, { "subtitle": "💆 관리 루틴", "content": "비타민 섭취와 함께하는 5단계 수분 장벽 케어" }, { "subtitle": "✅ 피부 타입", "content": "모든 피부용 보습 및 영양 공급" }] },
+                "hair": { "title": "정돈된 느낌의 스마트 헤어", "sections": [{ "subtitle": "💇 추천 스타일", "content": "애즈 펌, 가일 컷 (지적이고 깔끔한 느낌)" }, { "subtitle": "✨ 스타일링 팁", "content": "가르마 라인을 깔끔하게 잡고 옆머리는 다운펌으로 밀착" }, { "subtitle": "🧼 추천 제품", "content": "그라펜 다운펌 약, 포마드 왁스" }] },
+                "grooming": { "title": "에너지를 더하는 시트러스 향", "sections": [{ "subtitle": "👃 추천 향수", "content": "아쿠아 디 파르마 미르토 (프리미엄), 아틀리에 코롱 포멜로 파라디" }, { "subtitle": "✨ 그루밍 팁", "content": "오전 업무 시작 전 가볍게 뿌려 리프레시 효과" }] }
+            },
+            "HIP": {
+                "workout": { "title": "트렌디하고 파워풀한 기능성 루틴", "sections": [{ "subtitle": "📅 1주일: 탐색기", "content": "크로스핏 또는 새로운 운동 종목 체험" }, { "subtitle": "🚀 3개월: 퍼포먼스기", "content": "신체 기능성 극대화 및 고강도 훈련 소화" }, { "subtitle": "🏆 6개월: 한계 돌파기", "content": "자신만의 운동 스타일 정립 및 최고 기록 달성" }, { "subtitle": "💡 라이프스타일 팁", "content": "유튜브 운동 채널을 통한 트렌디한 훈련법 습득" }] },
+                "fashion": { "title": "개성을 드러내는 스트릿 큐레이션", "sections": [{ "subtitle": "🏷️ 추천 브랜드", "content": "스투시, 슈프림, 아이앱 스튜디오" }, { "subtitle": "👕 코디 아이템", "content": "오버핏 그래픽 후드, 와이드 카고 팬츠, 한정판 스니커즈" }, { "subtitle": "📸 스타일 팁", "content": "과감한 레이어링과 액세서리 활용으로 독보적 무드 연출" }] },
+                "skin": { "title": "야외 활동이 많은 피부를 위한 보호", "sections": [{ "subtitle": "🧴 추천 제품", "content": "아넷사 선스크린 (가성비), 시슬리 선케어 (프리미엄)" }, { "subtitle": "💆 관리 루틴", "content": "워터프루프 자차 사용 및 진정 마스크팩" }, { "subtitle": "✅ 피부 타입", "content": "자외선 노출이 많은 활동성 피부 케어" }] },
+                "hair": { "title": "트렌드를 선도하는 유니크 헤어", "sections": [{ "subtitle": "💇 추천 스타일", "content": "리프 컷, 울프 컷, 웨트 헤어 스타일링" }, { "subtitle": "✨ 스타일링 팁", "content": "웨트 오일을 활용해 젖은 듯한 질감을 연출하는 것이 포인트" }, { "subtitle": "🧼 추천 제품", "content": "밀본 니젤 젤리, 헤어 오일" }] },
+                "grooming": { "title": "나만의 개성을 담은 스파이시 향", "sections": [{ "subtitle": "👃 추천 향수", "content": "르라보 상탈 33 (프리미엄), 이솝 테싯 (데일리)" }, { "subtitle": "✨ 그루밍 팁", "content": "향을 레이어링하여 나만의 시그니처 향기 제조" }] }
+            }
+        };
+
+        // 모바일 터치 2단계 인터랙션
+        function isMobile() {
+            return window.matchMedia('(max-width: 768px)').matches;
+        }
+
+        function handleCardClick(event, element, style) {
+            if (!isMobile()) {
+                // PC: 기존 동작 그대로
+                selectQuiz(element, style);
+                return;
+            }
+
+            // 모바일: 2단계 터치
+            const isDescOpen = element.classList.contains('mobile-desc-open');
+
+            if (!isDescOpen) {
+                // 1차 터치: 상세내용(desc) 표시
+                // 다른 카드 닫기
+                document.querySelectorAll('.quiz-card.mobile-desc-open').forEach(c => {
+                    if (c !== element) c.classList.remove('mobile-desc-open');
+                });
+                element.classList.add('mobile-desc-open');
+            } else {
+                // 2차 터치: 루틴으로 이동 (selectQuiz 실행)
+                element.classList.remove('mobile-desc-open');
+                selectQuiz(element, style);
+            }
+        }
+
+        function selectQuiz(element, style) {
+            currentStyle = style;
+            document.querySelectorAll('.quiz-card').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+
+            document.querySelector('.mockup-section').scrollIntoView({ behavior: 'smooth' });
+
+            const styleNames = { MUSCLE: '몸으로 말하는 남자', CLEAN: '느좋남', ROUTINE: '갓생남', HIP: '힙흘남' };
+            const selectedName = styleNames[style];
+            const personalMsg = document.getElementById('personal-message');
+            personalMsg.innerHTML = `<strong>'${selectedName}'</strong>를 선택하신 당신!<br>아래 루틴대로 진행하시면 곧 이 추구미는 당신의 아우라로 바뀔 것입니다.<br>지금 바로 확인해보세요.`;
+            personalMsg.style.opacity = '1';
+
+            const ids = ['mockup-workout', 'mockup-fashion', 'mockup-skin', 'mockup-hair', 'mockup-grooming'];
+            const categories = ['workout', 'fashion', 'skin', 'hair', 'grooming'];
+            
+            ids.forEach((id, i) => { 
+                const category = categories[i];
+                const prefix = category.toUpperCase();
+                const el = document.getElementById(id);
+                if (el) {
+                    el.innerText = `${prefix}: ${routineDetails[style][category].title}`;
+                    // 동적으로 이벤트 리스너 재설정 (확실한 작동 보장)
+                    el.onclick = function() { openModal(category); };
+                }
+            });
+        }
+
+        function openModal(category) {
+            // 클릭한 항목 활성화 스타일 적용
+            document.querySelectorAll('.mockup-item').forEach(item => item.classList.remove('active'));
+            const clickedItem = document.getElementById(`mockup-${category}`);
+            if (clickedItem) clickedItem.classList.add('active');
+
+            const data = routineDetails[currentStyle][category];
+            document.getElementById('modalCategory').innerText = category.toUpperCase();
+            document.getElementById('modalTitle').innerText = data.title;
+            
+            const detailsList = document.getElementById('modalDetails');
+            detailsList.innerHTML = '';
+            
+            data.sections.forEach(section => {
+                const li = document.createElement('li');
+                // 이모지 제거 로직 적용
+                const cleanSubtitle = section.subtitle.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\u200D|\uFE0F|[\u2000-\u3300]/g, "").trim();
+                li.innerHTML = `<strong>${cleanSubtitle}</strong><br>${section.content}`;
+                detailsList.appendChild(li);
+            });
+            
+            // 베타 페이지 연결 버튼 텍스트 수정
+            const modalCta = document.querySelector('.modal-cta');
+            if (modalCta) {
+                modalCta.innerHTML = "자기관리를 시작하는 당신을 위한 A-Z 가이드<br><span style='font-size: 0.75rem; font-weight: 400; opacity: 0.8;'>(화장품 사용법, 효과적인 도포법, 운동 루틴 안내, 헤어 스타일링 팁 등)</span><br>더 많은 정보를 원한다면?";
+            }
+            
+            document.getElementById('routineModal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // 스크롤 방지
+        }
+
+        function closeModal() {
+            document.getElementById('routineModal').classList.remove('active');
+            document.body.style.overflow = ''; // 스크롤 복원
+        }
+    </script>
+</body>
+</html>
