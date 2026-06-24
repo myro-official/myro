@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MYRO — Demo Day 2026.07.18</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+
+:root {
+  --bg:    #111827;
+  --bg2:   #1a2336;
+  --surf:  #1f2d44;
+  --white: #f0f4ff;
+  --muted: #94a3b8;
+  --faint: #556070;
+  --blue:  #60a5fa;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --red:   #f87171;
+  --border: rgba(255,255,255,0.08);
+  --font-ko: 'Noto Sans KR', sans-serif;
+  --font-en: 'Bebas Neue', sans-serif;
+  --font-ui: 'Outfit', sans-serif;
+}
+
+html, body { width:100%; height:100%; font-family:var(--font-ko); background:var(--bg); color:var(--white); overflow:hidden; }
+
+/* ── FULLPAGE ── */
+#fp { height:100vh; overflow-y:scroll; scroll-snap-type:y mandatory; scroll-behavior:smooth; }
+#fp::-webkit-scrollbar { display:none; }
+
+.fp-section {
+  scroll-snap-align:start;
+  height:100vh;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  padding:5rem;
+  position:relative; overflow:clip;
+  background:var(--bg);
+}
+.fp-section:nth-child(even) { background:var(--bg2); }
+#s3 { overflow:visible; }
+
+/* ── REVEAL ── */
+.r { opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
+.r.in { opacity:1; transform:translateY(0); }
+.d1{transition-delay:.07s} .d2{transition-delay:.14s} .d3{transition-delay:.21s}
+.d4{transition-delay:.28s} .d5{transition-delay:.35s}
+
+/* ── NAV ── */
+#nav {
+  position:fixed; top:0; left:0; right:0; z-index:900;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.2rem 3rem; transition:all .4s;
+}
+#nav.on { background:rgba(17,24,39,.9); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:.8rem 3rem; }
+.nav-logo { font-family:var(--font-en); font-size:1.8rem; letter-spacing:.15em; color:var(--white); text-decoration:none; }
+.nav-links { display:flex; gap:1.8rem; align-items:center; }
+.nav-a { font-family:var(--font-ui); font-size:.68rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); text-decoration:none; cursor:pointer; transition:color .3s; }
+.nav-a:hover { color:var(--white); }
+.nav-cta { font-family:var(--font-ui); font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--white); border:1px solid rgba(255,255,255,.2); padding:.5rem 1.2rem; text-decoration:none; transition:background .3s; }
+.nav-cta:hover { background:rgba(255,255,255,.08); }
+
+/* ── PROGRESS ── */
+#progress { position:fixed; top:0; left:0; height:2px; background:var(--blue); z-index:1000; transition:width .4s; }
+
+/* ── DOTS ── */
+#sdots { position:fixed; right:1.5rem; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:.7rem; z-index:800; }
+.sdot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.18); cursor:pointer; transition:all .3s; }
+.sdot.on { background:var(--white); transform:scale(1.5); }
+
+/* ── ARROWS ── */
+.fp-arrow { position:fixed; bottom:2rem; display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,.07); border:1px solid var(--border); cursor:pointer; z-index:800; transition:all .3s; font-size:1.1rem; color:var(--muted); }
+.fp-arrow:hover { background:rgba(255,255,255,.14); color:var(--white); }
+#fp-prev { left:50%; transform:translateX(calc(-50% - 32px)); }
+#fp-next { left:50%; transform:translateX(calc(-50% + 32px)); }
+.fp-arrow.hidden { opacity:0; pointer-events:none; }
+
+/* ── SLIDE NUM ── */
+.snum { position:absolute; bottom:1.5rem; right:2.5rem; font-family:var(--font-ui); font-size:.62rem; letter-spacing:.2em; color:var(--faint); }
+
+/* ── LABEL ── */
+.label { font-family:var(--font-ui); font-size:.65rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.9rem; }
+.line { width:36px; height:2px; background:var(--blue); margin:1rem 0 1.4rem; }
+
+/* ── HEADINGS ── */
+h2 { font-family:var(--font-ko); font-size:clamp(2.2rem,4vw,3.8rem); font-weight:700; line-height:1.2; color:var(--white); margin-bottom:1rem; white-space:nowrap; }
+h2 .en { font-family:var(--font-en); font-size:1.1em; letter-spacing:.04em; }
+h3 { font-family:var(--font-ko); font-size:clamp(.95rem,1.3vw,1.1rem); font-weight:700; color:var(--white); margin-bottom:.35rem; }
+p.body { font-family:var(--font-ko); font-size:clamp(.88rem,1.1vw,1rem); font-weight:400; line-height:1.9; color:var(--muted); }
+
+/* ── NUM ── */
+.num { font-family:var(--font-en); font-size:clamp(2.6rem,4.5vw,4rem); letter-spacing:.04em; line-height:1; color:var(--white); }
+.num-lbl { font-family:var(--font-ko); font-size:.82rem; font-weight:400; color:var(--muted); margin-top:.3rem; }
+
+/* ── CARD ── */
+.card { background:var(--surf); border:1px solid var(--border); border-radius:4px; padding:1.3rem 1.1rem; }
+.card h3 { margin-bottom:.25rem; }
+.card p.body { font-size:.86rem; }
+
+/* ── BADGE ── */
+.badge { display:inline-block; border:1px solid var(--border); border-radius:2px; padding:.2rem .65rem; font-family:var(--font-ui); font-size:.62rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+.badge-blue  { border-color:rgba(96,165,250,.35); color:var(--blue); }
+.badge-green { border-color:rgba(52,211,153,.35); color:var(--green); }
+
+/* ── GRIDS ── */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:3.5rem; width:100%; max-width:1100px; align-items:center; }
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; width:100%; max-width:1100px; }
+.g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:.9rem; width:100%; max-width:1100px; }
+.content { width:100%; max-width:1100px; }
+
+/* ── BAR ── */
+.bar-wrap { background:rgba(255,255,255,.06); border-radius:2px; height:4px; margin-top:.45rem; }
+.bar-fill  { height:4px; border-radius:2px; background:var(--white); }
+
+/* ── TABLE ── */
+table { width:100%; border-collapse:collapse; }
+th { font-family:var(--font-ui); padding:.6rem .9rem; text-align:left; font-size:.62rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); border-bottom:1px solid var(--border); }
+td { font-family:var(--font-ko); padding:.75rem .9rem; border-bottom:1px solid rgba(255,255,255,.04); color:var(--muted); font-size:.86rem; vertical-align:top; }
+td b { color:var(--white); }
+
+/* ════════════════════════
+   PHONE MOCKUP
+════════════════════════ */
+.phone-outer {
+  position:relative; width:224px; flex-shrink:0;
+  background:#161616; border-radius:34px; padding:9px;
+  box-shadow:0 28px 56px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.phone-outer::before { content:''; position:absolute; left:-3px; top:72px; width:3px; height:26px; background:#0a0a0a; border-radius:2px 0 0 2px; }
+.phone-outer::after  { content:''; position:absolute; right:-3px; top:90px; width:3px; height:38px; background:#0a0a0a; border-radius:0 2px 2px 0; }
+.phone-inner { background:#111; border-radius:26px; overflow:hidden; height:440px; }
+.ph-island { width:72px; height:18px; background:#000; border-radius:9px; margin:8px auto 4px; }
+.ph-status { display:flex; justify-content:space-between; align-items:center; padding:0 14px 4px; font-size:10px; color:rgba(255,255,255,.4); font-weight:600; font-family:var(--font-ui); }
+.ph-bar { display:flex; justify-content:space-between; align-items:center; padding:0 14px 7px; border-bottom:1px solid rgba(255,255,255,.05); }
+.ph-logo { font-family:var(--font-en); font-size:13px; letter-spacing:.15em; color:#fff; }
+.ph-step { font-size:8px; color:rgba(255,255,255,.22); letter-spacing:.1em; font-family:var(--font-ui); }
+.ph-carousel { overflow:hidden; }
+.ph-slides { display:flex; transition:transform .4s cubic-bezier(.4,0,.2,1); }
+.ph-slide { min-width:100%; background:#111; padding:13px; }
+.sl-lbl { font-size:8px; letter-spacing:.18em; color:rgba(255,255,255,.24); margin-bottom:6px; text-transform:uppercase; font-family:var(--font-ui); }
+.sl-q { font-family:var(--font-ko); font-size:13px; font-weight:700; color:#fff; line-height:1.5; margin-bottom:11px; }
+.opts { display:flex; flex-wrap:wrap; gap:5px; }
+.opt { font-size:10px; padding:7px 0; border:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.35); border-radius:5px; text-align:center; flex:1 1 calc(50% - 3px); font-family:var(--font-ko); cursor:default; }
+.opt.on { border-color:rgba(255,255,255,.55); color:#fff; background:rgba(255,255,255,.07); font-weight:700; }
+.opt.full { flex:1 1 100%; padding:7px 10px; text-align:left; }
+.ph-home { width:68px; height:3px; background:rgba(255,255,255,.16); border-radius:2px; margin:6px auto 0; }
+.ph-nav { display:flex; justify-content:center; align-items:center; gap:10px; margin-top:10px; }
+.p-arr { background:none; border:1px solid var(--border); color:var(--muted); width:28px; height:28px; cursor:pointer; font-size:13px; border-radius:50%; transition:all .3s; }
+.p-arr:hover { border-color:var(--blue); color:var(--blue); }
+.p-dots { display:flex; gap:4px; }
+.p-dot { width:4px; height:4px; border-radius:50%; background:var(--faint); transition:background .3s; }
+.p-dot.on { background:var(--blue); }
+.sched { margin-top:1px; }
+.day-tabs { display:flex; gap:2px; margin-bottom:6px; }
+.day { font-size:8px; padding:3px 3px; color:rgba(255,255,255,.2); border:1px solid transparent; border-radius:3px; font-family:var(--font-ui); cursor:default; }
+.day.on { color:#fff; border-color:rgba(255,255,255,.28); font-weight:700; }
+.tl { display:flex; flex-direction:column; gap:5px; }
+.tl-row { display:flex; align-items:center; gap:7px; }
+.tl-t { font-size:8px; color:rgba(255,255,255,.2); width:30px; flex-shrink:0; font-family:var(--font-ui); }
+.tl-a { font-size:10px; color:rgba(255,255,255,.5); font-family:var(--font-ko); }
+.tl-a.red { color:#f87171; font-weight:700; }
+.gen-list { display:flex; flex-direction:column; gap:8px; margin-top:3px; }
+.gen-row { display:flex; align-items:center; gap:7px; }
+.gen-check { width:13px; height:13px; border-radius:50%; background:#f87171; color:#fff; font-size:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.gen-spin { width:13px; height:13px; border-radius:50%; border:1.5px solid rgba(255,255,255,.1); border-top-color:#fff; animation:spin .8s linear infinite; flex-shrink:0; }
+.gen-dot { width:13px; height:13px; border-radius:50%; border:1px solid rgba(255,255,255,.1); flex-shrink:0; }
+.gen-txt { font-size:10px; font-family:var(--font-ko); }
+.gen-row.done .gen-txt { color:rgba(255,255,255,.65); }
+.gen-row.active .gen-txt { color:#fff; font-weight:700; }
+.gen-row.idle .gen-txt { color:rgba(255,255,255,.16); }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ── AI UPLOAD ── */
+.upload-grid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; max-width:280px; margin-bottom:1rem; }
+.upload-box { position:relative; border:1.5px dashed var(--faint); border-radius:5px; cursor:pointer; overflow:hidden; aspect-ratio:3/4; transition:border-color .3s; }
+.upload-box:hover { border-color:var(--blue); }
+.upload-box.has-file { border-style:solid; border-color:var(--blue); }
+.upload-box input { position:absolute; inset:0; opacity:0; cursor:pointer; z-index:2; width:100%; height:100%; }
+.upload-ph { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; pointer-events:none; }
+.upload-icon { font-size:18px; color:var(--faint); }
+.upload-lbl { font-family:var(--font-ko); font-size:11px; font-weight:700; color:var(--white); }
+.upload-sub { font-size:9px; color:var(--muted); font-family:var(--font-ui); }
+.upload-prev { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; border-radius:4px; }
+.analyze-btn { display:block; padding:.8rem 2rem; background:var(--white); color:#111; font-size:.8rem; font-weight:700; letter-spacing:.06em; border:none; cursor:pointer; border-radius:2px; font-family:var(--font-ui); transition:opacity .3s; }
+.analyze-btn:disabled { background:var(--surf); color:var(--faint); cursor:not-allowed; }
+.analyze-btn:not(:disabled):hover { opacity:.82; }
+.ai-loading-wrap { display:none; padding:1.5rem 0; }
+.ai-dots-anim { display:inline-flex; gap:4px; }
+.ai-dots-anim span { width:6px; height:6px; background:var(--muted); border-radius:50%; animation:dotP 1.4s infinite; }
+.ai-dots-anim span:nth-child(2){animation-delay:.2s} .ai-dots-anim span:nth-child(3){animation-delay:.4s}
+@keyframes dotP { 0%,80%,100%{opacity:.2;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
+.ai-loading-txt { font-size:.8rem; color:var(--muted); margin-top:.6rem; font-family:var(--font-ko); }
+.ai-results-wrap { display:none; max-height:340px; overflow-y:auto; }
+.ai-results-wrap::-webkit-scrollbar { width:3px; }
+.ai-results-wrap::-webkit-scrollbar-thumb { background:var(--faint); border-radius:2px; }
+.result-title { font-family:var(--font-ko); font-size:1rem; font-weight:700; color:var(--white); margin-bottom:.7rem; }
+.result-card { border:1px solid var(--border); padding:.9rem; margin-bottom:.6rem; background:var(--surf); border-radius:3px; }
+.result-card-lbl { font-family:var(--font-ui); font-size:.58rem; letter-spacing:.2em; color:var(--muted); margin-bottom:.35rem; text-transform:uppercase; }
+.result-card-head { font-family:var(--font-ko); font-size:.88rem; font-weight:700; color:var(--white); margin-bottom:.35rem; line-height:1.5; }
+.result-bullets { list-style:none; display:flex; flex-wrap:wrap; gap:4px; margin-bottom:.35rem; }
+.result-bullets li { font-family:var(--font-ko); font-size:.72rem; color:var(--muted); border:1px solid var(--border); padding:.15rem .45rem; border-radius:2px; }
+.result-conclusion { font-family:var(--font-ko); font-size:.8rem; color:var(--muted); line-height:1.7; border-top:1px solid var(--border); padding-top:.45rem; margin-top:.3rem; }
+.result-traits { display:flex; flex-wrap:wrap; gap:.35rem; margin-bottom:.6rem; }
+.trait-item { font-family:var(--font-ui); font-size:.7rem; color:var(--muted); display:flex; align-items:center; gap:.3rem; }
+.trait-bar { width:40px; height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
+.trait-fill { height:100%; background:var(--blue); border-radius:2px; }
+.result-gate { border:1px solid rgba(96,165,250,.2); padding:1rem; text-align:center; margin-top:.6rem; background:rgba(96,165,250,.04); border-radius:3px; }
+.result-gate p { font-family:var(--font-ko); font-size:.8rem; color:var(--muted); margin-bottom:.6rem; line-height:1.7; }
+.result-gate a { display:inline-block; padding:.55rem 1.4rem; background:var(--blue); color:#0a0f1c; font-size:.76rem; font-weight:700; text-decoration:none; border-radius:2px; font-family:var(--font-ui); }
+.trust-badges { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.9rem; }
+.trust-badge { font-family:var(--font-ui); font-size:.66rem; color:var(--muted); border:1px solid var(--border); padding:.18rem .55rem; border-radius:20px; }
+.ai-ph { display:flex; flex-direction:column; align-items:center; justify-content:center; height:220px; color:var(--faint); text-align:center; }
+.ai-ph .big-lbl { font-family:var(--font-en); font-size:3.5rem; opacity:.1; margin-bottom:.5rem; }
+
+/* ── BM ROW ── */
+.bm-row { display:grid; grid-template-columns:80px 1fr 160px; gap:1.4rem; align-items:center; border-bottom:1px solid var(--border); padding:1rem 0; }
+.bm-row:last-child { border-bottom:none; }
+.bm-phase { font-family:var(--font-ui); font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+.bm-phase.hi { color:var(--blue); }
+.bm-title { font-family:var(--font-ko); font-size:.95rem; font-weight:700; color:var(--white); margin-bottom:.2rem; }
+.bm-desc { font-family:var(--font-ko); font-size:.82rem; color:var(--muted); }
+.bm-amount { font-family:var(--font-ui); font-size:.85rem; font-weight:600; color:var(--muted); text-align:right; }
+.bm-amount.hi { color:var(--blue); font-size:.9rem; }
+
+/* ── ROADMAP ── */
+.rm-card { background:var(--surf); border:1px solid var(--border); border-radius:4px; padding:1.3rem 1.1rem; }
+.rm-card.hi { border-color:rgba(96,165,250,.4); background:rgba(96,165,250,.05); }
+.rm-date { font-family:var(--font-ui); font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); margin-bottom:.5rem; }
+.rm-date.hi { color:var(--blue); }
+
+/* ── QUOTE ── */
+.quote { border-left:2px solid var(--faint); padding-left:1.2rem; }
+.quote p { font-family:var(--font-ko); font-size:.92rem; font-weight:300; color:var(--muted); line-height:2; font-style:italic; }
+.quote cite { font-family:var(--font-ui); font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); display:block; margin-top:.5rem; }
+
+/* ── FLOW ── */
+.flow { display:flex; align-items:center; gap:.7rem; flex-wrap:wrap; margin:1.4rem 0; }
+.flow-step { background:var(--surf); border:1px solid var(--border); border-radius:4px; padding:.7rem 1.2rem; font-family:var(--font-ko); font-size:.9rem; font-weight:700; color:var(--white); white-space:nowrap; }
+.flow-arrow { font-family:var(--font-en); font-size:1.4rem; color:var(--blue); }
+
+/* ── HERO BIG ── */
+.hero-logo { font-family:var(--font-en); font-size:clamp(9rem,22vw,18rem); line-height:.85; letter-spacing:-.02em; color:var(--white); animation:logoIn 1.4s cubic-bezier(.2,.8,.2,1) both; display:block; margin-bottom:1.2rem; }
+@keyframes logoIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.hero-sub { font-family:var(--font-ko); font-size:clamp(.95rem,1.6vw,1.3rem); font-weight:300; color:var(--muted); margin-bottom:2rem; animation:fadeUp 1.4s .3s both; letter-spacing:.02em; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+.hero-badges { display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; animation:fadeUp 1.4s .5s both; }
+</style>
+</head>
+<body>
+
+<div id="progress" style="width:0%"></div>
+
+<nav id="nav">
+  <a class="nav-logo">MYRO</a>
+  <div class="nav-links">
+    <span class="nav-a" onclick="goTo(1)">문제</span>
+    <span class="nav-a" onclick="goTo(2)">솔루션</span>
+    <span class="nav-a" onclick="goTo(5)">트랙션</span>
+    <span class="nav-a" onclick="goTo(6)">시장</span>
+    <span class="nav-a" onclick="goTo(7)">수익모델</span>
+    <span class="nav-a" onclick="goTo(9)">로드맵</span>
+    <a href="https://myro-official.github.io/myro/" target="_blank" class="nav-cta">랜딩페이지 →</a>
+  </div>
+</nav>
+
+<div id="sdots"></div>
+<button id="fp-prev" class="fp-arrow" onclick="goTo(cur-1)">↑</button>
+<button id="fp-next" class="fp-arrow" onclick="goTo(cur+1)">↓</button>
+
+<div id="fp">
+
+<!-- ══ 01 HERO ══ -->
+<section class="fp-section" id="s0" style="background:radial-gradient(ellipse at 40% 30%,rgba(96,165,250,.06) 0%,transparent 55%),var(--bg); text-align:center;">
+  <span class="hero-logo">MYRO</span>
+  <p class="hero-sub">남성 고민 기반 자기관리 코치</p>
+  <div class="hero-badges">
+    <span class="badge">TAM 1.2조</span>
+    <span class="badge">광고비 0원 · 조회수 160K+</span>
+    <span class="badge">베타 신청 9명 · 전환율 18.4%</span>
+    <span class="badge">데모데이 2026.07.18</span>
+  </div>
+  <div class="snum">01 / 10</div>
+</section>
+
+<!-- ══ 02 PROBLEM ══ -->
+<section class="fp-section" id="s1">
+  <div class="g2">
+    <div>
+      <span class="label r">Problem</span>
+      <h2 class="r d1">방향 없이 시작 못 하는<br>남자들</h2>
+      <div class="line r d2"></div>
+      <p class="body r d2" style="margin-bottom:1.6rem;">운동은 헬스앱, 피부는 유튜브, 헤어는 인스타.<br>정보는 넘치는데 <strong style="color:var(--white);">어디서 시작해야 할지 모른다.</strong></p>
+      <div class="quote r d3">
+        <p>"뭐부터 해야 할지 몰라서 아무것도 안 하게 된다"<br>"강제성이 없으면 남자들은 안 해"</p>
+        <cite>수요조사 자유 응답 (n=56)</cite>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.8rem;">
+      <div class="card r d1"><div class="num" style="color:var(--blue);" data-count="37.5" data-suffix="%">0%</div><div class="num-lbl">페인포인트 1위 — "정보가 너무 복잡하다"</div></div>
+      <div class="card r d2"><div class="num" data-count="32.1" data-suffix="%">0%</div><div class="num-lbl">기대 기능 1위 — "내 고민에 맞는 맞춤 루틴"</div></div>
+      <div class="card r d3"><div class="num" style="color:var(--green);" data-count="69.6" data-suffix="%">0%</div><div class="num-lbl">서비스 사용 의향 4~5점</div></div>
+    </div>
+  </div>
+  <div class="snum">02 / 10</div>
+</section>
+
+<!-- ══ 03 SOLUTION ══ -->
+<section class="fp-section" id="s2">
+  <div class="content">
+    <span class="label r">Solution</span>
+    <h2 class="r d1">고민 말하면, 루틴이 설계된다</h2>
+    <div class="flow r d2">
+      <div class="flow-step">고민 선택</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">AI 얼굴 분석</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">4주 루틴 생성</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">완주 코칭</div>
+    </div>
+    <div class="g3" style="margin-top:.5rem;">
+      <div class="card r d1">
+        <div style="font-family:var(--font-en);font-size:2rem;color:var(--blue);margin-bottom:.6rem;">01</div>
+        <h3>5영역 통합</h3>
+        <p class="body">피부·인상·헤어·스타일·체형 — 한 곳에서</p>
+      </div>
+      <div class="card r d2">
+        <div style="font-family:var(--font-en);font-size:2rem;color:var(--blue);margin-bottom:.6rem;">02</div>
+        <h3>AI 즉시 개인화</h3>
+        <p class="body">사진 1장 → 분위기·형태 분석 → 루틴 자동 연결</p>
+      </div>
+      <div class="card r d3">
+        <div style="font-family:var(--font-en);font-size:2rem;color:var(--blue);margin-bottom:.6rem;">03</div>
+        <h3>완주 구조</h3>
+        <p class="body">72시간 이탈 감지 + 게이미피케이션 + 기수제</p>
+      </div>
+    </div>
+    <p class="body r d4" style="margin-top:1.4rem;padding-left:.5rem;border-left:2px solid rgba(96,165,250,.3);color:var(--muted);">기존 앱들이 <strong style="color:var(--white);">정보를 주고 끝나는 곳</strong>에서, MYRO가 시작합니다.</p>
+  </div>
+  <div class="snum">03 / 10</div>
+</section>
+
+<!-- ══ 04 MOCKUP ══ -->
+<section class="fp-section" id="s3">
+  <div class="g2" style="gap:2.5rem;">
+    <div>
+      <span class="label r">Product · Mockup</span>
+      <h2 class="r d1">Your Concern.<br>Your Routine.</h2>
+      <div class="line r d2"></div>
+      <div class="r d3" style="display:flex;flex-direction:column;gap:.7rem;">
+        <div style="display:flex;align-items:center;gap:.7rem;font-family:var(--font-ko);font-size:.92rem;color:var(--muted);"><span style="color:var(--green);font-weight:900;">✓</span>고민 선택 → 즉시 세팅</div>
+        <div style="display:flex;align-items:center;gap:.7rem;font-family:var(--font-ko);font-size:.92rem;color:var(--muted);"><span style="color:var(--green);font-weight:900;">✓</span>생활 스케줄 기반 개인화 알림</div>
+        <div style="display:flex;align-items:center;gap:.7rem;font-family:var(--font-ko);font-size:.92rem;color:var(--muted);"><span style="color:var(--green);font-weight:900;">✓</span>4주 완주 게이미피케이션 구조</div>
+      </div>
+    </div>
+    <div class="r d2" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="phone-outer">
+        <div class="phone-inner">
+          <div class="ph-island"></div>
+          <div class="ph-status"><span>9:41</span><span>●●●</span></div>
+          <div class="ph-bar"><span class="ph-logo">MYRO</span><span class="ph-step" id="phoneStep">STEP 1 / 5</span></div>
+          <div class="ph-carousel"><div class="ph-slides" id="phoneSlides">
+            <!-- S1 -->
+            <div class="ph-slide"><p class="sl-lbl">고민 선택</p><p class="sl-q">지금 가장<br>바꾸고 싶은 것은?</p><div class="opts"><span class="opt on">피부</span><span class="opt">인상</span><span class="opt">헤어</span><span class="opt">스타일</span><span class="opt">체형</span></div></div>
+            <!-- S2 -->
+            <div class="ph-slide"><p class="sl-lbl">소비 범위</p><p class="sl-q">월 소비 가능 범위는?</p><div class="opts"><span class="opt">~3만원</span><span class="opt on">~7만원</span><span class="opt">~15만원</span><span class="opt">15만원+</span></div></div>
+            <!-- S3 -->
+            <div class="ph-slide"><p class="sl-lbl">주간 스케줄</p><p class="sl-q" style="font-size:12px;">한 주 어떻게 보내세요?</p><div class="sched"><div class="day-tabs"><span class="day on">월</span><span class="day">화</span><span class="day">수</span><span class="day">목</span><span class="day">금</span><span class="day">토</span><span class="day">일</span></div><div class="tl"><div class="tl-row"><span class="tl-t">06:30</span><span class="tl-a">기상</span></div><div class="tl-row"><span class="tl-t">09:00</span><span class="tl-a">출근</span></div><div class="tl-row"><span class="tl-t">18:30</span><span class="tl-a">퇴근</span></div><div class="tl-row"><span class="tl-t">20:00</span><span class="tl-a red">운동</span></div><div class="tl-row"><span class="tl-t">23:30</span><span class="tl-a">취침</span></div></div></div></div>
+            <!-- S4 -->
+            <div class="ph-slide"><p class="sl-lbl">세부 고민</p><p class="sl-q">가장 신경 쓰이는 부분은?</p><div class="opts"><span class="opt full">트러블·여드름</span><span class="opt on full">칙칙한 피부톤</span><span class="opt full">모공·피지</span><span class="opt full">건조함·각질</span></div></div>
+            <!-- S5 -->
+            <div class="ph-slide"><p class="sl-lbl">현재 수준</p><p class="sl-q">자기관리를 어느 정도<br>하고 있나요?</p><div class="opts"><span class="opt full">물세수가 전부예요</span><span class="opt on full">로션·선크림은 챙겨요</span><span class="opt full">스킨케어 루틴 있어요</span></div></div>
+            <!-- S6 -->
+            <div class="ph-slide"><p class="sl-lbl">루틴 생성</p><p class="sl-q" style="font-size:12px;">맞춤 루틴을<br>제작 중이에요.</p><div class="gen-list"><div class="gen-row done"><span class="gen-check">✓</span><span class="gen-txt">고민 분석 완료</span></div><div class="gen-row done"><span class="gen-check">✓</span><span class="gen-txt">스케줄 패턴 반영</span></div><div class="gen-row active"><span class="gen-spin"></span><span class="gen-txt">4주 루틴 설계 중...</span></div><div class="gen-row idle"><span class="gen-dot"></span><span class="gen-txt">알림 시간 지정</span></div><div class="gen-row idle"><span class="gen-dot"></span><span class="gen-txt">맞춤 제품 추천</span></div></div></div>
+          </div></div>
+          <div class="ph-home"></div>
+        </div>
+      </div>
+      <div class="ph-nav">
+        <button class="p-arr" onclick="slidePhone(-1)">‹</button>
+        <div class="p-dots" id="pDots">
+          <div class="p-dot on"></div><div class="p-dot"></div><div class="p-dot"></div>
+          <div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div>
+        </div>
+        <button class="p-arr" onclick="slidePhone(1)">›</button>
+      </div>
+      <p style="font-size:.62rem;color:var(--faint);margin-top:.4rem;font-family:var(--font-ui);">* 프로토타입 화면</p>
+    </div>
+  </div>
+  <div class="snum">04 / 10</div>
+</section>
+
+<!-- ══ 05 AI ══ -->
+<section class="fp-section" id="s4">
+  <div class="g2" style="align-items:start;">
+    <div>
+      <span class="label r">Product · AI Analysis</span>
+      <h2 class="r d1">사진 한 장으로<br>얼굴을 분석한다</h2>
+      <div class="line r d2"></div>
+      <p class="body r d2" style="margin-bottom:1.2rem;">앞모습·옆모습 두 장 → <strong style="color:var(--white);">분위기 + 형태 + 인상 분석</strong> 즉시 제공</p>
+      <div class="trust-badges r d3">
+        <span class="trust-badge">OpenAI Vision 기반</span>
+        <span class="trust-badge">분석 후 즉시 삭제</span>
+        <span class="trust-badge">저장·학습 안 함</span>
+      </div>
+      <div class="upload-grid r d3">
+        <div class="upload-box" id="frontBox">
+          <input type="file" id="frontInput" accept="image/*" onchange="previewImg(this,'frontPrev','frontBox')">
+          <div class="upload-ph"><span class="upload-icon">+</span><span class="upload-lbl">앞모습</span><span class="upload-sub">정면 사진</span></div>
+          <img id="frontPrev" class="upload-prev">
+        </div>
+        <div class="upload-box" id="sideBox">
+          <input type="file" id="sideInput" accept="image/*" onchange="previewImg(this,'sidePrev','sideBox')">
+          <div class="upload-ph"><span class="upload-icon">+</span><span class="upload-lbl">옆모습</span><span class="upload-sub">측면 사진</span></div>
+          <img id="sidePrev" class="upload-prev">
+        </div>
+      </div>
+      <button class="analyze-btn r d4" id="analyzeBtn" disabled onclick="startAnalysis()">분석 시작하기</button>
+      <div class="ai-loading-wrap" id="aiLoading">
+        <div class="ai-dots-anim"><span></span><span></span><span></span></div>
+        <p class="ai-loading-txt">AI가 이미지를 분석하고 있습니다...</p>
+      </div>
+    </div>
+    <div>
+      <div class="ai-ph" id="aiPlaceholder">
+        <div class="big-lbl">AI</div>
+        <p class="body" style="font-size:.82rem;">사진을 업로드하면<br>분석 결과가 여기에 표시됩니다.</p>
+      </div>
+      <div class="ai-results-wrap" id="aiResults">
+        <p class="result-title">분석 결과</p>
+        <div class="result-card"><p class="result-card-lbl">분위기 분석</p><p class="result-card-head" id="rMoodLabel"></p><ul class="result-bullets" id="rMoodBullets"></ul><p class="result-conclusion" id="rMoodConclusion"></p></div>
+        <div class="result-card"><p class="result-card-lbl">얼굴 정밀 분석</p><p class="result-card-head" id="rPreciseTitle"></p><ul class="result-bullets" id="rPreciseFeatures"></ul><p class="result-conclusion" id="rPreciseConclusion"></p></div>
+        <div class="result-traits" id="rTraits"></div>
+        <div class="result-gate">
+          <p>종합 결론 및 <strong style="color:var(--white);">맞춤 루틴</strong>은<br>베타 서비스 신청 후 확인 가능합니다.</p>
+          <a href="https://myro-official.github.io/myro/#beta-section" target="_blank">맞춤 루틴 확인하기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="snum">05 / 10</div>
+</section>
+
+<!-- ══ 06 TRACTION ══ -->
+<section class="fp-section" id="s5">
+  <div class="content">
+    <span class="label r">Traction</span>
+    <h2 class="r d1">서비스 출시 전, 이미 검증됐습니다</h2>
+    <p class="body r d2" style="margin-bottom:2.2rem;">광고비 0원, 6주, 콘텐츠만으로</p>
+    <div class="g4" style="margin-bottom:1.6rem;">
+      <div class="card r d1"><div class="num" style="color:var(--blue);" data-count="143" data-suffix="K">0</div><div class="num-lbl">스레드 누적 조회수</div></div>
+      <div class="card r d2"><div class="num" data-count="17.5" data-suffix="K">0</div><div class="num-lbl">인스타 조회수 · 팔로워 111명</div></div>
+      <div class="card r d3"><div class="num" style="color:var(--green);" data-count="18.4" data-suffix="%">0</div><div class="num-lbl">랜딩 → 베타 신청 전환율</div></div>
+      <div class="card r d4"><div class="num" style="color:var(--amber);" data-count="9" data-suffix="명">0</div><div class="num-lbl">베타 신청 · 4명 먼저 연락</div></div>
+    </div>
+    <div class="r d3" style="background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.14);border-radius:4px;padding:1.2rem 1.6rem;">
+      <span class="badge badge-green" style="margin-bottom:.5rem;">인바운드 수요 발생</span>
+      <p class="body">랜딩 방문 49회 → 베타 신청 9명 (전환율 18.4%) — <strong style="color:var(--white);">4명이 카카오 채널로 먼저 연락. 아웃바운드 0건.</strong></p>
+    </div>
+  </div>
+  <div class="snum">06 / 10</div>
+</section>
+
+<!-- ══ 07 MARKET ══ -->
+<section class="fp-section" id="s6">
+  <div class="g2">
+    <div>
+      <span class="label r">Market Size</span>
+      <h2 class="r d1">국내 남성<br>자기관리 시장</h2>
+      <div class="line r d2"></div>
+      <div style="display:flex;flex-direction:column;gap:.8rem;">
+        <div class="card r d2">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <div class="num" style="font-size:2.6rem;" data-count="1.2" data-suffix="조원">0</div>
+            <span style="font-family:var(--font-en);font-size:.7rem;letter-spacing:.2em;color:var(--faint);">TAM</span>
+          </div>
+          <div class="num-lbl">국내 남성 그루밍 전체</div>
+        </div>
+        <div class="card r d3">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <div class="num" style="font-size:2.6rem;color:var(--blue);" data-count="620" data-suffix="억원">0</div>
+            <span style="font-family:var(--font-en);font-size:.7rem;letter-spacing:.2em;color:var(--faint);">SAM</span>
+          </div>
+          <div class="num-lbl">20~39세 × 유료 의향 28.6%</div>
+        </div>
+        <div class="card r d4" style="border-color:rgba(96,165,250,.3);">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <div class="num" style="font-size:2.6rem;color:var(--blue);" data-count="12" data-suffix="억/년">0</div>
+            <span style="font-family:var(--font-en);font-size:.7rem;letter-spacing:.2em;color:var(--blue);">SOM</span>
+          </div>
+          <div class="num-lbl">유료 구독자 1만명 × 9,900원/월</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.8rem;">
+      <div class="card r d2">
+        <h3 style="margin-bottom:.8rem;">CAC / LTV</h3>
+        <table>
+          <tr><td style="color:var(--faint);">CAC</td><td><b>3.6만원</b></td></tr>
+          <tr><td style="color:var(--faint);">LTV</td><td><b>19.8만원</b></td></tr>
+          <tr><td style="color:var(--faint);">LTV / CAC</td><td><b style="color:var(--green);">5.5배</b></td></tr>
+        </table>
+      </div>
+      <div class="card r d3">
+        <h3 style="margin-bottom:.8rem;">수요조사 (n=56)</h3>
+        <div style="margin-bottom:.8rem;">
+          <div style="display:flex;justify-content:space-between;font-family:var(--font-ko);font-size:.82rem;margin-bottom:.35rem;"><span style="color:var(--muted);">사용 의향 4~5점</span><span style="color:var(--white);font-weight:700;">69.6%</span></div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:69.6%;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--font-ko);font-size:.82rem;margin-bottom:.35rem;"><span style="color:var(--muted);">유료 결제 의향</span><span style="color:var(--white);font-weight:700;">55.4%</span></div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:55.4%;background:var(--blue);"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="snum">07 / 10</div>
+</section>
+
+<!-- ══ 08 BM ══ -->
+<section class="fp-section" id="s7">
+  <div class="content">
+    <span class="label r">Business Model</span>
+    <h2 class="r d1">5단계 수익 구조</h2>
+    <p class="body r d2" style="margin-bottom:1.8rem;">지금 당장 실행 가능한 수익원부터 장기 데이터 비즈니스까지</p>
+    <div class="r d2">
+      <div class="bm-row">
+        <div class="bm-phase">즉시</div>
+        <div><div class="bm-title">제휴 커머스 수수료</div><div class="bm-desc">쿠팡 파트너스 3% — 루틴 맥락 안에서 자연 발생</div></div>
+        <div class="bm-amount">월 13만 → 5K명 135만원</div>
+      </div>
+      <div class="bm-row">
+        <div class="bm-phase">단기 ①</div>
+        <div><div class="bm-title">루틴 플랜 판매</div><div class="bm-desc">단건 9,900원 / 전체 5개 29,900원 · 1주 무료체험 후 전환</div></div>
+        <div class="bm-amount">월 225만 → 5K명 2,250만원</div>
+      </div>
+      <div class="bm-row">
+        <div class="bm-phase hi">단기 ②</div>
+        <div><div class="bm-title" style="color:var(--blue);">1:1 루틴 케어 패키지</div><div class="bm-desc">베타 19,900원 → 정식 34,900원 (2주 패키지)</div></div>
+        <div class="bm-amount hi">베타 월 24만 / 정식 42만원</div>
+      </div>
+      <div class="bm-row">
+        <div class="bm-phase">중기</div>
+        <div><div class="bm-title">브랜드 스폰서십 & 오프라인</div><div class="bm-desc">완주자 대상 브랜드 협찬 이벤트 · B2B+B2C 복합</div></div>
+        <div class="bm-amount">협찬 50~100만 + 참가비</div>
+      </div>
+      <div class="bm-row">
+        <div class="bm-phase">장기</div>
+        <div><div class="bm-title">자기관리 패턴 데이터</div><div class="bm-desc">익명화 집계 → 뷰티·스포츠·패션 브랜드 인사이트 판매</div></div>
+        <div class="bm-amount">계약당 100~500만원</div>
+      </div>
+    </div>
+  </div>
+  <div class="snum">08 / 10</div>
+</section>
+
+<!-- ══ 09 COMPETITION ══ -->
+<section class="fp-section" id="s8">
+  <div class="content">
+    <span class="label r">Competition</span>
+    <h2 class="r d1">각 영역 챔피언은 있다.<br><span style="color:var(--blue);">통합 코치는 없다.</span></h2>
+    <p class="body r d2" style="margin-bottom:1.8rem;">5영역 통합 + 습관화 코칭 — 국내외 미존재</p>
+    <div class="r d2" style="margin-bottom:1.4rem;">
+      <table>
+        <thead>
+          <tr><th>서비스</th><th>규모</th><th>한계</th><th>MYRO 차별점</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>플랜핏</b></td><td>400만 유저</td><td>운동 단일 · 습관화 없음</td><td><b>5영역 통합 + 완주 구조</b></td></tr>
+          <tr><td><b>룩핀</b></td><td>1,000만 유저</td><td>패션 단일 · 루틴 없음</td><td><b>스타일+그루밍+바디 통합</b></td></tr>
+          <tr><td><b>화해</b></td><td>성분 분석 앱 1위</td><td>여성 중심 · 정보만 제공</td><td><b>남성 전용 + 고민 기반</b></td></tr>
+          <tr><td><b>오맨뷰티</b></td><td>컨설팅 1만건</td><td>수동 7일 / 69,000원+</td><td><b>AI 즉시 분석 + 9,900원~</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="g3">
+      <div class="card r d1"><span class="badge badge-blue" style="margin-bottom:.5rem;">완주 구조</span><p class="body" style="font-size:.86rem;">이탈 감지 + 게이미피케이션 + 기수제 — 타 앱에 없음</p></div>
+      <div class="card r d2"><span class="badge badge-blue" style="margin-bottom:.5rem;">AI 개인화</span><p class="body" style="font-size:.86rem;">오맨뷰티 7일 vs MYRO 즉시 — 10배 빠름</p></div>
+      <div class="card r d3"><span class="badge badge-blue" style="margin-bottom:.5rem;">콘텐츠 Moat</span><p class="body" style="font-size:.86rem;">160K+ 뷰 · 광고비 0원 · 유기 수요 이미 존재</p></div>
+    </div>
+  </div>
+  <div class="snum">09 / 10</div>
+</section>
+
+<!-- ══ 10 ROADMAP ══ -->
+<section class="fp-section" id="s9">
+  <div class="content">
+    <span class="label r">Roadmap & Ask</span>
+    <h2 class="r d1">데모데이까지 <span class="en" style="color:var(--blue);">D-23</span></h2>
+    <p class="body r d2" style="margin-bottom:2rem;">검증 완료 → 빌드 → 테스트 → 발표</p>
+    <div class="g4" style="margin-bottom:1.6rem;">
+      <div class="rm-card r d1">
+        <div class="rm-date">6/24 ~ 6/29</div>
+        <h3 style="margin-bottom:.35rem;">실구동 빌드</h3>
+        <p class="body" style="font-size:.82rem;">온보딩 + 루틴 결과 카드 · 베타 1기 10명</p>
+      </div>
+      <div class="rm-card r d2">
+        <div class="rm-date">6/30 ~ 7/5</div>
+        <h3 style="margin-bottom:.35rem;">베타 테스트</h3>
+        <p class="body" style="font-size:.82rem;">5명 MVP 테스트 · 유료결제 의향 직접 확인</p>
+      </div>
+      <div class="rm-card r d3">
+        <div class="rm-date">7/6 ~ 7/9</div>
+        <h3 style="margin-bottom:.35rem;">1차 심사</h3>
+        <p class="body" style="font-size:.82rem;">IR덱 완성 · 베타 피드백 반영</p>
+      </div>
+      <div class="rm-card hi r d4">
+        <div class="rm-date hi">7/18 데모데이</div>
+        <h3 style="margin-bottom:.35rem;">최종 발표</h3>
+        <p class="body" style="font-size:.82rem;">온보딩 라이브 시연 · AI 분석 데모</p>
+      </div>
+    </div>
+    <div class="r d3" style="background:rgba(96,165,250,.05);border:1px solid rgba(96,165,250,.2);border-radius:4px;padding:1.2rem 1.6rem;display:flex;justify-content:space-between;align-items:center;gap:2rem;">
+      <div>
+        <span class="badge badge-blue" style="margin-bottom:.5rem;">팀 소개</span>
+        <p class="body">지강은 · 1인 창업 · 전략+개발+마케팅 직접 수행<br>Claude Code 활용 — 주간 20시간으로 4인팀 속도 구현</p>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="font-family:var(--font-en);font-size:3rem;color:var(--blue);line-height:1;">MYRO</div>
+        <p style="font-family:var(--font-ui);font-size:.65rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-top:.3rem;">be.myro · @be.myro</p>
+      </div>
+    </div>
+  </div>
+  <div class="snum">10 / 10</div>
+</section>
+
+</div><!-- /fp -->
+
+<script>
+const AI_API = 'https://web-production-0e945.up.railway.app/analyze';
+
+/* ── FULLPAGE ENGINE ── */
+const fp = document.getElementById('fp');
+const sections = [...document.querySelectorAll('.fp-section')];
+const total = sections.length;
+let cur = 0;
+
+function goTo(idx) {
+  idx = Math.max(0, Math.min(total - 1, idx));
+  cur = idx;
+  sections[idx].scrollIntoView({ behavior:'smooth' });
+  update();
+}
+
+function update() {
+  document.querySelectorAll('.sdot').forEach((d,i) => d.classList.toggle('on', i === cur));
+  document.getElementById('fp-prev').classList.toggle('hidden', cur === 0);
+  document.getElementById('fp-next').classList.toggle('hidden', cur === total - 1);
+  document.getElementById('progress').style.width = ((cur / (total - 1)) * 100) + '%';
+  document.getElementById('nav').classList.toggle('on', cur > 0);
+}
+
+/* 섹션 도트 생성 */
+const sdots = document.getElementById('sdots');
+sections.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'sdot' + (i === 0 ? ' on' : '');
+  d.onclick = () => goTo(i);
+  sdots.appendChild(d);
+});
+
+/* IntersectionObserver */
+const sObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      cur = sections.indexOf(e.target);
+      update();
+      e.target.querySelectorAll('.r:not(.in)').forEach(el => el.classList.add('in'));
+      e.target.querySelectorAll('[data-count]:not(.counted)').forEach(el => {
+        el.classList.add('counted'); countUp(el);
+      });
+    }
+  });
+}, { threshold:0.5, root:fp });
+sections.forEach(s => sObs.observe(s));
+
+/* Hero 즉시 reveal */
+sections[0].querySelectorAll('.r').forEach(el => el.classList.add('in'));
+
+/* 키보드 */
+document.addEventListener('keydown', e => {
+  if (['ArrowDown','ArrowRight',' ','Enter'].includes(e.key)) { e.preventDefault(); goTo(cur+1); }
+  if (['ArrowUp','ArrowLeft'].includes(e.key)) { e.preventDefault(); goTo(cur-1); }
+});
+
+/* 터치 */
+let ty0 = 0;
+fp.addEventListener('touchstart', e => { ty0 = e.touches[0].clientY; }, { passive:true });
+fp.addEventListener('touchend', e => {
+  const dy = ty0 - e.changedTouches[0].clientY;
+  if (Math.abs(dy) > 40) goTo(cur + (dy > 0 ? 1 : -1));
+});
+
+/* 카운트업 */
+function countUp(el) {
+  const target = parseFloat(el.dataset.count);
+  const suffix = el.dataset.suffix || '';
+  const dec = target % 1 !== 0 ? 1 : 0;
+  const dur = 1200, step = 16, steps = dur / step;
+  let v = 0;
+  const t = setInterval(() => {
+    v = Math.min(v + target/steps, target);
+    el.textContent = v.toFixed(dec) + suffix;
+    if (v >= target) clearInterval(t);
+  }, step);
+}
+
+/* 폰 목업 */
+let pIdx = 0;
+function slidePhone(dir) {
+  pIdx = Math.max(0, Math.min(5, pIdx + dir));
+  document.getElementById('phoneSlides').style.transform = `translateX(-${pIdx * 100}%)`;
+  document.getElementById('phoneStep').textContent = pIdx < 5 ? `STEP ${pIdx+1} / 5` : '생성 중...';
+  document.querySelectorAll('.p-dot').forEach((d,i) => d.classList.toggle('on', i === pIdx));
+}
+
+/* AI 분석 */
+function previewImg(input, prevId, boxId) {
+  if (!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById(prevId);
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById(boxId).classList.add('has-file');
+  };
+  reader.readAsDataURL(input.files[0]);
+  const f = document.getElementById('frontInput').files[0];
+  const s = document.getElementById('sideInput').files[0];
+  document.getElementById('analyzeBtn').disabled = !(f && s);
+}
+
+async function startAnalysis() {
+  const f = document.getElementById('frontInput').files[0];
+  const s = document.getElementById('sideInput').files[0];
+  if (!f || !s) return;
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('aiLoading').style.display = 'block';
+  document.getElementById('aiResults').style.display = 'none';
+  document.getElementById('aiPlaceholder').style.display = 'none';
+  try {
+    const post = async file => {
+      const fd = new FormData(); fd.append('photo', file);
+      const r = await fetch(AI_API, { method:'POST', body:fd });
+      if (!r.ok) throw 0;
+      return r.json();
+    };
+    const [fd, sd] = await Promise.all([post(f), post(s)]);
+    document.getElementById('rMoodLabel').textContent = fd.mood?.label || '';
+    document.getElementById('rMoodBullets').innerHTML = (fd.mood?.bullets||[]).map(b=>`<li>${b}</li>`).join('');
+    document.getElementById('rMoodConclusion').textContent = fd.mood?.conclusion || '';
+    document.getElementById('rPreciseTitle').textContent = fd.precise?.title || '';
+    document.getElementById('rPreciseFeatures').innerHTML = (fd.precise?.features||[]).map(v=>`<li>${v}</li>`).join('');
+    document.getElementById('rPreciseConclusion').textContent = sd.precise?.conclusion || fd.precise?.conclusion || '';
+    document.getElementById('rTraits').innerHTML = Object.entries(fd.traits||{}).map(([k,v])=>
+      `<div class="trait-item">${k}<div class="trait-bar"><div class="trait-fill" style="width:${Math.round(v*100)}%"></div></div></div>`).join('');
+    document.getElementById('aiLoading').style.display = 'none';
+    document.getElementById('aiResults').style.display = 'block';
+  } catch {
+    document.getElementById('aiLoading').style.display = 'none';
+    document.getElementById('analyzeBtn').disabled = false;
+    document.getElementById('aiPlaceholder').style.display = 'flex';
+    alert('분석 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+  }
+}
+</script>
+</body>
+</html>
