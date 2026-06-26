@@ -1114,8 +1114,16 @@
                             <p class="ai-item-text" id="resultItemHair"></p>
                         </div>
                         <div class="ai-item-row">
-                            <span class="ai-item-cat">패션</span>
-                            <p class="ai-item-text" id="resultItemFashion"></p>
+                            <span class="ai-item-cat">여름 패션</span>
+                            <p class="ai-item-text" id="resultItemSummer"></p>
+                        </div>
+                        <div class="ai-item-row">
+                            <span class="ai-item-cat">겨울 패션</span>
+                            <p class="ai-item-text" id="resultItemWinter"></p>
+                        </div>
+                        <div class="ai-item-row">
+                            <span class="ai-item-cat">악세사리</span>
+                            <p class="ai-item-text" id="resultItemAccessory"></p>
                         </div>
                         <div class="ai-item-row">
                             <span class="ai-item-cat">그루밍</span>
@@ -1128,6 +1136,12 @@
                 <div class="ai-result-card">
                     <p class="ai-result-card-label">얼굴 균형</p>
                     <p class="ai-result-conclusion" id="resultBalance"></p>
+                </div>
+
+                <!-- 자기관리 코칭 -->
+                <div class="ai-result-card" style="border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.03);">
+                    <p class="ai-result-card-label">자기관리 시작 포인트</p>
+                    <p class="ai-result-conclusion" id="resultCoaching" style="color:#fff; line-height:1.9;"></p>
                 </div>
 
                 <!-- 인상 속성 (traits) -->
@@ -1533,11 +1547,16 @@
 
                 // 어울리는 아이템
                 document.getElementById('resultItemHair').textContent = d.items?.hair || '';
-                document.getElementById('resultItemFashion').textContent = d.items?.fashion || '';
+                document.getElementById('resultItemSummer').textContent = d.items?.summer || '';
+                document.getElementById('resultItemWinter').textContent = d.items?.winter || '';
+                document.getElementById('resultItemAccessory').textContent = d.items?.accessory || '';
                 document.getElementById('resultItemGrooming').textContent = d.items?.grooming || '';
 
                 // 얼굴 균형
                 document.getElementById('resultBalance').textContent = d.balance || '';
+
+                // 자기관리 코칭
+                document.getElementById('resultCoaching').textContent = d.coaching || '';
 
                 // Traits (바 + 숫자)
                 const traits = d.traits || {};
