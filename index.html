@@ -1129,6 +1129,10 @@
                             <span class="ai-item-cat">그루밍</span>
                             <p class="ai-item-text" id="resultItemGrooming"></p>
                         </div>
+                        <div class="ai-item-row">
+                            <span class="ai-item-cat">이미지 체형</span>
+                            <p class="ai-item-text" id="resultItemWorkout"></p>
+                        </div>
                     </div>
                 </div>
 
@@ -1551,6 +1555,7 @@
                 document.getElementById('resultItemWinter').textContent = d.items?.winter || '';
                 document.getElementById('resultItemAccessory').textContent = d.items?.accessory || '';
                 document.getElementById('resultItemGrooming').textContent = d.items?.grooming || '';
+                document.getElementById('resultItemWorkout').textContent = d.items?.workout || '';
 
                 // 얼굴 균형
                 document.getElementById('resultBalance').textContent = d.balance || '';
