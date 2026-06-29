@@ -139,25 +139,47 @@
     .sec-title { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gray); margin:18px 0 10px; }
 
     /* ── s6: 스케줄 ── */
-    .schedule-list { display:flex; flex-direction:column; gap:8px; margin-bottom:24px; }
-    .day-row {
-      background:var(--card-bg); border:1.5px solid var(--border); border-radius:12px;
-      padding:12px 14px; display:flex; align-items:center; gap:10px;
+    .schedule-list { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+    .day-block {
+      background:var(--card-bg); border:1.5px solid var(--border); border-radius:14px; overflow:hidden;
     }
-    .day-label { font-size:13px; font-weight:600; min-width:52px; flex-shrink:0; }
-    .day-label span { display:block; font-size:10px; font-weight:400; color:var(--gray); margin-top:2px; }
-    .day-fields { flex:1; display:flex; gap:8px; align-items:center; }
-    .time-field { flex:1; display:flex; flex-direction:column; gap:3px; }
-    .time-field label { font-size:10px; color:var(--gray); }
-    .time-field input[type="time"] {
-      background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:8px;
-      color:var(--white); font-family:'Montserrat',sans-serif; font-size:13px; padding:7px 8px; width:100%;
+    .day-block-head {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 16px; border-bottom:1px solid var(--border);
     }
-    .time-field input[type="time"]:focus { outline:none; border-color:rgba(232,237,242,0.4); }
-    .time-field input[type="time"]::-webkit-calendar-picker-indicator { filter:invert(0.6); cursor:pointer; }
-    .day-free { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--gray); cursor:pointer; user-select:none; flex-shrink:0; }
-    .day-free input[type="checkbox"] { width:14px; height:14px; accent-color:var(--silver); cursor:pointer; }
-    .weekend-tag { font-size:9px; background:rgba(232,237,242,0.08); color:var(--gray); padding:1px 6px; border-radius:6px; }
+    .day-block-label { display:flex; align-items:center; gap:10px; }
+    .day-name { font-size:14px; font-weight:700; }
+    .day-date-sub { font-size:11px; color:var(--gray); }
+    .weekend-tag { font-size:9px; background:rgba(232,237,242,0.08); color:var(--gray); padding:2px 7px; border-radius:6px; margin-left:4px; }
+    .day-block-events { padding:10px 14px; display:flex; flex-direction:column; gap:7px; }
+    .event-row { display:flex; align-items:center; gap:8px; }
+    .event-label-input {
+      flex:1; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:8px;
+      color:var(--white); font-family:'Montserrat','Noto Sans KR',sans-serif; font-size:13px;
+      padding:8px 12px; min-width:0;
+    }
+    .event-label-input::placeholder { color:rgba(160,169,180,0.45); font-size:12px; }
+    .event-label-input:focus { outline:none; border-color:rgba(232,237,242,0.35); }
+    .event-time-input {
+      width:96px; flex-shrink:0; background:rgba(255,255,255,0.05); border:1px solid var(--border);
+      border-radius:8px; color:var(--white); font-family:'Montserrat',sans-serif;
+      font-size:13px; padding:8px 8px;
+    }
+    .event-time-input:focus { outline:none; border-color:rgba(232,237,242,0.35); }
+    .event-time-input::-webkit-calendar-picker-indicator { filter:invert(0.5); cursor:pointer; }
+    .event-del {
+      width:28px; height:28px; background:none; border:none; color:rgba(160,169,180,0.5);
+      font-size:16px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+      border-radius:6px; transition:color 0.2s;
+    }
+    .event-del:hover { color:var(--white); }
+    .add-event-btn {
+      display:flex; align-items:center; gap:6px; margin:8px 14px 12px;
+      background:none; border:1px dashed rgba(160,169,180,0.25); border-radius:8px;
+      color:var(--gray); font-size:12px; font-family:inherit; cursor:pointer;
+      padding:8px 12px; width:calc(100% - 28px); transition:border-color 0.2s;
+    }
+    .add-event-btn:hover { border-color:rgba(232,237,242,0.4); color:var(--silver); }
 
     /* ── s7: 소비력 ── */
     .budget-list { display:flex; flex-direction:column; gap:8px; margin-bottom:24px; }
@@ -205,6 +227,42 @@
     }
     .radio-opt:hover { border-color:rgba(232,237,242,0.3); }
     .radio-opt.selected { border-color:var(--silver); background:rgba(232,237,242,0.08); }
+
+    /* ── 피부타입 퀴즈 ── */
+    .quiz-trigger {
+      display:flex; align-items:center; gap:6px; width:100%; margin-top:8px;
+      background:none; border:1px dashed rgba(160,169,180,0.3); border-radius:12px;
+      color:var(--gray); font-size:12px; font-family:inherit; cursor:pointer;
+      padding:10px 14px; transition:all 0.2s;
+    }
+    .quiz-trigger:hover { border-color:rgba(232,237,242,0.4); color:var(--silver); }
+    .quiz-panel {
+      margin-top:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border);
+      border-radius:14px; padding:18px 16px; display:none;
+    }
+    .quiz-panel.open { display:block; animation:fadeUp 0.25s ease; }
+    .quiz-progress-wrap { margin-bottom:14px; }
+    .quiz-prog-bar { height:2px; background:var(--border); border-radius:2px; margin-bottom:6px; }
+    .quiz-prog-fill { height:100%; background:var(--silver); border-radius:2px; transition:width 0.3s; }
+    .quiz-step-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gray); }
+    .quiz-q { font-size:14px; font-weight:600; line-height:1.5; margin-bottom:14px; }
+    .quiz-opts { display:flex; flex-direction:column; gap:7px; }
+    .quiz-opt {
+      background:var(--card-bg); border:1.5px solid var(--border); border-radius:10px;
+      color:var(--white); font-size:13px; font-family:inherit; text-align:left;
+      padding:11px 14px; cursor:pointer; transition:all 0.2s; line-height:1.5;
+    }
+    .quiz-opt:hover { border-color:rgba(232,237,242,0.35); background:rgba(232,237,242,0.04); }
+    .quiz-result-box { text-align:center; padding:8px 0; }
+    .quiz-result-tag { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gray); margin-bottom:8px; }
+    .quiz-result-type { font-size:22px; font-weight:700; margin-bottom:8px; }
+    .quiz-result-desc { font-size:13px; color:var(--gray); line-height:1.7; margin-bottom:14px; }
+    .quiz-reset-btn {
+      background:none; border:1px solid var(--border); border-radius:10px;
+      color:var(--gray); font-size:12px; font-family:inherit; cursor:pointer;
+      padding:8px 16px; transition:all 0.2s;
+    }
+    .quiz-reset-btn:hover { border-color:rgba(232,237,242,0.4); color:var(--silver); }
 
     /* ── Buttons ── */
     .btn-primary {
@@ -459,68 +517,9 @@
   <!-- s6: 스케줄 (Step 1/4) -->
   <div class="screen" id="s6">
     <div class="label">Step 1 of 4</div>
-    <div class="title" id="schedule-title">님의 이번 주<br>스케줄을 알려주세요.</div>
-    <div class="subtitle">기상·귀가 시간을 입력하면 루틴 시간대를<br>딱 맞게 설계해 드릴게요.</div>
-    <div class="schedule-list">
-      <div class="day-row">
-        <div class="day-label">7/1<span>수요일</span></div>
-        <div class="day-fields">
-          <div class="time-field"><label>기상</label><input type="time" id="wake-0" value="07:00"></div>
-          <div class="time-field"><label>귀가</label><input type="time" id="home-0" value="18:00"></div>
-        </div>
-      </div>
-      <div class="day-row">
-        <div class="day-label">7/2<span>목요일</span></div>
-        <div class="day-fields">
-          <div class="time-field"><label>기상</label><input type="time" id="wake-1" value="07:00"></div>
-          <div class="time-field"><label>귀가</label><input type="time" id="home-1" value="18:00"></div>
-        </div>
-      </div>
-      <div class="day-row">
-        <div class="day-label">7/3<span>금요일</span></div>
-        <div class="day-fields">
-          <div class="time-field"><label>기상</label><input type="time" id="wake-2" value="07:00"></div>
-          <div class="time-field"><label>귀가</label><input type="time" id="home-2" value="18:00"></div>
-        </div>
-      </div>
-      <div class="day-row">
-        <div class="day-label">7/4<span>토<span class="weekend-tag">주말</span></span></div>
-        <div class="day-fields" id="fields-3">
-          <div class="time-field"><label>기상</label><input type="time" id="wake-3" value="09:00"></div>
-          <div class="time-field"><label>귀가</label><input type="time" id="home-3" value="21:00"></div>
-        </div>
-        <label class="day-free"><input type="checkbox" onchange="toggleFree(3,this)">자유</label>
-      </div>
-      <div class="day-row">
-        <div class="day-label">7/5<span>일<span class="weekend-tag">주말</span></span></div>
-        <div class="day-fields" id="fields-4">
-          <div class="time-field"><label>기상</label><input type="time" id="wake-4" value="09:00"></div>
-          <div class="time-field"><label>귀가</label><input type="time" id="home-4" value="21:00"></div>
-        </div>
-        <label class="day-free"><input type="checkbox" onchange="toggleFree(4,this)">자유</label>
-      </div>
-      <div class="day-row">
-        <div class="day-label">7/6<span>월요일</span></div>
-        <div class="day-fields">
-          <div class="time-field"><label>기상</label><input type="time" id="wake-5" value="07:00"></div>
-          <div class="time-field"><label>귀가</label><input type="time" id="home-5" value="18:00"></div>
-        </div>
-      </div>
-      <div class="day-row">
-        <div class="day-label">7/7<span>화요일</span></div>
-        <div class="day-fields">
-          <div class="time-field"><label>기상</label><input type="time" id="wake-6" value="07:00"></div>
-          <div class="time-field"><label>귀가</label><input type="time" id="home-6" value="18:00"></div>
-        </div>
-      </div>
-      <div class="day-row">
-        <div class="day-label">7/8<span>수요일</span></div>
-        <div class="day-fields">
-          <div class="time-field"><label>기상</label><input type="time" id="wake-7" value="07:00"></div>
-          <div class="time-field"><label>귀가</label><input type="time" id="home-7" value="18:00"></div>
-        </div>
-      </div>
-    </div>
+    <div class="title" id="schedule-title">님의 이번 주<br>스케줄을 입력해주세요.</div>
+    <div class="subtitle" id="schedule-sub">고정 스케줄을 입력할수록 <em style="font-style:normal;color:var(--silver);font-weight:600">님께 더 정교하게 맞춤화된</em> 루틴을 설계해 드릴 수 있어요.</div>
+    <div class="schedule-list" id="schedule-list"></div>
     <button class="btn-primary" onclick="go(7)">다음</button>
   </div>
 
@@ -646,7 +645,7 @@
 
   function go(n) {
     if (n === 5) applyName();
-    if (n === 6) applyTitles();
+    if (n === 6) { applyTitles(); setTimeout(renderSchedule, 0); }
     if (n === 9) renderDetail();
     const prev = document.getElementById('s' + cur);
     if (prev) prev.classList.remove('active');
@@ -692,25 +691,218 @@
 
   function applyTitles() {
     const n = state.name || '마이러';
-    document.getElementById('schedule-title').innerHTML = `${n}님의 이번 주<br>스케줄을 알려주세요.`;
+    document.getElementById('schedule-title').innerHTML = `${n}님의 이번 주<br>스케줄을 입력해주세요.`;
+    document.getElementById('schedule-sub').innerHTML = `고정 스케줄을 입력할수록 <em style="font-style:normal;color:var(--silver);font-weight:600">${n}님께 더 정교하게 맞춤화된</em> 루틴을 설계해 드릴 수 있어요.`;
     document.getElementById('budget-title').innerHTML = `${n}님만의 루틴을<br>설계해 드릴게요.`;
     state.callStart = document.getElementById('call-start')?.value || '';
     state.callEnd = document.getElementById('call-end')?.value || '';
   }
 
-  /* ── s6: 스케줄 ── */
-  function toggleFree(idx, cb) {
-    const f = document.getElementById('fields-' + idx);
-    f.style.opacity = cb.checked ? '0.3' : '1';
-    f.querySelectorAll('input').forEach(i => i.disabled = cb.checked);
+  /* ── s6: 동적 스케줄 ── */
+  const DAY_INFO = [
+    {date:'7/1', day:'수요일', weekend:false},
+    {date:'7/2', day:'목요일', weekend:false},
+    {date:'7/3', day:'금요일', weekend:false},
+    {date:'7/4', day:'토요일', weekend:true},
+    {date:'7/5', day:'일요일', weekend:true},
+    {date:'7/6', day:'월요일', weekend:false},
+    {date:'7/7', day:'화요일', weekend:false},
+    {date:'7/8', day:'수요일', weekend:false},
+  ];
+
+  // events[dayIdx] = [{label, time}, ...]
+  const events = DAY_INFO.map((d) => d.weekend
+    ? [{label:'기상', time:'09:00'}, {label:'귀가', time:'21:00'}]
+    : [{label:'기상', time:'07:00'}, {label:'귀가', time:'18:00'}]
+  );
+
+  function renderSchedule() {
+    const list = document.getElementById('schedule-list');
+    if (!list) return;
+    list.innerHTML = DAY_INFO.map((d, di) => `
+      <div class="day-block">
+        <div class="day-block-head">
+          <div class="day-block-label">
+            <span class="day-name">${d.date}</span>
+            <span class="day-date-sub">${d.day}${d.weekend ? '<span class="weekend-tag">주말</span>' : ''}</span>
+          </div>
+        </div>
+        <div class="day-block-events" id="events-${di}">
+          ${events[di].map((e, ei) => eventRowHTML(di, ei, e)).join('')}
+        </div>
+        <button class="add-event-btn" onclick="addEvent(${di})">+ 일정 추가</button>
+      </div>
+    `).join('');
+  }
+
+  function eventRowHTML(di, ei, e) {
+    return `
+      <div class="event-row" id="row-${di}-${ei}">
+        <input class="event-label-input" type="text" placeholder="출근, 점심, 운동, 취침…"
+          value="${e.label}" maxlength="10"
+          onchange="updateEvent(${di},${ei},'label',this.value)">
+        <input class="event-time-input" type="time"
+          value="${e.time}"
+          onchange="updateEvent(${di},${ei},'time',this.value)">
+        <button class="event-del" onclick="removeEvent(${di},${ei})">×</button>
+      </div>
+    `;
+  }
+
+  function addEvent(di) {
+    events[di].push({label:'', time:'12:00'});
+    renderSchedule();
+    // focus the new label input
+    const rows = document.querySelectorAll(`#events-${di} .event-label-input`);
+    if (rows.length) rows[rows.length-1].focus();
+  }
+
+  function removeEvent(di, ei) {
+    if (events[di].length <= 1) return; // 최소 1개 유지
+    events[di].splice(ei, 1);
+    renderSchedule();
+  }
+
+  function updateEvent(di, ei, field, val) {
+    if (events[di]?.[ei]) events[di][ei][field] = val;
   }
 
   function collectSchedule() {
-    state.schedule = DATES.map((date, i) => {
-      const freeBox = document.querySelector(`#fields-${i}`)?.closest('.day-row')?.querySelector('input[type="checkbox"]');
-      const free = freeBox?.checked || false;
-      return { date, day: DAYS_KR[i], wake: free ? '자유' : (document.getElementById('wake-'+i)?.value||''), home: free ? '자유' : (document.getElementById('home-'+i)?.value||'') };
+    state.schedule = DAY_INFO.map((d, i) => {
+      const evts = events[i].filter(e => e.time);
+      const evtStr = evts.map(e => `${e.label || '일정'} ${e.time}`).join(', ');
+      return { date: d.date, day: d.day, evtStr };
     });
+  }
+
+  function formatScheduleForAPI() {
+    return state.schedule
+      .map(d => `${d.date}(${d.day.slice(0,1)}): ${d.evtStr}`)
+      .join('\n');
+  }
+
+  /* ── 피부타입 퀴즈 ── */
+  const SKIN_QUIZ = [
+    {
+      q: "세안 후 아무것도 바르지 않으면, 1시간 뒤 피부 상태는?",
+      opts: [
+        { text: "얼굴 전체가 번들거려요", score: {oily:3} },
+        { text: "이마·코만 번들거리고 볼은 당겨요", score: {combo:3} },
+        { text: "전체적으로 당기고 건조해요", score: {dry:3} },
+        { text: "당기진 않지만 빨개지거나 따가워요", score: {sensitive:3} },
+      ]
+    },
+    {
+      q: "오후 2~3시, 거울을 보면 피부 상태는?",
+      opts: [
+        { text: "얼굴 전체가 기름지고 번들거려요", score: {oily:3} },
+        { text: "이마·코만 번들거리고 볼은 괜찮아요", score: {combo:3} },
+        { text: "화장이 들뜨거나 각질이 올라와요", score: {dry:3} },
+        { text: "피부가 불편하거나 붉어져 있어요", score: {sensitive:2, dry:1} },
+      ]
+    },
+    {
+      q: "모공과 블랙헤드 상태는?",
+      opts: [
+        { text: "얼굴 전체 모공이 크고 블랙헤드가 많아요", score: {oily:3} },
+        { text: "코·이마 주변 모공만 눈에 띄어요", score: {combo:3} },
+        { text: "모공이 거의 보이지 않아요", score: {dry:2, sensitive:1} },
+        { text: "모공은 작은데 피부가 자주 빨개져요", score: {sensitive:3} },
+      ]
+    },
+    {
+      q: "여드름·트러블이 생기는 패턴은?",
+      opts: [
+        { text: "얼굴 전체에 자주 생겨요", score: {oily:3} },
+        { text: "주로 이마·코 주변에만 나요", score: {combo:3} },
+        { text: "거의 생기지 않아요", score: {dry:2} },
+        { text: "새 제품 쓰거나 날씨 바뀌면 생겨요", score: {sensitive:3} },
+      ]
+    },
+    {
+      q: "새로운 스킨케어 제품을 쓸 때는?",
+      opts: [
+        { text: "대부분 문제없이 잘 맞아요", score: {oily:1, combo:1} },
+        { text: "가끔 뾰루지나 트러블이 생겨요", score: {combo:2, oily:1} },
+        { text: "자주 빨개지거나 따갑고 가려워요", score: {sensitive:3} },
+        { text: "보습이 부족하면 더 당기고 건조해요", score: {dry:3} },
+      ]
+    },
+  ];
+
+  const quizState = { current: 0, scores: {oily:0,dry:0,combo:0,sensitive:0} };
+
+  function openSkinQuiz() {
+    quizState.current = 0;
+    quizState.scores = {oily:0, dry:0, combo:0, sensitive:0};
+    document.getElementById('skin-quiz-btn').style.display = 'none';
+    const panel = document.getElementById('skin-quiz-panel');
+    panel.classList.add('open');
+    renderQuizQ();
+  }
+
+  function renderQuizQ() {
+    const panel = document.getElementById('skin-quiz-panel');
+    const idx = quizState.current;
+    const total = SKIN_QUIZ.length;
+    const q = SKIN_QUIZ[idx];
+    const pct = (idx / total) * 100;
+    panel.innerHTML = `
+      <div class="quiz-progress-wrap">
+        <div class="quiz-prog-bar"><div class="quiz-prog-fill" style="width:${pct}%"></div></div>
+        <div class="quiz-step-label">질문 ${idx + 1} / ${total}</div>
+      </div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-opts">
+        ${q.opts.map((o, i) => `<button class="quiz-opt" onclick="answerQuiz(${i})">${o.text}</button>`).join('')}
+      </div>
+    `;
+  }
+
+  function answerQuiz(optIdx) {
+    const q = SKIN_QUIZ[quizState.current];
+    Object.entries(q.opts[optIdx].score).forEach(([t, pts]) => {
+      quizState.scores[t] = (quizState.scores[t] || 0) + pts;
+    });
+    quizState.current++;
+    if (quizState.current >= SKIN_QUIZ.length) showQuizResult();
+    else renderQuizQ();
+  }
+
+  function showQuizResult() {
+    const s = quizState.scores;
+    const winner = Object.entries(s).sort((a,b) => b[1]-a[1])[0][0];
+    const map = {
+      oily:      { label:'지성 피부', val:'지성 피부', desc:'피지 분비가 활발한 타입이에요. 가벼운 수분 위주 케어와 피지 조절이 핵심입니다.' },
+      dry:       { label:'건성 피부', val:'건성 피부', desc:'수분과 유분이 부족한 타입이에요. 보습 장벽 강화 루틴이 가장 중요합니다.' },
+      combo:     { label:'복합성 피부', val:'복합성 피부', desc:'T존은 지성, 볼은 건성인 타입이에요. 부위별 맞춤 케어가 포인트입니다.' },
+      sensitive: { label:'민감성 피부', val:'민감성 피부', desc:'자극에 예민하게 반응하는 타입이에요. 저자극·무향 제품 위주 루틴이 필요합니다.' },
+    };
+    const r = map[winner];
+    state.skinType = r.val;
+    document.querySelectorAll('#skinType-list .radio-opt').forEach(el => {
+      el.classList.toggle('selected', el.dataset.val === r.val);
+    });
+    checkDetail();
+    document.getElementById('skin-quiz-panel').innerHTML = `
+      <div class="quiz-result-box">
+        <div class="quiz-prog-bar" style="margin-bottom:14px"><div class="quiz-prog-fill" style="width:100%"></div></div>
+        <div class="quiz-result-tag">분석 결과</div>
+        <div class="quiz-result-type">${r.label}</div>
+        <div class="quiz-result-desc">${r.desc}</div>
+        <button class="quiz-reset-btn" onclick="resetSkinQuiz()">다시 테스트하기</button>
+      </div>
+    `;
+  }
+
+  function resetSkinQuiz() {
+    state.skinType = null;
+    document.querySelectorAll('#skinType-list .radio-opt').forEach(el => el.classList.remove('selected'));
+    checkDetail();
+    const panel = document.getElementById('skin-quiz-panel');
+    panel.classList.remove('open');
+    panel.innerHTML = '';
+    document.getElementById('skin-quiz-btn').style.display = 'flex';
   }
 
   /* ── s7: 소비력 ── */
@@ -737,7 +929,15 @@
       <div class="sec-title" style="margin-top:0">주요 고민</div>
       <div class="chips">${chips(['여드름·트러블','번들거림·지성','건조함·당김','모공·블랙헤드','칙칙함·잡티','민감성·홍조'])}</div>
       <div class="sec-title">피부 타입</div>
-      <div class="radio-list">${radios(['지성 피부','건성 피부','복합성 피부','민감성 피부'],'skinType')}</div>
+      <div class="radio-list" id="skinType-list">
+        ${['지성 피부','건성 피부','복합성 피부','민감성 피부'].map(v =>
+          `<button class="radio-opt" data-val="${v}" onclick="pickField('skinType','${v}',this)">${v}</button>`
+        ).join('')}
+      </div>
+      <button class="quiz-trigger" id="skin-quiz-btn" onclick="openSkinQuiz()">
+        🔍 피부타입을 모르겠어요 — 퀴즈로 알아보기
+      </button>
+      <div class="quiz-panel" id="skin-quiz-panel"></div>
       <div class="sec-title">아침 준비 시간</div>
       <div class="radio-list" id="morning-list">${morningOpts()}</div>
       <div class="sec-title">현재 자기관리 레벨</div>
@@ -824,9 +1024,7 @@
   }
 
   async function fetchRoutine() {
-    const scheduleText = state.schedule.map(d =>
-      d.wake==='자유' ? `${d.date}(${d.day}): 자유` : `${d.date}(${d.day}): 기상 ${d.wake}, 귀가 ${d.home}`
-    ).join(' / ');
+    const scheduleText = formatScheduleForAPI();
     const res = await fetch(`${BACKEND}/routine`, {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
