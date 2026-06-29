@@ -47,18 +47,43 @@
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
     /* ── s0: Welcome ── */
-    .welcome-wrap {
-      min-height:100vh; display:flex; flex-direction:column;
-      justify-content:space-between; padding:52px 0 48px;
-    }
-    .welcome-top { text-align:center; }
-    .welcome-logo { font-family:'Bebas Neue',sans-serif; font-size:56px; letter-spacing:14px; margin-bottom:14px; display:block; }
+    .welcome-wrap { padding:52px 0 56px; }
+    .welcome-logo-row { text-align:center; margin-bottom:36px; }
+    .welcome-logo { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:14px; display:block; margin-bottom:10px; }
     .welcome-badge {
       display:inline-block; font-size:10px; letter-spacing:3px; text-transform:uppercase;
-      color:var(--gray); border:1px solid rgba(232,237,242,0.2); padding:5px 14px; border-radius:20px; margin-bottom:28px;
+      color:var(--gray); border:1px solid rgba(232,237,242,0.2); padding:5px 14px; border-radius:20px;
     }
-    .welcome-headline { font-size:22px; font-weight:700; line-height:1.5; margin-bottom:8px; }
-    .welcome-sub { font-size:13px; color:var(--gray); line-height:1.8; }
+    .brand-headline {
+      font-family:'Bebas Neue',sans-serif; font-size:48px; letter-spacing:3px;
+      line-height:1.05; margin-bottom:14px;
+    }
+    .brand-copy { font-size:14px; color:var(--gray); line-height:1.9; margin-bottom:28px; }
+    .brand-copy em { font-style:normal; color:var(--silver); }
+    .brand-divider { height:1px; background:var(--border); margin:28px 0; }
+    .brand-copy2 { font-size:13px; color:var(--gray); line-height:2; }
+    .brand-copy2 strong { color:var(--white); font-weight:600; display:block; }
+    .feature-card {
+      background:var(--card-bg); border:1px solid var(--border); border-radius:16px;
+      padding:20px 20px 16px; margin:28px 0;
+    }
+    .feature-card-lead { font-size:12px; color:var(--gray); line-height:1.7; margin-bottom:16px; }
+    .feature-list { display:flex; flex-direction:column; gap:0; margin-bottom:14px; }
+    .feature-item {
+      display:flex; align-items:center; gap:12px;
+      padding:10px 0; border-bottom:1px solid rgba(232,237,242,0.06); font-size:14px; font-weight:600;
+    }
+    .feature-item:last-child { border-bottom:none; }
+    .feature-dot { width:6px; height:6px; background:var(--silver); border-radius:50%; flex-shrink:0; }
+    .feature-card-close { font-size:12px; color:var(--gray); line-height:1.7; padding-top:4px; border-top:1px solid rgba(232,237,242,0.06); }
+    .welcome-closing {
+      text-align:center; padding:24px 0 0;
+    }
+    .welcome-closing-badge {
+      font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gray); margin-bottom:10px;
+    }
+    .welcome-headline { font-size:18px; font-weight:700; line-height:1.6; margin-bottom:4px; }
+    .welcome-sub { font-size:13px; color:var(--gray); line-height:1.8; margin-bottom:28px; }
 
     /* ── s1: 베타 안내 ── */
     .notice-wrap { padding: 24px 0 0; }
@@ -372,13 +397,44 @@
   <!-- s0: Welcome -->
   <div class="screen" id="s0">
     <div class="welcome-wrap">
-      <div class="welcome-top">
+
+      <div class="welcome-logo-row">
         <span class="welcome-logo">MYRO</span>
         <span class="welcome-badge">1ST MYRER</span>
-        <div class="welcome-headline" id="welcome-headline">마이로의 첫 마이러가<br>되어주셔서 감사합니다.</div>
-        <div class="welcome-sub">당신의 선택이 마이로의 첫 걸음입니다.<br>함께해 주셔서 진심으로 감사드려요.</div>
       </div>
-      <button class="btn-primary" style="margin-top:36px" onclick="go(1)">시작하기</button>
+
+      <div class="brand-headline">남자의<br>자기관리.</div>
+      <div class="brand-copy">
+        당신이 되고 싶은 <em>진짜 당신의 모습.</em><br>
+        변화의 시작을 책임집니다.
+      </div>
+
+      <div class="brand-divider"></div>
+
+      <div class="brand-copy2">
+        <strong>어떻게 시작할지 몰라 미뤄왔거나,<br>
+        시작했지만 끝내 포기했다면.</strong>
+        그 시작점이자 완주점이 되겠습니다. MYRO.
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-lead">루틴만으로는 변화가 힘든 것을 알기에,</div>
+        <div class="feature-list">
+          <div class="feature-item"><div class="feature-dot"></div>일일 체크인</div>
+          <div class="feature-item"><div class="feature-dot"></div>개인화 알림</div>
+          <div class="feature-item"><div class="feature-dot"></div>습관화 설계</div>
+          <div class="feature-item"><div class="feature-dot"></div>전후 리포트</div>
+        </div>
+        <div class="feature-card-close">변화가 자리잡을 때까지 함께합니다.</div>
+      </div>
+
+      <div class="welcome-closing">
+        <div class="welcome-closing-badge">1ST MYRER</div>
+        <div class="welcome-headline" id="welcome-headline">마이로의 첫 마이러가<br>되어주셔서 감사합니다.</div>
+        <div class="welcome-sub">당신의 선택이 마이로의 첫 걸음입니다.</div>
+        <button class="btn-primary" onclick="go(1)">시작하기</button>
+      </div>
+
     </div>
   </div>
 
