@@ -16,7 +16,6 @@
       --border: rgba(232,237,242,0.12);
       --accent: #C8D5E4;
       --red: #E53935;
-      --locked: rgba(160,169,180,0.18);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -76,14 +75,146 @@
     .p-dot.done { background: var(--gray); }
 
     /* Screens */
-    .screen { display: none; animation: fadeUp 0.3s ease; }
+    .screen { display: none; animation: fadeUp 0.35s ease; }
     .screen.active { display: block; }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(14px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Typography */
+    /* ──────────────────────────────────────
+       WELCOME SCREEN (s0)
+    ────────────────────────────────────── */
+    .welcome-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 52px 0 48px;
+    }
+    .welcome-top { text-align: center; }
+    .welcome-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      letter-spacing: 14px;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .welcome-badge {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gray);
+      border: 1px solid rgba(232,237,242,0.2);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+    }
+    .welcome-headline {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+    .welcome-sub {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.8;
+    }
+
+    .notice-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 20px;
+      margin: 28px 0 0;
+    }
+    .notice-title {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 14px;
+    }
+    .notice-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+    .notice-item:last-child { margin-bottom: 0; }
+    .notice-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--gray);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+    .notice-text {
+      font-size: 13px;
+      color: var(--silver);
+      line-height: 1.7;
+    }
+    .notice-text em {
+      font-style: normal;
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .kakao-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px;
+      background: #FEE500;
+      color: #191919;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 14px;
+      text-decoration: none;
+    }
+
+    /* ──────────────────────────────────────
+       NAME SCREEN (s1)
+    ────────────────────────────────────── */
+    .name-wrap {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .name-input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      color: var(--white);
+      font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      padding: 18px 20px;
+      margin: 16px 0 8px;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .name-input::placeholder { color: rgba(160,169,180,0.45); font-weight: 400; }
+    .name-input:focus {
+      outline: none;
+      border-color: rgba(232,237,242,0.5);
+    }
+    .name-hint { font-size: 12px; color: var(--gray); margin-bottom: 28px; }
+
+    /* ──────────────────────────────────────
+       COMMON TYPOGRAPHY
+    ────────────────────────────────────── */
     .label {
       font-size: 11px;
       letter-spacing: 2.5px;
@@ -101,7 +232,7 @@
       font-size: 13px;
       color: var(--gray);
       margin-bottom: 22px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
     .sec-title {
       font-size: 11px;
@@ -111,7 +242,9 @@
       margin: 18px 0 10px;
     }
 
-    /* ── Step 1: 주간 스케줄 ── */
+    /* ──────────────────────────────────────
+       SCHEDULE (s2)
+    ────────────────────────────────────── */
     .schedule-list {
       display: flex;
       flex-direction: column;
@@ -122,15 +255,15 @@
       background: var(--card-bg);
       border: 1.5px solid var(--border);
       border-radius: 12px;
-      padding: 13px 16px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .day-label {
       font-size: 13px;
       font-weight: 600;
-      min-width: 60px;
+      min-width: 52px;
       flex-shrink: 0;
     }
     .day-label span {
@@ -143,19 +276,18 @@
     .day-fields {
       flex: 1;
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
     }
     .time-field {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
     .time-field label {
       font-size: 10px;
       color: var(--gray);
-      letter-spacing: 0.5px;
     }
     .time-field input[type="time"] {
       background: rgba(255,255,255,0.05);
@@ -164,15 +296,13 @@
       color: var(--white);
       font-family: 'Montserrat', sans-serif;
       font-size: 13px;
-      padding: 7px 10px;
+      padding: 7px 8px;
       width: 100%;
-      -webkit-appearance: none;
     }
     .time-field input[type="time"]:focus {
       outline: none;
       border-color: rgba(232,237,242,0.4);
     }
-    /* Safari/Chrome time icon color */
     .time-field input[type="time"]::-webkit-calendar-picker-indicator {
       filter: invert(0.6);
       cursor: pointer;
@@ -180,29 +310,30 @@
     .day-free {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 12px;
+      gap: 5px;
+      font-size: 11px;
       color: var(--gray);
       cursor: pointer;
       user-select: none;
       flex-shrink: 0;
     }
     .day-free input[type="checkbox"] {
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
       accent-color: var(--silver);
       cursor: pointer;
     }
     .weekend-tag {
       font-size: 9px;
-      background: rgba(232,237,242,0.1);
+      background: rgba(232,237,242,0.08);
       color: var(--gray);
-      padding: 2px 7px;
-      border-radius: 8px;
-      margin-left: 4px;
+      padding: 1px 6px;
+      border-radius: 6px;
     }
 
-    /* ── Step 2: 소비력 ── */
+    /* ──────────────────────────────────────
+       BUDGET (s3)
+    ────────────────────────────────────── */
     .budget-list {
       display: flex;
       flex-direction: column;
@@ -239,13 +370,15 @@
       border-color: var(--silver);
     }
 
-    /* ── Step 3: 카테고리 ── */
+    /* ──────────────────────────────────────
+       CATEGORY (s4)
+    ────────────────────────────────────── */
     .cat-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
     .cat-card {
       background: var(--card-bg);
       border: 1.5px solid var(--border);
       border-radius: 14px;
-      padding: 16px 18px;
+      padding: 15px 18px;
       cursor: pointer;
       transition: all 0.2s;
       display: flex;
@@ -258,7 +391,7 @@
       background: rgba(232,237,242,0.07);
     }
     .cat-card.locked {
-      opacity: 0.42;
+      opacity: 0.38;
       cursor: not-allowed;
     }
     .cat-icon { font-size: 22px; flex-shrink: 0; }
@@ -270,6 +403,7 @@
       padding: 3px 9px;
       border-radius: 20px;
       flex-shrink: 0;
+      white-space: nowrap;
     }
     .cat-status.beta {
       color: var(--silver);
@@ -277,10 +411,12 @@
     }
     .cat-status.soon {
       color: var(--gray);
-      background: rgba(160,169,180,0.1);
+      background: rgba(160,169,180,0.08);
     }
 
-    /* ── Step 4: 세부 고민 + 패턴 ── */
+    /* ──────────────────────────────────────
+       DETAIL (s5)
+    ────────────────────────────────────── */
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
     .chip {
       background: var(--card-bg);
@@ -318,7 +454,9 @@
       background: rgba(232,237,242,0.08);
     }
 
-    /* Buttons */
+    /* ──────────────────────────────────────
+       BUTTONS
+    ────────────────────────────────────── */
     .btn-primary {
       width: 100%;
       padding: 16px;
@@ -356,7 +494,9 @@
     }
     .btn-secondary:hover { border-color: var(--gray); }
 
-    /* Loading */
+    /* ──────────────────────────────────────
+       LOADING (s6)
+    ────────────────────────────────────── */
     .loading-wrap {
       min-height: 72vh;
       display: flex;
@@ -399,7 +539,9 @@
     .step-item.done { color: var(--silver); }
     .step-icon { width: 16px; text-align: center; }
 
-    /* Result */
+    /* ──────────────────────────────────────
+       RESULT (s7)
+    ────────────────────────────────────── */
     .type-card {
       background: linear-gradient(145deg, #152232, #1d3249);
       border: 1px solid var(--border);
@@ -519,147 +661,144 @@
 </head>
 <body>
   <div class="app">
-    <div class="nav">
+    <div class="nav" id="main-nav">
       <a class="logo" href="index_beta.html">MYRO</a>
-      <button class="back-btn" onclick="handleBack()">←</button>
+      <button class="back-btn" id="back-btn" onclick="handleBack()">←</button>
     </div>
-    <div class="progress">
+    <div class="progress" id="main-progress">
       <div class="p-dot" id="dot0"></div>
       <div class="p-dot" id="dot1"></div>
       <div class="p-dot" id="dot2"></div>
       <div class="p-dot" id="dot3"></div>
     </div>
 
-    <!-- ── Screen 1: 주간 스케줄 ── -->
+    <!-- ── s0: Welcome ── -->
+    <div class="screen" id="s0">
+      <div class="welcome-wrap">
+        <div class="welcome-top">
+          <span class="welcome-logo">MYRO</span>
+          <span class="welcome-badge">1ST MYRER</span>
+          <div class="welcome-headline">마이러의 첫 이용자가<br>되어주셔서 감사합니다.</div>
+          <div class="welcome-sub">당신의 선택이 MYRO의 첫 걸음입니다.<br>함께해 주셔서 진심으로 감사드려요.</div>
+
+          <div class="notice-card">
+            <div class="notice-title">베타 이용 안내</div>
+            <div class="notice-item">
+              <div class="notice-dot"></div>
+              <div class="notice-text"><em>일주일간</em> 마이러 서비스를 이용하실 수 있어요. (7/1 ~ 7/8)</div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-dot"></div>
+              <div class="notice-text">아직 다듬어지지 않은 부분이 있을 수 있어요. 넓은 마음으로 양해 부탁드립니다.</div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-dot"></div>
+              <div class="notice-text">사용 후 <em>카카오톡으로 간단한 인터뷰</em>와 후기 작성에 참여해 주시면 정말 큰 힘이 됩니다.</div>
+            </div>
+            <a class="kakao-btn" href="http://pf.kakao.com/_VuAxfX" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.72 2 11.28c0 2.88 1.68 5.4 4.2 6.96L5.04 21l4.08-2.16c.9.24 1.88.36 2.88.36 5.52 0 10-3.72 10-8.28S17.52 3 12 3z"/></svg>
+              카카오채널 채널 추가하기
+            </a>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="margin-top:28px" onclick="go(1)">시작하기</button>
+      </div>
+    </div>
+
+    <!-- ── s1: 이름 입력 ── -->
     <div class="screen" id="s1">
+      <div class="name-wrap">
+        <div class="label">먼저</div>
+        <div class="title">어떻게 불러드릴까요?</div>
+        <div class="subtitle">이름이나 별명을 알려주세요.<br>루틴 전 과정에서 사용돼요.</div>
+        <input
+          class="name-input"
+          id="name-input"
+          type="text"
+          placeholder="이름 또는 별명"
+          maxlength="12"
+          oninput="checkName()"
+        >
+        <div class="name-hint">최대 12자 · 나중에 변경 불가</div>
+        <button class="btn-primary" id="btn1" onclick="go(2)" disabled>다음</button>
+      </div>
+    </div>
+
+    <!-- ── s2: 주간 스케줄 ── -->
+    <div class="screen" id="s2">
       <div class="label">Step 1 of 4</div>
-      <div class="title">이번 주 스케줄을<br>알려주세요.</div>
-      <div class="subtitle">기상 시간과 귀가 시간을 입력하면<br>루틴을 맞춤 설계해 드려요.</div>
+      <div class="title" id="schedule-title">님의 이번 주<br>스케줄을 알려주세요.</div>
+      <div class="subtitle">기상·귀가 시간을 입력하면 루틴 시간대를<br>딱 맞게 설계해 드릴게요.</div>
 
       <div class="schedule-list">
-        <!-- 7/1 수 -->
         <div class="day-row">
           <div class="day-label">7/1<span>수요일</span></div>
           <div class="day-fields">
-            <div class="time-field">
-              <label>기상</label>
-              <input type="time" id="wake-0" value="07:00">
-            </div>
-            <div class="time-field">
-              <label>귀가</label>
-              <input type="time" id="home-0" value="18:00">
-            </div>
+            <div class="time-field"><label>기상</label><input type="time" id="wake-0" value="07:00"></div>
+            <div class="time-field"><label>귀가</label><input type="time" id="home-0" value="18:00"></div>
           </div>
         </div>
-        <!-- 7/2 목 -->
         <div class="day-row">
           <div class="day-label">7/2<span>목요일</span></div>
           <div class="day-fields">
-            <div class="time-field">
-              <label>기상</label>
-              <input type="time" id="wake-1" value="07:00">
-            </div>
-            <div class="time-field">
-              <label>귀가</label>
-              <input type="time" id="home-1" value="18:00">
-            </div>
+            <div class="time-field"><label>기상</label><input type="time" id="wake-1" value="07:00"></div>
+            <div class="time-field"><label>귀가</label><input type="time" id="home-1" value="18:00"></div>
           </div>
         </div>
-        <!-- 7/3 금 -->
         <div class="day-row">
           <div class="day-label">7/3<span>금요일</span></div>
           <div class="day-fields">
-            <div class="time-field">
-              <label>기상</label>
-              <input type="time" id="wake-2" value="07:00">
-            </div>
-            <div class="time-field">
-              <label>귀가</label>
-              <input type="time" id="home-2" value="18:00">
-            </div>
+            <div class="time-field"><label>기상</label><input type="time" id="wake-2" value="07:00"></div>
+            <div class="time-field"><label>귀가</label><input type="time" id="home-2" value="18:00"></div>
           </div>
         </div>
-        <!-- 7/4 토 -->
         <div class="day-row">
-          <div class="day-label">7/4<span>토요일 <span class="weekend-tag">주말</span></span></div>
+          <div class="day-label">7/4<span>토<span class="weekend-tag">주말</span></span></div>
           <div class="day-fields" id="fields-3">
-            <div class="time-field">
-              <label>기상</label>
-              <input type="time" id="wake-3" value="09:00">
-            </div>
-            <div class="time-field">
-              <label>귀가</label>
-              <input type="time" id="home-3" value="21:00">
-            </div>
+            <div class="time-field"><label>기상</label><input type="time" id="wake-3" value="09:00"></div>
+            <div class="time-field"><label>귀가</label><input type="time" id="home-3" value="21:00"></div>
           </div>
-          <label class="day-free"><input type="checkbox" onchange="toggleFree(3, this)">자유</label>
+          <label class="day-free"><input type="checkbox" onchange="toggleFree(3,this)">자유</label>
         </div>
-        <!-- 7/5 일 -->
         <div class="day-row">
-          <div class="day-label">7/5<span>일요일 <span class="weekend-tag">주말</span></span></div>
+          <div class="day-label">7/5<span>일<span class="weekend-tag">주말</span></span></div>
           <div class="day-fields" id="fields-4">
-            <div class="time-field">
-              <label>기상</label>
-              <input type="time" id="wake-4" value="09:00">
-            </div>
-            <div class="time-field">
-              <label>귀가</label>
-              <input type="time" id="home-4" value="21:00">
-            </div>
+            <div class="time-field"><label>기상</label><input type="time" id="wake-4" value="09:00"></div>
+            <div class="time-field"><label>귀가</label><input type="time" id="home-4" value="21:00"></div>
           </div>
-          <label class="day-free"><input type="checkbox" onchange="toggleFree(4, this)">자유</label>
+          <label class="day-free"><input type="checkbox" onchange="toggleFree(4,this)">자유</label>
         </div>
-        <!-- 7/6 월 -->
         <div class="day-row">
           <div class="day-label">7/6<span>월요일</span></div>
           <div class="day-fields">
-            <div class="time-field">
-              <label>기상</label>
-              <input type="time" id="wake-5" value="07:00">
-            </div>
-            <div class="time-field">
-              <label>귀가</label>
-              <input type="time" id="home-5" value="18:00">
-            </div>
+            <div class="time-field"><label>기상</label><input type="time" id="wake-5" value="07:00"></div>
+            <div class="time-field"><label>귀가</label><input type="time" id="home-5" value="18:00"></div>
           </div>
         </div>
-        <!-- 7/7 화 -->
         <div class="day-row">
           <div class="day-label">7/7<span>화요일</span></div>
           <div class="day-fields">
-            <div class="time-field">
-              <label>기상</label>
-              <input type="time" id="wake-6" value="07:00">
-            </div>
-            <div class="time-field">
-              <label>귀가</label>
-              <input type="time" id="home-6" value="18:00">
-            </div>
+            <div class="time-field"><label>기상</label><input type="time" id="wake-6" value="07:00"></div>
+            <div class="time-field"><label>귀가</label><input type="time" id="home-6" value="18:00"></div>
           </div>
         </div>
-        <!-- 7/8 수 -->
         <div class="day-row">
           <div class="day-label">7/8<span>수요일</span></div>
           <div class="day-fields">
-            <div class="time-field">
-              <label>기상</label>
-              <input type="time" id="wake-7" value="07:00">
-            </div>
-            <div class="time-field">
-              <label>귀가</label>
-              <input type="time" id="home-7" value="18:00">
-            </div>
+            <div class="time-field"><label>기상</label><input type="time" id="wake-7" value="07:00"></div>
+            <div class="time-field"><label>귀가</label><input type="time" id="home-7" value="18:00"></div>
           </div>
         </div>
       </div>
-      <button class="btn-primary" onclick="go(2)">다음</button>
+      <button class="btn-primary" onclick="go(3)">다음</button>
     </div>
 
-    <!-- ── Screen 2: 소비력 ── -->
-    <div class="screen" id="s2">
+    <!-- ── s3: 소비력 ── -->
+    <div class="screen" id="s3">
       <div class="label">Step 2 of 4</div>
-      <div class="title">자기관리에 한 달<br>얼마나 쓸 수 있어요?</div>
-      <div class="subtitle">예산에 맞는 제품과 루틴을 드려요.<br>제품 구매 안 해도 루틴은 나와요.</div>
+      <div class="title" id="budget-title">님만의 루틴을<br>설계해 드릴게요.</div>
+      <div class="subtitle">한 달 자기관리 예산을 알려주세요.<br>당신에게 딱 맞는 제품과 루틴을 드려요.</div>
 
       <div class="budget-list">
         <div class="budget-card" onclick="pickBudget('3만원 미만', this)">
@@ -691,14 +830,14 @@
           <div class="budget-check"></div>
         </div>
       </div>
-      <button class="btn-primary" id="btn2" onclick="go(3)" disabled>다음</button>
+      <button class="btn-primary" id="btn3" onclick="go(4)" disabled>다음</button>
     </div>
 
-    <!-- ── Screen 3: 카테고리 ── -->
-    <div class="screen" id="s3">
+    <!-- ── s4: 카테고리 ── -->
+    <div class="screen" id="s4">
       <div class="label">Step 3 of 4</div>
-      <div class="title">어디서부터 시작할까요?</div>
-      <div class="subtitle">베타에서는 2개 카테고리를 먼저 드려요.</div>
+      <div class="title">어디서부터<br>시작할까요?</div>
+      <div class="subtitle">베타에서는 2개 카테고리를 먼저 선보여요.</div>
 
       <div class="cat-list">
         <div class="cat-card" onclick="pickCat('skin', this)">
@@ -742,21 +881,21 @@
           <span class="cat-status soon">정식 오픈 예정</span>
         </div>
       </div>
-      <button class="btn-primary" id="btn3" onclick="go(4)" disabled>다음</button>
+      <button class="btn-primary" id="btn4" onclick="go(5)" disabled>다음</button>
     </div>
 
-    <!-- ── Screen 4: 세부 고민 + 패턴 ── -->
-    <div class="screen" id="s4">
+    <!-- ── s5: 세부 고민 + 패턴 ── -->
+    <div class="screen" id="s5">
       <div class="label">Step 4 of 4</div>
       <div id="detail-area"></div>
-      <button class="btn-primary" id="btn4" onclick="startAnalysis()" disabled>AI 루틴 분석 시작하기</button>
+      <button class="btn-primary" id="btn5" onclick="startAnalysis()" disabled>AI 루틴 분석 시작하기</button>
     </div>
 
-    <!-- ── Screen 5: Loading ── -->
-    <div class="screen" id="s5">
+    <!-- ── s6: Loading ── -->
+    <div class="screen" id="s6">
       <div class="loading-wrap">
         <div class="loading-logo">MYRO</div>
-        <div class="loading-msg">마이러님의 루틴을 설계 중입니다</div>
+        <div class="loading-msg" id="loading-msg">님의 루틴을 설계 중입니다</div>
         <div class="dots">
           <div class="dot"></div>
           <div class="dot"></div>
@@ -771,28 +910,20 @@
       </div>
     </div>
 
-    <!-- ── Screen 6: Result ── -->
-    <div class="screen" id="s6">
+    <!-- ── s7: Result ── -->
+    <div class="screen" id="s7">
       <div id="result-area"></div>
     </div>
   </div>
 
   <script>
     const BACKEND = 'https://web-production-0e945.up.railway.app';
-
-    const DAYS = [
-      { date: '7/1', day: '수', idx: 0 },
-      { date: '7/2', day: '목', idx: 1 },
-      { date: '7/3', day: '금', idx: 2 },
-      { date: '7/4', day: '토', idx: 3 },
-      { date: '7/5', day: '일', idx: 4 },
-      { date: '7/6', day: '월', idx: 5 },
-      { date: '7/7', day: '화', idx: 6 },
-      { date: '7/8', day: '수', idx: 7 },
-    ];
+    const DAYS = ['수','목','금','토','일','월','화','수'];
+    const DATES = ['7/1','7/2','7/3','7/4','7/5','7/6','7/7','7/8'];
 
     const state = {
-      schedule: [],      // [{date, day, wake, home, free}]
+      name: '',
+      schedule: [],
       budget: null,
       cat: null,
       concerns: [],
@@ -801,33 +932,57 @@
       routineLevel: null,
     };
 
-    let currentScreen = 0;
+    let currentScreen = -1;
 
-    function updateProgress(n) {
-      for (let i = 0; i < 4; i++) {
-        const d = document.getElementById('dot' + i);
-        d.className = 'p-dot';
-        if (i < n - 1) d.classList.add('done');
-        else if (i === n - 1) d.classList.add('active');
+    /* ── Nav / Progress visibility ── */
+    function updateUI(n) {
+      const showNav = n >= 2;
+      const showProgress = n >= 2 && n <= 5;
+      document.getElementById('main-nav').style.display = showNav ? 'flex' : 'none';
+      document.getElementById('main-progress').style.display = showProgress ? 'flex' : 'none';
+      if (showProgress) {
+        const step = n - 2; // 0~3
+        for (let i = 0; i < 4; i++) {
+          const d = document.getElementById('dot' + i);
+          d.className = 'p-dot';
+          if (i < step) d.classList.add('done');
+          else if (i === step) d.classList.add('active');
+        }
       }
     }
 
     function go(n) {
-      if (n === 4) renderDetail();
+      if (n === 2) applyName();
+      if (n === 5) renderDetail();
       const cur = document.getElementById('s' + currentScreen);
       if (cur) cur.classList.remove('active');
       currentScreen = n;
       document.getElementById('s' + n).classList.add('active');
-      updateProgress(n);
+      updateUI(n);
       window.scrollTo(0, 0);
     }
 
     function handleBack() {
-      if (currentScreen > 1 && currentScreen <= 4) go(currentScreen - 1);
+      if (currentScreen === 2) go(1);
+      else if (currentScreen > 2 && currentScreen <= 5) go(currentScreen - 1);
       else window.location.href = 'index_beta.html';
     }
 
-    /* ── Step 1: 스케줄 ── */
+    /* ── s1: 이름 ── */
+    function checkName() {
+      const val = document.getElementById('name-input').value.trim();
+      state.name = val;
+      document.getElementById('btn1').disabled = val.length === 0;
+    }
+
+    function applyName() {
+      const n = state.name || '마이러';
+      document.getElementById('schedule-title').innerHTML = `${n}님의 이번 주<br>스케줄을 알려주세요.`;
+      document.getElementById('budget-title').innerHTML = `${n}님만의 루틴을<br>설계해 드릴게요.`;
+      document.getElementById('loading-msg').textContent = `${n}님의 루틴을 설계 중입니다`;
+    }
+
+    /* ── s2: 스케줄 ── */
     function toggleFree(idx, cb) {
       const fields = document.getElementById('fields-' + idx);
       fields.style.opacity = cb.checked ? '0.3' : '1';
@@ -835,78 +990,67 @@
     }
 
     function collectSchedule() {
-      state.schedule = DAYS.map((d, i) => {
-        const freeEl = document.querySelector(`#fields-${i}`)?.closest('.day-row')?.querySelector('input[type="checkbox"]');
-        const free = freeEl?.checked || false;
+      state.schedule = DATES.map((date, i) => {
+        const freeBox = document.querySelector(`#fields-${i}`)?.closest('.day-row')?.querySelector('input[type="checkbox"]');
+        const free = freeBox?.checked || false;
         return {
-          date: d.date,
-          day: d.day,
+          date,
+          day: DAYS[i],
           wake: free ? '자유' : (document.getElementById('wake-' + i)?.value || ''),
           home: free ? '자유' : (document.getElementById('home-' + i)?.value || ''),
-          free,
         };
       });
     }
 
-    /* ── Step 2: 소비력 ── */
+    /* ── s3: 소비력 ── */
     function pickBudget(val, el) {
       document.querySelectorAll('.budget-card').forEach(c => c.classList.remove('selected'));
       el.classList.add('selected');
       state.budget = val;
-      document.getElementById('btn2').disabled = false;
+      document.getElementById('btn3').disabled = false;
     }
 
-    /* ── Step 3: 카테고리 ── */
+    /* ── s4: 카테고리 ── */
     function pickCat(cat, el) {
       document.querySelectorAll('.cat-card:not(.locked)').forEach(c => c.classList.remove('selected'));
       el.classList.add('selected');
       state.cat = cat;
-      state.concerns = [];
-      state.skinType = null;
-      document.getElementById('btn3').disabled = false;
+      document.getElementById('btn4').disabled = false;
     }
 
-    /* ── Step 4: 세부 고민 + 패턴 ── */
+    /* ── s5: 세부 고민 ── */
     const detailDefs = {
       skin: () => `
         <div class="title">피부 고민과<br>생활 패턴을 알려주세요.</div>
         <div class="subtitle">중복 선택 가능해요.</div>
         <div class="sec-title" style="margin-top:0">주요 고민</div>
         <div class="chips">
-          ${chips(['여드름·트러블', '번들거림·지성', '건조함·당김', '모공·블랙헤드', '칙칙함·잡티', '민감성·홍조'])}
+          ${chips(['여드름·트러블','번들거림·지성','건조함·당김','모공·블랙헤드','칙칙함·잡티','민감성·홍조'])}
         </div>
         <div class="sec-title">피부 타입</div>
         <div class="radio-list">
-          ${radios(['지성 피부', '건성 피부', '복합성 피부', '민감성 피부'], 'skinType')}
+          ${radios(['지성 피부','건성 피부','복합성 피부','민감성 피부'],'skinType')}
         </div>
         <div class="sec-title">아침 준비 시간</div>
-        <div class="radio-list" id="morning-list">
-          ${morningOpts()}
-        </div>
+        <div class="radio-list" id="morning-list">${morningOpts()}</div>
         <div class="sec-title">현재 자기관리 레벨</div>
-        <div class="radio-list" id="level-list">
-          ${levelOpts()}
-        </div>
+        <div class="radio-list" id="level-list">${levelOpts()}</div>
       `,
       hair: () => `
         <div class="title">헤어·그루밍 고민과<br>생활 패턴을 알려주세요.</div>
         <div class="subtitle">중복 선택 가능해요.</div>
         <div class="sec-title" style="margin-top:0">헤어 고민</div>
         <div class="chips">
-          ${chips(['탈모·모발 빠짐', '두피 트러블·비듬', '스타일링 안 됨', '모발 손상·푸석함', '두피 기름기'])}
+          ${chips(['탈모·모발 빠짐','두피 트러블·비듬','스타일링 안 됨','모발 손상·푸석함','두피 기름기'])}
         </div>
         <div class="sec-title">그루밍 고민</div>
         <div class="chips">
-          ${chips(['면도 자극·트러블', '체모 관리', '향수 선택', '바디케어'])}
+          ${chips(['면도 자극·트러블','체모 관리','향수 선택','바디케어'])}
         </div>
         <div class="sec-title">아침 준비 시간</div>
-        <div class="radio-list" id="morning-list">
-          ${morningOpts()}
-        </div>
+        <div class="radio-list" id="morning-list">${morningOpts()}</div>
         <div class="sec-title">현재 자기관리 레벨</div>
-        <div class="radio-list" id="level-list">
-          ${levelOpts()}
-        </div>
+        <div class="radio-list" id="level-list">${levelOpts()}</div>
       `,
     };
 
@@ -917,29 +1061,18 @@
       return arr.map(v => `<button class="radio-opt" onclick="pickField('${field}','${v}',this)">${v}</button>`).join('');
     }
     function morningOpts() {
-      return [
-        ['5분 미만', '⚡ 5분 미만'],
-        ['5~15분', '⏱️ 5~15분'],
-        ['15~30분', '🕐 15~30분'],
-        ['30분 이상', '☕ 30분 이상'],
-      ].map(([v, t]) => `<button class="radio-opt" onclick="pickMorning('${v}',this)">${t}</button>`).join('');
+      return [['5분 미만','⚡ 5분 미만'],['5~15분','⏱️ 5~15분'],['15~30분','🕐 15~30분'],['30분 이상','☕ 30분 이상']]
+        .map(([v,t]) => `<button class="radio-opt" onclick="pickMorning('${v}',this)">${t}</button>`).join('');
     }
     function levelOpts() {
-      return [
-        ['전혀 안 함', '🌱 전혀 안 함 — 완전 처음'],
-        ['기본만 함', '💧 기본만 함 — 세안·로션 정도'],
-        ['어느 정도 함', '✨ 어느 정도 함 — 개선하고 싶음'],
-      ].map(([v, t]) => `<button class="radio-opt" onclick="pickLevel('${v}',this)">${t}</button>`).join('');
+      return [['전혀 안 함','🌱 전혀 안 함 — 완전 처음'],['기본만 함','💧 기본만 함 — 세안·로션 정도'],['어느 정도 함','✨ 어느 정도 함 — 개선하고 싶음']]
+        .map(([v,t]) => `<button class="radio-opt" onclick="pickLevel('${v}',this)">${t}</button>`).join('');
     }
 
     function renderDetail() {
-      state.concerns = [];
-      state.skinType = null;
-      state.morningTime = null;
-      state.routineLevel = null;
-      const def = detailDefs[state.cat];
-      document.getElementById('detail-area').innerHTML = def ? def() : '';
-      document.getElementById('btn4').disabled = true;
+      state.concerns = []; state.skinType = null; state.morningTime = null; state.routineLevel = null;
+      document.getElementById('detail-area').innerHTML = detailDefs[state.cat]?.() || '';
+      document.getElementById('btn5').disabled = true;
     }
 
     function toggleConcern(val, el) {
@@ -965,13 +1098,13 @@
       checkDetail();
     }
     function checkDetail() {
-      document.getElementById('btn4').disabled = !(state.morningTime && state.routineLevel);
+      document.getElementById('btn5').disabled = !(state.morningTime && state.routineLevel);
     }
 
     /* ── Analysis ── */
     async function startAnalysis() {
       collectSchedule();
-      go(5);
+      go(6);
       animateSteps();
       let routine;
       try {
@@ -981,7 +1114,7 @@
         routine = mockRoutine();
       }
       renderResult(routine);
-      setTimeout(() => go(6), 200);
+      setTimeout(() => go(7), 200);
     }
 
     function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -999,7 +1132,7 @@
 
     async function fetchRoutine() {
       const scheduleText = state.schedule.map(d =>
-        d.free ? `${d.date}(${d.day}): 자유` : `${d.date}(${d.day}): 기상 ${d.wake}, 귀가 ${d.home}`
+        d.wake === '자유' ? `${d.date}(${d.day}): 자유` : `${d.date}(${d.day}): 기상 ${d.wake}, 귀가 ${d.home}`
       ).join(' / ');
 
       const res = await fetch(`${BACKEND}/routine`, {
@@ -1013,13 +1146,14 @@
           morningTime: state.morningTime,
           routineLevel: state.routineLevel,
           schedule: scheduleText,
+          userName: state.name,
         }),
       });
       if (!res.ok) throw new Error('api error');
       return res.json();
     }
 
-    /* ── Mock fallback ── */
+    /* ── Mock ── */
     function mockRoutine() {
       const m = {
         skin: {
@@ -1051,7 +1185,7 @@
           products: [
             { name:'TS 샴푸', reason:'탈모 관리 대표 제품', price:'18,000원대', link:'https://www.coupang.com/np/search?q=TS샴푸' },
             { name:'닥터포헤어 두피 토닉', reason:'두피 강화·영양 공급', price:'16,000원대', link:'https://www.coupang.com/np/search?q=두피+토닉+에센스' },
-            { name:'헤어 왁스 (아모레퍼시픽)', reason:'자연스러운 스타일링', price:'12,000원대', link:'https://www.coupang.com/np/search?q=헤어왁스+남성' },
+            { name:'헤어 왁스', reason:'자연스러운 스타일링', price:'12,000원대', link:'https://www.coupang.com/np/search?q=헤어왁스+남성' },
           ],
         },
       };
@@ -1060,6 +1194,7 @@
 
     /* ── Result ── */
     function renderResult(data) {
+      const name = state.name || '마이러';
       const weeksHTML = data.weeks.map(w => `
         <div class="week-card">
           <div class="week-head">
@@ -1073,7 +1208,7 @@
       `).join('');
 
       const productsHTML = data.products.map(p => `
-        <a class="product-link" href="${p.link || '#'}" target="_blank" rel="noopener noreferrer">
+        <a class="product-link" href="${p.link||'#'}" target="_blank" rel="noopener noreferrer">
           <div class="product-info">
             <div class="product-name">${p.name}</div>
             <div class="product-reason">${p.reason}</div>
@@ -1084,7 +1219,7 @@
       `).join('');
 
       document.getElementById('result-area').innerHTML = `
-        <div class="label" style="margin-bottom:16px">마이러님의 맞춤 루틴</div>
+        <div class="label" style="margin-bottom:16px">${name}님의 맞춤 루틴</div>
         <div class="type-card">
           <div class="type-badge">YOUR MYRO TYPE</div>
           <div class="type-name">${data.type_name}</div>
@@ -1110,16 +1245,18 @@
     }
 
     function restart() {
-      Object.assign(state, { schedule:[], budget:null, cat:null, concerns:[], skinType:null, morningTime:null, routineLevel:null });
+      Object.assign(state, { name:'', schedule:[], budget:null, cat:null, concerns:[], skinType:null, morningTime:null, routineLevel:null });
+      document.getElementById('name-input').value = '';
       document.querySelectorAll('.budget-card').forEach(c => c.classList.remove('selected'));
       document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
-      document.getElementById('btn2').disabled = true;
+      document.getElementById('btn1').disabled = true;
       document.getElementById('btn3').disabled = true;
-      go(1);
+      document.getElementById('btn4').disabled = true;
+      go(0);
     }
 
-    // Init
-    go(1);
+    // Init — welcome screen, nav/progress hidden
+    go(0);
   </script>
 </body>
 </html>
