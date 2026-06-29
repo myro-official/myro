@@ -585,34 +585,68 @@
       color: var(--bg);
       line-height: 1.6;
     }
-    .week-card {
+    /* Day cards */
+    .day-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 18px;
-      margin-bottom: 8px;
+      border-radius: 14px;
+      padding: 18px 18px 14px;
+      margin-bottom: 10px;
     }
-    .week-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-    .week-num {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--silver);
-      background: rgba(232,237,242,0.1);
-      padding: 3px 10px;
-      border-radius: 6px;
-      flex-shrink: 0;
+    .day-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
     }
-    .week-focus { font-size: 14px; font-weight: 600; }
-    .week-tasks { list-style: none; }
-    .week-task {
+    .day-card-date {
       font-size: 13px;
+      font-weight: 700;
+      color: var(--silver);
+    }
+    .day-card-theme {
+      font-size: 12px;
       color: var(--gray);
-      padding: 3px 0;
+      background: rgba(232,237,242,0.07);
+      padding: 3px 10px;
+      border-radius: 10px;
+    }
+    .routine-block { margin-bottom: 12px; }
+    .routine-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 7px;
+    }
+    .routine-steps { list-style: none; }
+    .routine-step {
+      font-size: 13px;
+      color: var(--silver);
+      padding: 4px 0;
       display: flex;
       gap: 10px;
-      line-height: 1.5;
+      line-height: 1.6;
+      border-bottom: 1px solid rgba(232,237,242,0.05);
     }
-    .week-task::before { content: "–"; opacity: 0.4; flex-shrink: 0; }
+    .routine-step:last-child { border-bottom: none; }
+    .routine-step-num {
+      font-size: 11px;
+      color: var(--gray);
+      min-width: 16px;
+      padding-top: 1px;
+      flex-shrink: 0;
+    }
+    .day-tip {
+      font-size: 12px;
+      color: var(--accent);
+      background: rgba(200,213,228,0.08);
+      border-left: 2px solid var(--accent);
+      padding: 8px 12px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 4px;
+      line-height: 1.6;
+    }
     .product-link {
       display: flex;
       align-items: center;
@@ -678,8 +712,8 @@
         <div class="welcome-top">
           <span class="welcome-logo">MYRO</span>
           <span class="welcome-badge">1ST MYRER</span>
-          <div class="welcome-headline">마이러의 첫 이용자가<br>되어주셔서 감사합니다.</div>
-          <div class="welcome-sub">당신의 선택이 MYRO의 첫 걸음입니다.<br>함께해 주셔서 진심으로 감사드려요.</div>
+          <div class="welcome-headline" id="welcome-headline">마이로의 첫 마이러가<br>되어주셔서 감사합니다.</div>
+          <div class="welcome-sub">당신의 선택이 마이로의 첫 걸음입니다.<br>함께해 주셔서 진심으로 감사드려요.</div>
 
           <div class="notice-card">
             <div class="notice-title">베타 이용 안내</div>
@@ -973,10 +1007,16 @@
       const val = document.getElementById('name-input').value.trim();
       state.name = val;
       document.getElementById('btn1').disabled = val.length === 0;
+      if (val.length > 0) {
+        document.getElementById('welcome-headline').innerHTML = `마이로의 첫 마이러,<br>${val}님 환영합니다.`;
+      } else {
+        document.getElementById('welcome-headline').innerHTML = `마이로의 첫 마이러가<br>되어주셔서 감사합니다.`;
+      }
     }
 
     function applyName() {
       const n = state.name || '마이러';
+      document.getElementById('welcome-headline').innerHTML = `마이로의 첫 마이러,<br>${n}님 환영합니다.`;
       document.getElementById('schedule-title').innerHTML = `${n}님의 이번 주<br>스케줄을 알려주세요.`;
       document.getElementById('budget-title').innerHTML = `${n}님만의 루틴을<br>설계해 드릴게요.`;
       document.getElementById('loading-msg').textContent = `${n}님의 루틴을 설계 중입니다`;
@@ -1158,13 +1198,16 @@
       const m = {
         skin: {
           type_name: '피부 재건형',
-          tagline: '기초부터 탄탄하게. 4주 안에 피부가 달라집니다.',
-          first_action: '오늘 저녁 클렌징 폼으로 세안 후 보습 크림 하나만 바르세요. 루틴의 첫 번째 날입니다.',
-          weeks: [
-            { week:1, focus:'클렌징 습관 정착', tasks:['아침·저녁 세안 루틴 고정','보습 크림 1가지 선택','SPF 30+ 선크림 시작'] },
-            { week:2, focus:'수분 레이어 쌓기', tasks:['토너 추가','주 2회 시트 마스크','수분 집중 케어'] },
-            { week:3, focus:'트러블 집중 케어', tasks:['BHA 성분 제품 도입','피지 컨트롤 루틴','야간 수면 팩'] },
-            { week:4, focus:'루틴 고도화', tasks:['전후 비교 사진 촬영','유지 루틴 확정','다음 단계 계획'] },
+          tagline: '기초부터 탄탄하게. 이번 주가 바뀝니다.',
+          first_action: '오늘 저녁 세안 후 보습 크림 하나만 바르고 주무세요. 자기 전 2분, 오늘부터 시작합니다.',
+          days: [
+            { date:'7/1 (수)', theme:'루틴 첫날', morning:['기상 후 7:05 미온수로 세안 (1분)','세안 후 즉시 토너 손으로 가볍게 펴바르기','선크림 → 외출 전 5분 흡수 대기'], evening:['귀가 후 클렌징 폼으로 꼼꼼 세안 (90초)','토너 → 보습 크림 순서로 레이어링','취침 전 립밤 마무리'], tip:'오늘은 세안을 정확히 2번 지키는 것만으로 충분합니다.' },
+            { date:'7/2 (목)', theme:'수분 채우기', morning:['기상 후 세안 → 보습 크림 두 번 덧바르기','선크림 꼼꼼히 (이마·코 위주)'], evening:['귀가 후 이중 세안 (오일 클렌저 → 폼 클렌저)','시트 마스크 15분 → 남은 에센스 가볍게 흡수'], tip:'이중 세안이 처음이면 오일 클렌저 대신 폼만 두 번 해도 괜찮습니다.' },
+            { date:'7/3 (금)', theme:'피지 컨트롤', morning:['세안 → 토너 → 가벼운 수분 크림','T존에 파우더 or 프라이머로 피지 방어'], evening:['귀가 후 즉시 세안','BHA 토너 코튼 패드로 T존 닦아내기 (10분 후 보습)'], tip:'BHA는 주 2~3회만 사용하세요. 매일 쓰면 자극이 됩니다.' },
+            { date:'7/4 (토)', theme:'스페셜 케어', morning:['늦잠 이후 세안 → 스크럽 3분 (주 1회)','세안 후 시트 마스크 20분'], evening:['수면 팩 넉넉하게 도포 → 그대로 취침'], tip:'주말 스페셜 케어가 주중 피부를 완전히 바꿉니다. 오늘만큼은 아끼지 마세요.' },
+            { date:'7/5 (일)', theme:'회복·보습', morning:['가볍게 세안 → 수분 에센스 → 보습 크림 덧바르기'], evening:['세안 후 보습 마스크 10분','피부 상태 사진 촬영 (비교용)'], tip:'이번 주 루틴을 돌아보고 가장 효과가 좋았던 단계를 기억해 두세요.' },
+            { date:'7/6 (월)', theme:'주간 루틴 점검', morning:['세안 → 토너 → 선크림 (10분 이내)','거울에서 피부 상태 체크'], evening:['이중 세안 → BHA 토닉 → 보습 크림'], tip:'월요일 피부는 주말 케어 효과가 나타나는 날입니다. 오늘 상태를 체크하세요.' },
+            { date:'7/7 (화)', theme:'마무리·습관화', morning:['루틴 타이머 맞추기 (총 8분 목표)','세안 → 토너 → 수분크림 → 선크림'], evening:['저녁 루틴 완료 후 다음 주 루틴 계획'], tip:'7일을 완주했다면 이미 습관의 시작입니다. 다음 주도 이어가세요.' },
           ],
           products: [
             { name:'세타필 젠틀 클렌징 워시', reason:'자극 없는 기초 클렌징', price:'15,000원대', link:'https://www.coupang.com/np/search?q=세타필+클렌징' },
@@ -1174,18 +1217,21 @@
         },
         hair: {
           type_name: '두피 리셋형',
-          tagline: '헤어는 두피부터. 4주면 눈에 띄게 달라집니다.',
-          first_action: '오늘 저녁 샴푸 후 두피를 손가락으로 2분간 마사지해주세요. 혈액순환의 시작입니다.',
-          weeks: [
-            { week:1, focus:'두피 환경 개선', tasks:['두피 전용 샴푸로 교체','올바른 세발법 익히기','드라이 온도 낮추기'] },
-            { week:2, focus:'두피 영양 공급', tasks:['두피 에센스 도입','주 1회 두피 스케일링','두피 마사지 루틴화'] },
-            { week:3, focus:'스타일링 개선', tasks:['왁스·포마드 사용법 숙지','헤어 드라이 방향 교정','미용실 방문'] },
-            { week:4, focus:'그루밍 완성', tasks:['면도 루틴 정착','향수 사용법 익히기','전체 그루밍 점검'] },
+          tagline: '두피부터 바꾸면 전부 바뀝니다.',
+          first_action: '오늘 저녁 샴푸 후 드라이기 없이 자연 건조하면서 손가락으로 두피를 2분 마사지해주세요.',
+          days: [
+            { date:'7/1 (수)', theme:'두피 리셋 첫날', morning:['기상 후 두피 상태 체크 (손으로 눌러 유분 확인)','스타일링 전 헤어 에센스 모발에 소량 도포'], evening:['귀가 후 두피 전용 샴푸로 세발 (2분 마사지)','드라이 전 두피 에센스 도포 → 저온(130도 이하) 드라이'], tip:'샴푸는 두피를 문지르지 말고 지그시 눌러서 마사지하세요.' },
+            { date:'7/2 (목)', theme:'세발 루틴 점검', morning:['기상 후 헤어 스타일링 (왁스 소량, 뿌리부터 세우기)'], evening:['세발 → 두피 마사지 3분 → 저온 드라이','취침 전 머리카락 완전히 건조 확인'], tip:'젖은 채로 자면 두피 트러블의 주요 원인이 됩니다.' },
+            { date:'7/3 (금)', theme:'스타일링 연습', morning:['샴푸 후 헤어: 타월 드라이 → 에센스 → 왁스 순서','헤어 방향 잡기 (드라이 방향이 스타일을 결정)'], evening:['가벼운 물 세발 or 드라이 샴푸 활용'], tip:'금요일 저녁은 두피에 쌓인 스트레스를 씻어내는 날입니다.' },
+            { date:'7/4 (토)', theme:'두피 스페셜 케어', morning:['두피 스케일러 도포 → 10분 방치 → 세발 (주 1회)','세발 후 두피 팩 5분'], evening:['마스크 팩 하면서 헤어 에센스 집중 도포'], tip:'두피 스케일링은 주 1회가 적당합니다. 그 이상은 오히려 두피를 자극해요.' },
+            { date:'7/5 (일)', theme:'그루밍 점검', morning:['면도 루틴 점검 (면도 후 애프터쉐이브 또는 수분크림)','눈썹 정리 (비대칭 확인)'], evening:['전신 샤워 후 바디 로션','이번 주 두피·헤어 상태 사진 비교'], tip:'그루밍의 완성은 디테일입니다. 눈썹과 면도 라인을 오늘 점검하세요.' },
+            { date:'7/6 (월)', theme:'주간 루틴 점검', morning:['기상 → 두피 마사지 1분 → 스타일링','왁스 양 조절 (전주보다 줄여보기)'], evening:['세발 → 에센스 → 저온 드라이'], tip:'월요일은 한 주를 시작하는 날. 두피가 가볍고 깔끔할수록 자신감이 달라집니다.' },
+            { date:'7/7 (화)', theme:'습관화 마무리', morning:['이번 주 스타일링 루틴 최종 점검'], evening:['세발 후 두피 에센스 → 다음 주 루틴 계획 세우기'], tip:'7일 완주 축하드려요. 이제 이 루틴은 당신의 것입니다.' },
           ],
           products: [
             { name:'TS 샴푸', reason:'탈모 관리 대표 제품', price:'18,000원대', link:'https://www.coupang.com/np/search?q=TS샴푸' },
             { name:'닥터포헤어 두피 토닉', reason:'두피 강화·영양 공급', price:'16,000원대', link:'https://www.coupang.com/np/search?q=두피+토닉+에센스' },
-            { name:'헤어 왁스', reason:'자연스러운 스타일링', price:'12,000원대', link:'https://www.coupang.com/np/search?q=헤어왁스+남성' },
+            { name:'헤어 왁스 (남성용)', reason:'자연스러운 스타일링', price:'12,000원대', link:'https://www.coupang.com/np/search?q=헤어왁스+남성' },
           ],
         },
       };
@@ -1195,15 +1241,25 @@
     /* ── Result ── */
     function renderResult(data) {
       const name = state.name || '마이러';
-      const weeksHTML = data.weeks.map(w => `
-        <div class="week-card">
-          <div class="week-head">
-            <span class="week-num">${w.week}주차</span>
-            <span class="week-focus">${w.focus}</span>
+      const daysHTML = (data.days || []).map(d => `
+        <div class="day-card">
+          <div class="day-card-head">
+            <span class="day-card-date">${d.date}</span>
+            <span class="day-card-theme">${d.theme}</span>
           </div>
-          <ul class="week-tasks">
-            ${w.tasks.map(t => `<li class="week-task">${t}</li>`).join('')}
-          </ul>
+          <div class="routine-block">
+            <div class="routine-label">☀️ 아침 루틴</div>
+            <ul class="routine-steps">
+              ${(d.morning||[]).map((s,i) => `<li class="routine-step"><span class="routine-step-num">${i+1}</span>${s}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="routine-block">
+            <div class="routine-label">🌙 저녁 루틴</div>
+            <ul class="routine-steps">
+              ${(d.evening||[]).map((s,i) => `<li class="routine-step"><span class="routine-step-num">${i+1}</span>${s}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="day-tip">💡 ${d.tip}</div>
         </div>
       `).join('');
 
@@ -1229,8 +1285,8 @@
           <div class="action-label">오늘 당장 하나만</div>
           <div class="action-text">${data.first_action}</div>
         </div>
-        <div class="sec-title" style="margin-top:0">4주 플랜</div>
-        ${weeksHTML}
+        <div class="sec-title" style="margin-top:0">1주 데일리 루틴</div>
+        ${daysHTML}
         <div class="sec-title">추천 제품</div>
         ${productsHTML}
         <div class="cta-box">
