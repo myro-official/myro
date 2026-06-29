@@ -355,7 +355,7 @@
         </div>
         <div class="notice-item">
           <div class="notice-dot"></div>
-          <div class="notice-text"><em>마이러 1기 공식 리뷰</em>에도 참여해 주시면 서비스 개선에 큰 힘이 됩니다.</div>
+          <div class="notice-text">모든 베타 이용자 마이러님께서는 <em>리뷰 및 사용 후기 조사에 반드시 참여</em>하셔야 합니다.</div>
         </div>
         <a class="kakao-btn" href="http://pf.kakao.com/_VuAxfX" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.72 2 11.28c0 2.88 1.68 5.4 4.2 6.96L5.04 21l4.08-2.16c.9.24 1.88.36 2.88.36 5.52 0 10-3.72 10-8.28S17.52 3 12 3z"/></svg>
@@ -392,7 +392,7 @@
       <div class="consent-card">
         <span class="consent-tag">동의 2 / 2</span>
         <div class="consent-title">마이러 1기 공식<br>리뷰 참여에 동의하시나요?</div>
-        <div class="consent-desc">마이로의 첫 번째 이용자로서 공식 마이러 1기 리뷰에 참여해 주시면 서비스 개선에 직접 기여하게 됩니다.</div>
+        <div class="consent-desc">베타 이용자 마이러님께서는 서비스 체험 후 마이러 1기 공식 리뷰에 <em style="font-style:normal;color:var(--white);font-weight:600">반드시 참여</em>하셔야 합니다. 이는 베타 이용의 필수 조건입니다.</div>
         <ul class="consent-list">
           <li>형식: 짧은 텍스트 또는 음성 인터뷰</li>
           <li>활용: 마이로 서비스 개선 및 홍보 자료</li>
@@ -401,7 +401,6 @@
         </ul>
       </div>
       <button class="btn-consent" onclick="go(4)">✓ &nbsp;동의합니다</button>
-      <button class="btn-secondary" onclick="go(4)">건너뛰기</button>
     </div>
   </div>
 
@@ -600,10 +599,10 @@
       <div class="loading-msg" id="loading-msg">님의 루틴을 설계 중입니다</div>
       <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
       <div class="steps-list">
-        <div class="step-item" id="st0"><span class="step-icon">○</span> 스케줄 패턴 분석 중...</div>
-        <div class="step-item" id="st1"><span class="step-icon">○</span> 맞춤 타입 분류 중...</div>
-        <div class="step-item" id="st2"><span class="step-icon">○</span> 7일 플랜 생성 중...</div>
-        <div class="step-item" id="st3"><span class="step-icon">○</span> 제품 추천 선정 중...</div>
+        <div class="step-item" id="st0"><span class="step-icon">○</span> 입력 정보 AI 분석 중...</div>
+        <div class="step-item" id="st1"><span class="step-icon">○</span> 전문가 데이터베이스 조회 중...</div>
+        <div class="step-item" id="st2"><span class="step-icon">○</span> 맞춤 루틴 초안 생성 중...</div>
+        <div class="step-item" id="st3"><span class="step-icon">○</span> 전문가 2차 검토 중...</div>
       </div>
     </div>
   </div>
@@ -920,7 +919,12 @@
     `).join('');
 
     document.getElementById('result-area').innerHTML = `
-      <div class="label" style="margin-bottom:16px">${name}님의 맞춤 루틴</div>
+      <div class="label" style="margin-bottom:12px">${name}님의 맞춤 루틴</div>
+      <div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
+        <span style="font-size:10px;letter-spacing:1px;color:#A0A9B4;background:rgba(232,237,242,0.07);border:1px solid rgba(232,237,242,0.12);padding:4px 10px;border-radius:20px">✓ AI 분석 완료</span>
+        <span style="font-size:10px;letter-spacing:1px;color:#A0A9B4;background:rgba(232,237,242,0.07);border:1px solid rgba(232,237,242,0.12);padding:4px 10px;border-radius:20px">✓ 전문가 DB 조회</span>
+        <span style="font-size:10px;letter-spacing:1px;color:#E8EDF2;background:rgba(232,237,242,0.1);border:1px solid rgba(232,237,242,0.25);padding:4px 10px;border-radius:20px">✓ 2차 검토 완료</span>
+      </div>
       <div class="type-card">
         <div class="type-badge">YOUR MYRO TYPE</div>
         <div class="type-name">${data.type_name}</div>
