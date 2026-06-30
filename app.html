@@ -260,21 +260,40 @@
       padding:18px 16px; margin-bottom:4px;
     }
     .img-analysis-desc { font-size:13px; color:var(--gray); line-height:1.7; margin-bottom:14px; }
+    .img-upload-row { display:flex; gap:10px; margin-bottom:10px; }
+    .img-upload-slot { flex:1; display:flex; flex-direction:column; gap:6px; }
+    .img-slot-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--gray); text-align:center; }
     .img-upload-label {
-      display:flex; align-items:center; justify-content:center; gap:8px;
-      width:100%; padding:12px; background:rgba(232,237,242,0.07);
-      border:1.5px dashed rgba(232,237,242,0.25); border-radius:10px;
-      font-size:13px; font-weight:600; color:var(--silver); cursor:pointer; transition:all 0.2s;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+      width:100%; aspect-ratio:1/1.1; background:rgba(255,255,255,0.03);
+      border:1.5px dashed rgba(232,237,242,0.2); border-radius:12px;
+      font-size:20px; color:var(--gray); cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden;
     }
-    .img-upload-label:hover { border-color:rgba(232,237,242,0.5); background:rgba(232,237,242,0.1); }
-    .img-skip-note { font-size:11px; color:rgba(160,169,180,0.6); text-align:center; margin-top:10px; }
-    .img-analyzing { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--gray); padding:12px 0; }
+    .img-upload-label:hover { border-color:rgba(232,237,242,0.45); background:rgba(232,237,242,0.04); }
+    .img-upload-label.has-photo { border-color:rgba(232,237,242,0.3); }
+    .img-upload-label span { font-size:11px; color:var(--gray); }
+    .img-preview { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:10px; }
+    .img-analyze-btn {
+      width:100%; padding:13px; background:rgba(232,237,242,0.1); border:1.5px solid rgba(232,237,242,0.25);
+      border-radius:10px; color:var(--silver); font-size:13px; font-weight:700; font-family:inherit;
+      cursor:pointer; transition:all 0.2s; margin-top:4px;
+    }
+    .img-analyze-btn:hover { background:rgba(232,237,242,0.16); border-color:rgba(232,237,242,0.5); }
+    .img-analyze-btn:disabled { opacity:0.35; cursor:not-allowed; }
+    .img-skip-note { font-size:11px; color:rgba(160,169,180,0.5); text-align:center; margin-top:10px; }
+    .img-analyzing { display:flex; align-items:center; justify-content:center; gap:10px; font-size:13px; color:var(--gray); padding:14px 0; }
+    .img-result-wrap { margin-top:14px; display:flex; flex-direction:column; gap:10px; }
     .img-result-card {
-      margin-top:12px; background:rgba(200,213,228,0.07); border:1px solid rgba(200,213,228,0.15);
-      border-radius:10px; padding:14px;
+      background:rgba(200,213,228,0.06); border:1px solid rgba(200,213,228,0.12); border-radius:12px; padding:14px 16px;
     }
-    .img-result-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
-    .img-result-text { font-size:13px; color:var(--silver); line-height:1.7; }
+    .img-result-tag { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    .img-result-text { font-size:13px; color:var(--silver); line-height:1.75; }
+    .traits-row { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+    .trait-item { display:flex; align-items:center; gap:10px; }
+    .trait-name { font-size:11px; color:var(--gray); min-width:62px; flex-shrink:0; }
+    .trait-bar-bg { flex:1; height:4px; background:rgba(232,237,242,0.1); border-radius:2px; }
+    .trait-bar-fill { height:100%; background:var(--silver); border-radius:2px; }
+    .trait-val { font-size:11px; color:var(--gray); min-width:32px; text-align:right; flex-shrink:0; }
 
     /* ── 피부타입 퀴즈 ── */
     .quiz-trigger {
@@ -1036,13 +1055,26 @@
 
       <div class="sec-title" style="margin-top:0">AI 이미지 분석</div>
       <div class="img-analysis-box" id="hair-img-box">
-        <div class="img-analysis-desc">사진 한 장으로 현재 헤어 상태와 분위기를<br>AI가 직접 분석해 루틴에 반영합니다.</div>
-        <label class="img-upload-label" for="hair-photo-input">
-          <span id="hair-upload-text">📷 &nbsp;사진 업로드하기</span>
-          <input type="file" id="hair-photo-input" accept="image/*" style="display:none" onchange="analyzeHairPhoto(this)">
-        </label>
+        <div class="img-analysis-desc">앞모습과 옆모습 사진으로 현재 헤어·분위기를 정밀 분석해 루틴에 반영합니다.</div>
+        <div class="img-upload-row">
+          <div class="img-upload-slot">
+            <div class="img-slot-label">앞모습</div>
+            <label class="img-upload-label" id="slot-front" for="hair-front-input">
+              <span>🖼</span><span>업로드</span>
+              <input type="file" id="hair-front-input" accept="image/*" style="display:none" onchange="previewPhoto('front',this)">
+            </label>
+          </div>
+          <div class="img-upload-slot">
+            <div class="img-slot-label">옆모습</div>
+            <label class="img-upload-label" id="slot-side" for="hair-side-input">
+              <span>🖼</span><span>업로드</span>
+              <input type="file" id="hair-side-input" accept="image/*" style="display:none" onchange="previewPhoto('side',this)">
+            </label>
+          </div>
+        </div>
+        <button class="img-analyze-btn" id="hair-analyze-btn" onclick="runHairAnalysis()" disabled>AI 정밀 분석 시작하기</button>
         <div id="hair-analysis-result"></div>
-        <div class="img-skip-note">사진이 없으면 건너뛰어도 됩니다.</div>
+        <div class="img-skip-note">사진 없이 고민 입력만으로도 루틴을 받을 수 있어요.</div>
       </div>
 
       <div class="sec-title">헤어 고민</div>
@@ -1066,36 +1098,99 @@
   }
 
   /* ── 헤어 AI 이미지 분석 ── */
-  async function analyzeHairPhoto(input) {
+  const photoFiles = { front: null, side: null };
+
+  function previewPhoto(slot, input) {
     if (!input.files?.[0]) return;
+    photoFiles[slot] = input.files[0];
+    const slotEl = document.getElementById(`slot-${slot}`);
+    const url = URL.createObjectURL(input.files[0]);
+    // 기존 preview 제거 후 새로 삽입
+    slotEl.querySelectorAll('.img-preview').forEach(e => e.remove());
+    const img = document.createElement('img');
+    img.className = 'img-preview';
+    img.src = url;
+    slotEl.appendChild(img);
+    slotEl.classList.add('has-photo');
+    // 하나라도 있으면 버튼 활성화
+    document.getElementById('hair-analyze-btn').disabled = false;
+  }
+
+  async function runHairAnalysis() {
     const resultEl = document.getElementById('hair-analysis-result');
-    const uploadLabel = document.getElementById('hair-upload-text');
-    resultEl.innerHTML = `<div class="img-analyzing"><div class="dot"></div><div class="dot"></div><div class="dot"></div>&nbsp;AI 분석 중...</div>`;
-    uploadLabel.textContent = '📷 사진 변경하기';
-    try {
+    const btn = document.getElementById('hair-analyze-btn');
+    btn.disabled = true;
+    btn.textContent = '분석 중...';
+    resultEl.innerHTML = `<div class="img-analyzing"><div class="dot"></div><div class="dot"></div><div class="dot"></div>&nbsp;AI 정밀 분석 중...</div>`;
+
+    const sendPhoto = async (file) => {
+      if (!file) return null;
       const form = new FormData();
-      form.append('photo', input.files[0]);
+      form.append('photo', file);
       const res = await fetch(`${BACKEND}/analyze`, { method:'POST', body:form });
-      if (!res.ok) throw new Error('analysis failed');
-      const data = await res.json();
-      state.hairAnalysis = data;
-      const hairText = data.items?.hair || '';
-      const impressionText = data.impression?.description || '';
-      resultEl.innerHTML = `
-        <div class="img-result-card">
-          <div class="img-result-label">AI 분석 완료</div>
-          ${hairText ? `<div class="img-result-text" style="margin-bottom:8px">${hairText}</div>` : ''}
-          ${impressionText ? `<div class="img-result-text" style="font-size:12px;color:var(--gray)">${impressionText}</div>` : ''}
-        </div>
-      `;
+      if (!res.ok) throw new Error('failed');
+      return res.json();
+    };
+
+    try {
+      const [front, side] = await Promise.all([
+        sendPhoto(photoFiles.front),
+        sendPhoto(photoFiles.side),
+      ]);
+      const primary = front || side;
+      state.hairAnalysis = { front, side, primary };
+      renderHairAnalysisResult(primary, front, side);
+      btn.textContent = '✓ 분석 완료 — 재촬영하기';
+      btn.disabled = false;
     } catch {
       state.hairAnalysis = null;
-      resultEl.innerHTML = `<div class="img-skip-note" style="color:var(--gray);padding:10px 0">분석에 실패했어요. 고민 입력으로 계속할게요.</div>`;
+      resultEl.innerHTML = `<div class="img-skip-note" style="color:var(--gray);padding:12px 0">분석에 실패했어요. 고민 입력으로 계속합니다.</div>`;
+      btn.textContent = '다시 시도하기';
+      btn.disabled = false;
     }
+  }
+
+  function renderHairAnalysisResult(data, front, side) {
+    if (!data) return;
+    const resultEl = document.getElementById('hair-analysis-result');
+    const impression = data.impression?.description || '';
+    const hair = data.items?.hair || '';
+    const grooming = data.items?.grooming || '';
+    const coaching = data.coaching || '';
+    const traits = data.traits || {};
+
+    const traitsHTML = Object.entries(traits).length
+      ? `<div class="traits-row">${Object.entries(traits).map(([k,v]) => `
+          <div class="trait-item">
+            <span class="trait-name">${k}</span>
+            <div class="trait-bar-bg"><div class="trait-bar-fill" style="width:${Math.round(v*100)}%"></div></div>
+            <span class="trait-val">${Math.round(v*100)}%</span>
+          </div>`).join('')}</div>` : '';
+
+    resultEl.innerHTML = `<div class="img-result-wrap">
+      ${impression ? `<div class="img-result-card">
+        <div class="img-result-tag">인상 분석</div>
+        <div class="img-result-text">${impression}</div>
+        ${traitsHTML}
+      </div>` : ''}
+      ${hair ? `<div class="img-result-card">
+        <div class="img-result-tag">헤어</div>
+        <div class="img-result-text">${hair}</div>
+      </div>` : ''}
+      ${grooming ? `<div class="img-result-card">
+        <div class="img-result-tag">그루밍</div>
+        <div class="img-result-text">${grooming}</div>
+      </div>` : ''}
+      ${coaching ? `<div class="img-result-card" style="border-color:rgba(232,237,242,0.2)">
+        <div class="img-result-tag">자기관리 시작 포인트</div>
+        <div class="img-result-text">${coaching}</div>
+      </div>` : ''}
+    </div>`;
   }
 
   function renderDetail() {
     state.concerns=[]; state.skinType=null; state.morningTime=null; state.routineLevel=null; state.hairAnalysis=null;
+    photoFiles.front = null; photoFiles.side = null;
     document.getElementById('detail-area').innerHTML = detailDefs[state.cat]?.() || '';
     document.getElementById('btn9').disabled = true;
   }
