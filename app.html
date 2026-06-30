@@ -416,6 +416,27 @@
     .cta-badge { display:inline-block; font-size:11px; letter-spacing:1px; color:var(--red); margin-bottom:14px; }
     .spacer { height:40px; }
 
+    /* ── 알림 설정 ── */
+    .notif-box {
+      background:var(--card-bg); border:1px solid var(--border); border-radius:18px;
+      padding:24px 20px; margin-bottom:20px;
+    }
+    .notif-title { font-size:17px; font-weight:700; margin-bottom:6px; }
+    .notif-sub { font-size:13px; color:var(--gray); line-height:1.7; margin-bottom:18px; }
+    .notif-list { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+    .notif-item {
+      display:flex; align-items:center; gap:12px;
+      background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:11px 14px;
+    }
+    .notif-item-label { flex:1; font-size:13px; }
+    .notif-item-time {
+      font-size:13px; font-weight:600; color:var(--silver);
+      background:none; border:none; font-family:inherit; padding:0; cursor:pointer;
+      text-decoration:underline dotted rgba(232,237,242,0.3);
+    }
+    .notif-enabled { border-color:rgba(232,237,242,0.35); background:rgba(232,237,242,0.04); }
+    .notif-status { font-size:12px; color:var(--gray); text-align:center; margin-top:8px; }
+
     .kakao-btn {
       display:flex; align-items:center; justify-content:center; gap:8px; width:100%;
       padding:13px; background:#FEE500; color:#191919; border:none; border-radius:10px;
@@ -1225,13 +1246,14 @@
     collectSchedule();
     go(10);
     animateSteps();
+    saveToSheets(); // 비동기 fire-and-forget
     let routine;
     try {
       const [result] = await Promise.all([fetchRoutine(), delay(4200)]);
       routine = result;
     } catch { routine = mockRoutine(); }
     renderResult(routine);
-    setTimeout(() => go(11), 200);
+    setTimeout(() => { go(11); renderNotifList(); }, 200);
   }
 
   function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -1358,6 +1380,14 @@
       ${daysHTML}
       <div class="sec-title">추천 제품</div>
       ${productsHTML}
+      <div class="notif-box" id="notif-box">
+        <div class="notif-title">루틴 알림 설정</div>
+        <div class="notif-sub">스케줄을 분석해 딱 맞는 시간에 알림을 보내드릴게요.<br>귀갓길엔 "도착하자마자 클렌징" 같은 맥락 알림이에요.</div>
+        <div class="notif-list" id="notif-list"></div>
+        <button class="btn-primary" id="notif-btn" onclick="enableNotifications()">알림 받기</button>
+        <div class="notif-status" id="notif-status"></div>
+      </div>
+
       <div class="cta-box">
         <div class="cta-title">더 구체적인 플랜이<br>필요하다면?</div>
         <div class="cta-sub">마이러 코치의 1:1 피드백,<br>매일 습관 트래킹까지 함께합니다.</div>
@@ -1377,6 +1407,180 @@
     document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
     ['btn5','btn7','btn8','btn9'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=true;});
     go(0);
+  }
+
+  /* ══════════════════════════════════════════
+     구글 시트 제출
+  ══════════════════════════════════════════ */
+  const SHEETS_URL = 'https://script.google.com/macros/s/REPLACE_WITH_YOUR_SCRIPT_ID/exec';
+
+  async function saveToSheets() {
+    try {
+      const scheduleText = formatScheduleForAPI();
+      await fetch(SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: state.name,
+          phone: state.phone,
+          callTime: `${state.callStart}~${state.callEnd}`,
+          category: state.cat,
+          concerns: state.concerns.join(', '),
+          skinType: state.skinType || '',
+          budget: state.budget,
+          morningTime: state.morningTime,
+          routineLevel: state.routineLevel,
+          schedule: scheduleText,
+          submittedAt: new Date().toLocaleString('ko-KR'),
+        }),
+      });
+    } catch(e) { /* 시트 저장 실패해도 루틴 진행 */ }
+  }
+
+  /* ══════════════════════════════════════════
+     스마트 알림 — 스케줄 기반 시간 추출
+  ══════════════════════════════════════════ */
+  function addMin(t, m) {
+    const [h, min] = t.split(':').map(Number);
+    const total = h * 60 + min + m;
+    const hh = Math.floor(total / 60) % 24;
+    const mm = total % 60;
+    return `${String(hh).padStart(2,'0')}:${String(mm < 0 ? mm + 60 : mm).padStart(2,'0')}`;
+  }
+
+  function findScheduleTime(keywords) {
+    const weekdays = state.schedule.filter((_, i) => i !== 3 && i !== 4);
+    const times = [];
+    weekdays.forEach(d => {
+      (d.events || []).forEach(e => {
+        if (keywords.some(k => (e.label || '').includes(k))) times.push(e.time);
+      });
+    });
+    if (!times.length) return null;
+    return times.sort((a, b) =>
+      times.filter(v => v === b).length - times.filter(v => v === a).length
+    )[0];
+  }
+
+  function deriveNotifications(category) {
+    const wake  = findScheduleTime(['기상', '일어']);
+    const lunch = findScheduleTime(['점심', '식사', 'lunch']);
+    const home  = findScheduleTime(['귀가', '퇴근', '귀택']);
+    const sleep = findScheduleTime(['취침', '잠', '수면']);
+    const notifs = [];
+
+    if (category === 'skin') {
+      if (wake)  notifs.push({ label:'아침 루틴', time: addMin(wake, 5),
+        msg:`기상 후 5분! 아침 스킨케어 시작해볼까요? 세안부터 시작합니다. 💧` });
+      if (lunch) notifs.push({ label:'점심 케어', time: addMin(lunch, 10),
+        msg:`점심 식사 후 잠깐, 피지 정돈하고 가볼까요? 🧴` });
+      if (home)  notifs.push({ label:'저녁 루틴', time: addMin(home, 5),
+        msg:`집 도착! 도착하자마자 클렌징부터. 저녁 루틴 시작해요. 🌙` });
+      if (sleep) notifs.push({ label:'취침 전 케어', time: addMin(sleep, -30),
+        msg:`취침 30분 전 루틴 마무리 시간이에요. 수분 크림 챙기셨나요? 💤` });
+    } else {
+      if (wake)  notifs.push({ label:'아침 스타일링', time: addMin(wake, 5),
+        msg:`굿모닝! 오늘의 헤어 스타일링 시작해볼까요? 💇‍♂️` });
+      if (home)  notifs.push({ label:'저녁 두피 케어', time: addMin(home, 10),
+        msg:`퇴근 후 두피 케어! 샴푸 전 두피 마사지 2분부터 시작해요. 🌿` });
+      if (sleep) notifs.push({ label:'취침 전 케어', time: addMin(sleep, -20),
+        msg:`취침 전 모발 에센스 바르는 거 잊지 마세요! 🌙` });
+    }
+    // 폴백: 스케줄이 없으면 기본 시간
+    if (!notifs.length) {
+      notifs.push({ label:'아침 루틴',   time:'07:10', msg:`오늘 아침 루틴 시작할 시간이에요! 💧` });
+      notifs.push({ label:'저녁 루틴',   time:'19:00', msg:`저녁 루틴 시작해볼까요? 🌙` });
+    }
+    return notifs;
+  }
+
+  let derivedNotifs = [];
+
+  function renderNotifList() {
+    derivedNotifs = deriveNotifications(state.cat);
+    const list = document.getElementById('notif-list');
+    if (!list) return;
+    list.innerHTML = derivedNotifs.map((n, i) => `
+      <div class="notif-item" id="ni-${i}">
+        <span style="font-size:14px">${n.label === '아침 루틴' || n.label === '아침 스타일링' ? '☀️' : n.label.includes('점심') ? '🌤' : n.label.includes('저녁') ? '🌙' : '💤'}</span>
+        <span class="notif-item-label">${n.label}</span>
+        <button class="notif-item-time" onclick="editNotifTime(${i})" id="nt-${i}">${n.time}</button>
+      </div>
+    `).join('');
+  }
+
+  function editNotifTime(i) {
+    const val = prompt(`"${derivedNotifs[i].label}" 알림 시간 변경 (현재: ${derivedNotifs[i].time})`, derivedNotifs[i].time);
+    if (val && /^\d{2}:\d{2}$/.test(val)) {
+      derivedNotifs[i].time = val;
+      document.getElementById(`nt-${i}`).textContent = val;
+    }
+  }
+
+  async function enableNotifications() {
+    const btn = document.getElementById('notif-btn');
+    const status = document.getElementById('notif-status');
+
+    if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+      status.textContent = '이 브라우저는 알림을 지원하지 않아요.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '설정 중...';
+
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') {
+      status.textContent = '알림 권한이 필요해요. 브라우저 설정에서 허용해주세요.';
+      btn.disabled = false; btn.textContent = '다시 시도';
+      return;
+    }
+
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      // VAPID 공개키 가져오기
+      const keyRes = await fetch(`${BACKEND}/vapid-key`);
+      const { publicKey } = await keyRes.json();
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicKey),
+      });
+
+      await fetch(`${BACKEND}/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: `${state.name}_${Date.now()}`,
+          subscription: sub.toJSON(),
+          notifications: derivedNotifs,
+          category: state.cat,
+        }),
+      });
+
+      // 성공 UI
+      document.getElementById('notif-list').querySelectorAll('.notif-item').forEach(el => el.classList.add('notif-enabled'));
+      btn.textContent = '✓ 알림 설정 완료';
+      status.textContent = '매일 스케줄에 맞춰 루틴 알림을 보내드릴게요.';
+    } catch(e) {
+      console.error(e);
+      status.textContent = '알림 설정에 실패했어요. 다시 시도해주세요.';
+      btn.disabled = false; btn.textContent = '알림 받기';
+    }
+  }
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const raw = atob(base64);
+    return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+  }
+
+  /* ══════════════════════════════════════════
+     서비스 워커 등록
+  ══════════════════════════════════════════ */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/myro/sw.js', { scope: '/myro/' }).catch(() => {});
   }
 
   go(0);
