@@ -1503,9 +1503,40 @@
   let routineData = null;
   let curDay = 0;
 
-  function renderResult(data) {
+  function saveRoutineToStorage(data, name) {
+    localStorage.setItem('myro_routine', JSON.stringify({
+      routine: data,
+      name: name,
+      startDate: new Date().toISOString().split('T')[0],
+    }));
+  }
+
+  function getTodayDayIndex() {
+    const saved = localStorage.getItem('myro_routine');
+    if (!saved) return null;
+    try {
+      const { routine, name, startDate } = JSON.parse(saved);
+      const start = new Date(startDate);
+      const today = new Date();
+      today.setHours(0,0,0,0); start.setHours(0,0,0,0);
+      const diffDays = Math.floor((today - start) / 86400000);
+      if (diffDays < 0 || diffDays >= (routine.days||[]).length) return null;
+      return { routine, name, dayIndex: diffDays };
+    } catch { return null; }
+  }
+
+  function resumeRoutine() {
+    const saved = getTodayDayIndex();
+    if (!saved) return false;
+    renderResult(saved.routine, saved.name, saved.dayIndex);
+    return true;
+  }
+
+  function renderResult(data, nameOverride, startDayIdx) {
     routineData = data;
-    curDay = 0;
+    curDay = startDayIdx ?? 0;
+    const name = nameOverride || state.name || '마이러';
+    saveRoutineToStorage(data, name);
     const name = state.name || '마이러';
 
     const productsHTML = (data.products||[]).filter(p => p.name||p.searchQuery).map(p => {
@@ -1580,7 +1611,7 @@
       </div>
     `;
 
-    renderDayView(0);
+    renderDayView(curDay);
   }
 
   function renderDayView(idx) {
@@ -1624,6 +1655,7 @@
   }
 
   function restart() {
+    localStorage.removeItem('myro_routine');
     Object.assign(state,{name:'',phone:'',callStart:'',callEnd:'',schedule:[],budget:null,cat:null,concerns:[],skinType:null,morningTime:null,routineLevel:null});
     document.getElementById('name-input').value='';
     document.getElementById('phone-input').value='';
@@ -1805,6 +1837,22 @@
     navigator.serviceWorker.register('/myro/sw.js', { scope: '/myro/' }).catch(() => {});
   }
 
+  // 저장된 루틴 있으면 복귀 화면 표시, 없으면 처음부터
+  const savedCheck = getTodayDayIndex();
+  if (savedCheck) {
+    // 복귀 화면 삽입
+    const resumeBanner = document.createElement('div');
+    resumeBanner.id = 'resume-banner';
+    resumeBanner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0A0B0D;border-top:1px solid rgba(232,237,242,0.15);padding:16px 20px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px';
+    resumeBanner.innerHTML = `
+      <div>
+        <div style="font-size:11px;letter-spacing:1.5px;color:var(--gray);margin-bottom:4px">MYRO ROUTINE</div>
+        <div style="font-size:14px;font-weight:600;color:var(--white)">${savedCheck.name}님, 오늘은 DAY ${savedCheck.dayIndex+1}이에요</div>
+      </div>
+      <button onclick="document.getElementById('resume-banner').remove(); resumeRoutine(); go(11);" style="background:var(--white);color:#0A0B0D;border:none;font-size:13px;font-weight:700;padding:11px 20px;border-radius:50px;cursor:pointer;white-space:nowrap">오늘 루틴 보기</button>
+    `;
+    document.body.appendChild(resumeBanner);
+  }
   go(0);
 </script>
 </body>
