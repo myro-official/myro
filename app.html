@@ -49,7 +49,11 @@
 
     /* ── s0: Welcome ── */
     #s0 { position:relative; padding:0; overflow:hidden; }
-    .s0-video { position:absolute; top:50%; left:50%; min-width:100%; min-height:100%; width:auto; height:auto; transform:translate(-50%,-50%); object-fit:cover; z-index:0; }
+    .s0-video { position:absolute; top:50%; left:50%; min-width:100%; min-height:100%; width:auto; height:auto; transform:translate(-50%,-50%); object-fit:cover; z-index:0; pointer-events:none; }
+    .s0-video::-webkit-media-controls { display:none !important; }
+    .s0-video::-webkit-media-controls-panel { display:none !important; }
+    .s0-video::-webkit-media-controls-play-button { display:none !important; }
+    .s0-video::-webkit-media-controls-start-playback-button { display:none !important; }
     .s0-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(10,11,13,0.45) 0%, rgba(10,11,13,0.75) 60%, rgba(10,11,13,1) 100%); z-index:1; }
     .welcome-wrap { position:relative; z-index:2; min-height:100vh; padding:0 0 56px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; width:100%; }
     .welcome-logo-row { margin-bottom:24px; width:100%; }
