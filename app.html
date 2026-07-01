@@ -1508,16 +1508,27 @@
     curDay = 0;
     const name = state.name || '마이러';
 
-    const productsHTML = (data.products||[]).map(p => `
-      <a class="product-link" href="${p.link||'#'}" target="_blank" rel="noopener noreferrer">
-        <div class="product-info">
-          <div class="product-name">${p.name}</div>
-          <div class="product-reason">${p.reason}</div>
-          <span class="product-price">${p.price}</span>
-        </div>
-        <span class="product-arrow">→</span>
-      </a>
-    `).join('');
+    const productsHTML = (data.products||[]).filter(p => p.name||p.searchQuery).map(p => {
+      const pname = p.name || p.searchQuery || '';
+      const link = p.link || '';
+      if (link) {
+        return `<a class="product-link" href="${link}" target="_blank" rel="noopener noreferrer">
+          <div class="product-info">
+            <div class="product-name">${pname}</div>
+            <div class="product-reason">${p.reason||''}</div>
+            ${p.price ? `<span class="product-price">${p.price}</span>` : ''}
+          </div>
+          <span class="product-arrow">→</span>
+        </a>`;
+      } else {
+        return `<div class="product-link" style="cursor:default">
+          <div class="product-info">
+            <div class="product-name">${pname}</div>
+            <div class="product-reason">${p.reason||''}</div>
+          </div>
+        </div>`;
+      }
+    }).join('');
 
     document.getElementById('result-area').innerHTML = `
       <div class="label" style="margin-bottom:12px">${name}님의 맞춤 루틴</div>
