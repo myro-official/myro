@@ -606,8 +606,8 @@
       <div class="subtitle">이름이나 별명을 알려주세요.<br>루틴 전 과정에서 사용돼요.</div>
       <input class="name-input" id="name-input" type="text" placeholder="이름 또는 별명" maxlength="12" oninput="checkName()">
       <div class="name-hint">최대 12자</div>
-      <input class="name-input" id="location-input" type="text" placeholder="사는 곳 (예: 강남, 홍대, 수원)" maxlength="20" oninput="state.location=this.value.trim()" style="margin-top:12px">
-      <div class="name-hint">맞춤 루틴 · 근처 미용실 · 운동 장소 추천에 활용돼요 · 선택사항</div>
+      <input class="name-input" id="location-input" type="text" placeholder="사는 곳 (예: 강남, 홍대, 수원)" maxlength="20" oninput="checkName()" style="margin-top:12px">
+      <div class="name-hint">맞춤 루틴 · 근처 미용실 · 운동 장소 추천에 활용돼요 · 필수사항</div>
       <button class="btn-primary" id="btn5" onclick="go(6)" disabled>루틴 만들러 가기</button>
     </div>
   </div>
@@ -781,8 +781,10 @@
   /* ── s5: 이름 ── */
   function checkName() {
     const v = document.getElementById('name-input').value.trim();
+    const loc = document.getElementById('location-input')?.value.trim() || '';
     state.name = v;
-    document.getElementById('btn5').disabled = v.length === 0;
+    state.location = loc;
+    document.getElementById('btn5').disabled = v.length === 0 || loc.length === 0;
     const hl = document.getElementById('welcome-headline');
     if (hl) hl.innerHTML = v ? `마이로의 첫 마이러,<br>${v}님 환영합니다.` : `마이로의 첫 마이러가<br>되어주셔서 감사합니다.`;
   }
