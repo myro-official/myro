@@ -488,7 +488,7 @@
         <div class="notice-section-title">이용 기간 & 루틴 제공 방식</div>
         <div class="notice-item">
           <div class="notice-dot"></div>
-          <div class="notice-text"><em>7/1(수) ~ 7/8(수)</em>, 1주일간 마이로 서비스를 이용하실 수 있습니다.</div>
+          <div class="notice-text"><em>7/3(목) ~ 7/7(월)</em>, 5일간 마이로 서비스를 이용하실 수 있습니다.</div>
         </div>
         <div class="notice-item">
           <div class="notice-dot"></div>
@@ -504,7 +504,7 @@
         <div class="notice-section-title">베타 참여 필수 조건</div>
         <div class="notice-item">
           <div class="notice-dot"></div>
-          <div class="notice-text">7/8(수) 체험 종료 후 <em>카카오톡 후기 및 마이러 1기 리뷰 조사에 반드시 참여</em>하셔야 합니다.</div>
+          <div class="notice-text">7/7(월) 체험 종료 후 <em>카카오톡 후기 및 마이러 1기 리뷰 조사에 반드시 참여</em>하셔야 합니다.</div>
         </div>
         <div class="notice-item">
           <div class="notice-dot"></div>
@@ -526,12 +526,12 @@
       <div class="consent-card">
         <span class="consent-tag">동의 1 / 2</span>
         <div class="consent-title">사용 후 카카오톡<br>후기 참여에 동의하시나요?</div>
-        <div class="consent-desc">7/8(수) 베타 서비스 종료 후, 카카오톡 채널을 통해 솔직한 사용 후기를 남겨주시면 됩니다.</div>
+        <div class="consent-desc">7/7(월) 베타 서비스 종료 후, 카카오톡 채널을 통해 솔직한 사용 후기를 남겨주시면 됩니다.</div>
         <ul class="consent-list">
           <li>형식: 카카오채널 채팅 (자유 형식)</li>
           <li>내용: 서비스 사용 소감, 개선 사항 등</li>
           <li>소요시간: 10분 내외</li>
-          <li>시기: 7/8(수) 체험 종료 이후</li>
+          <li>시기: 7/7(월) 체험 종료 이후</li>
         </ul>
       </div>
       <button class="btn-consent" onclick="go(3)">✓ &nbsp;동의합니다</button>
@@ -562,7 +562,7 @@
     <div class="phone-wrap">
       <div class="label">연락처</div>
       <div class="title">연락받으실<br>전화번호를 알려주세요.</div>
-      <div class="subtitle">7/8 종료 후 인터뷰 일정 조율에 활용돼요.</div>
+      <div class="subtitle">7/7 종료 후 인터뷰 일정 조율에 활용돼요.</div>
 
       <input
         class="text-input"
@@ -575,7 +575,7 @@
       <div class="input-hint">숫자만 입력하면 자동으로 형식이 맞춰져요.</div>
 
       <div class="sec-title">전화 가능 시간대</div>
-      <div class="subtitle" style="margin-bottom:8px">7/8(수) 이후 언제 전화드리면 될까요?</div>
+      <div class="subtitle" style="margin-bottom:8px">7/7(월) 이후 언제 전화드리면 될까요?</div>
       <div class="time-input-row">
         <input class="text-input" id="call-start" type="time" value="10:00" style="font-size:15px;padding:14px 16px;margin:0">
         <span class="time-sep">~</span>
@@ -717,8 +717,8 @@
 
 <script>
   const BACKEND = 'https://web-production-0e945.up.railway.app';
-  const DATES = ['7/1','7/2','7/3','7/4','7/5','7/6','7/7','7/8'];
-  const DAYS_KR = ['수','목','금','토','일','월','화','수'];
+  const DATES = ['7/3','7/4','7/5','7/6','7/7'];
+  const DAYS_KR = ['목','금','토','일','월'];
 
   const state = {
     name: '', phone: '', callStart: '', callEnd: '',
@@ -802,14 +802,11 @@
 
   /* ── s6: 동적 스케줄 ── */
   const DAY_INFO = [
-    {date:'7/1', day:'수요일', weekend:false},
-    {date:'7/2', day:'목요일', weekend:false},
-    {date:'7/3', day:'금요일', weekend:false},
-    {date:'7/4', day:'토요일', weekend:true},
-    {date:'7/5', day:'일요일', weekend:true},
-    {date:'7/6', day:'월요일', weekend:false},
-    {date:'7/7', day:'화요일', weekend:false},
-    {date:'7/8', day:'수요일', weekend:false},
+    {date:'7/3', day:'목요일', weekend:false},
+    {date:'7/4', day:'금요일', weekend:false},
+    {date:'7/5', day:'토요일', weekend:true},
+    {date:'7/6', day:'일요일', weekend:true},
+    {date:'7/7', day:'월요일', weekend:false},
   ];
 
   // events[dayIdx] = [{label, time}, ...]
@@ -1463,13 +1460,11 @@
         type_name:'피부 재건형', tagline:'기초부터 탄탄하게. 이번 주가 바뀝니다.',
         first_action:'오늘 저녁 세안 후 보습 크림 하나만 바르고 주무세요. 자기 전 2분, 오늘부터 시작합니다.',
         days:[
-          {date:'7/1 (수)',theme:'루틴 첫날',morning:['7:05 미온수 세안 1분','즉시 토너 손으로 펴바르기','선크림 → 외출 5분 전 흡수'],evening:['귀가 후 클렌징 폼 세안 90초','토너 → 보습 크림 레이어링','취침 전 립밤 마무리'],tip:'오늘은 세안을 정확히 2번 지키는 것만으로 충분합니다.'},
-          {date:'7/2 (목)',theme:'수분 채우기',morning:['세안 → 보습 크림 두 번 덧바르기','선크림 꼼꼼히 (이마·코 위주)'],evening:['이중 세안 (오일 클렌저 → 폼)','시트 마스크 15분 → 에센스 흡수'],tip:'이중 세안이 처음이면 폼만 두 번 해도 괜찮아요.'},
-          {date:'7/3 (금)',theme:'피지 컨트롤',morning:['세안 → 토너 → 가벼운 수분 크림','T존 파우더로 피지 방어'],evening:['귀가 즉시 세안','BHA 토너로 T존 닦아내기 → 10분 후 보습'],tip:'BHA는 주 2~3회만 사용하세요. 매일은 자극이 됩니다.'},
-          {date:'7/4 (토)',theme:'스페셜 케어',morning:['세안 → 스크럽 3분 (주 1회)','시트 마스크 20분'],evening:['수면 팩 넉넉하게 도포 → 취침'],tip:'주말 스페셜 케어가 주중 피부를 완전히 바꿉니다.'},
-          {date:'7/5 (일)',theme:'회복·보습',morning:['가볍게 세안 → 수분 에센스 → 보습 크림'],evening:['세안 후 보습 마스크 10분','피부 상태 사진 촬영 (비교용)'],tip:'이번 주 루틴 중 가장 효과 좋았던 단계를 기억해 두세요.'},
-          {date:'7/6 (월)',theme:'주간 점검',morning:['세안 → 토너 → 선크림 (10분 이내)','거울에서 피부 상태 체크'],evening:['이중 세안 → BHA 토닉 → 보습 크림'],tip:'월요일 피부는 주말 케어 효과가 나타나는 날입니다.'},
-          {date:'7/7 (화)',theme:'습관화 마무리',morning:['루틴 타이머 맞추기 (총 8분 목표)','세안 → 토너 → 수분크림 → 선크림'],evening:['루틴 완료 후 다음 주 계획'],tip:'7일을 완주했다면 이미 습관의 시작입니다. 수고하셨어요.'},
+          {date:'7/3 (목)',theme:'루틴 첫날',morning:['미온수 세안 1분','토너 손으로 펴바르기','선크림 → 외출 5분 전 흡수'],evening:['귀가 후 클렌징 폼 세안 90초','토너 → 보습 크림 레이어링','취침 전 립밤 마무리'],tip:'오늘은 세안을 정확히 2번 지키는 것만으로 충분합니다.'},
+          {date:'7/4 (금)',theme:'수분 채우기',morning:['세안 → 보습 크림 두 번 덧바르기','선크림 꼼꼼히 (이마·코 위주)'],evening:['이중 세안 (오일 클렌저 → 폼)','시트 마스크 15분 → 에센스 흡수'],tip:'이중 세안이 처음이면 폼만 두 번 해도 괜찮아요.'},
+          {date:'7/5 (토)',theme:'스페셜 케어',morning:['세안 → 스크럽 3분 (주 1회)','시트 마스크 20분'],evening:['수면 팩 넉넉하게 도포 → 취침'],tip:'주말 스페셜 케어가 주중 피부를 완전히 바꿉니다.'},
+          {date:'7/6 (일)',theme:'회복·보습',morning:['가볍게 세안 → 수분 에센스 → 보습 크림'],evening:['세안 후 보습 마스크 10분','피부 상태 사진 촬영 (비교용)'],tip:'이번 루틴 중 가장 효과 좋았던 단계를 기억해 두세요.'},
+          {date:'7/7 (월)',theme:'마무리',morning:['세안 → 토너 → 선크림 (10분 이내)','거울에서 피부 상태 체크'],evening:['이중 세안 → 보습 크림','루틴 완료 후 카카오 채널에서 후기 남기기'],tip:'5일을 완주했다면 이미 습관의 시작입니다. 수고하셨어요.'},
         ],
         products:[
           {name:'세타필 젠틀 클렌징 워시',reason:'자극 없는 기초 클렌징',price:'15,000원대',link:'https://www.coupang.com/np/search?q=세타필+클렌징'},
@@ -1481,13 +1476,11 @@
         type_name:'두피 리셋형', tagline:'두피부터 바꾸면 전부 바뀝니다.',
         first_action:'오늘 저녁 샴푸 후 드라이기 없이 자연 건조하면서 손가락으로 두피를 2분 마사지해주세요.',
         days:[
-          {date:'7/1 (수)',theme:'두피 리셋 첫날',morning:['두피 유분 상태 손으로 확인','헤어 에센스 모발에 소량 도포'],evening:['두피 전용 샴푸 세발 (2분 마사지)','두피 에센스 → 저온(130도 이하) 드라이'],tip:'샴푸 시 두피를 문지르지 말고 지그시 눌러서 마사지하세요.'},
-          {date:'7/2 (목)',theme:'세발 루틴 정착',morning:['헤어 스타일링 (왁스 소량, 뿌리부터 세우기)'],evening:['세발 → 두피 마사지 3분 → 저온 드라이','취침 전 머리카락 완전 건조 확인'],tip:'젖은 채로 자면 두피 트러블의 주요 원인이 됩니다.'},
-          {date:'7/3 (금)',theme:'스타일링 연습',morning:['타월 드라이 → 에센스 → 왁스 순서','드라이 방향 잡기 (방향이 스타일 결정)'],evening:['가벼운 물 세발 또는 드라이 샴푸 활용'],tip:'금요일 저녁은 두피에 쌓인 피로를 씻어내는 날입니다.'},
-          {date:'7/4 (토)',theme:'두피 스페셜 케어',morning:['두피 스케일러 → 10분 방치 → 세발 (주 1회)','세발 후 두피 팩 5분'],evening:['헤어 에센스 집중 도포'],tip:'두피 스케일링은 주 1회가 적당합니다. 그 이상은 오히려 자극이 돼요.'},
-          {date:'7/5 (일)',theme:'그루밍 점검',morning:['면도 후 애프터쉐이브 또는 수분크림','눈썹 정리 (비대칭 확인)'],evening:['전신 샤워 후 바디 로션','헤어 상태 사진 비교'],tip:'그루밍의 완성은 디테일입니다. 눈썹과 면도 라인을 오늘 점검하세요.'},
-          {date:'7/6 (월)',theme:'주간 점검',morning:['두피 마사지 1분 → 스타일링','왁스 양 조절 (전주보다 줄여보기)'],evening:['세발 → 에센스 → 저온 드라이'],tip:'월요일은 두피가 가볍고 깔끔할수록 자신감이 달라집니다.'},
-          {date:'7/7 (화)',theme:'습관화 마무리',morning:['이번 주 스타일링 루틴 최종 점검'],evening:['세발 후 두피 에센스 → 다음 주 계획'],tip:'7일 완주 축하드려요. 이제 이 루틴은 당신의 것입니다.'},
+          {date:'7/3 (목)',theme:'두피 리셋 첫날',morning:['두피 유분 상태 손으로 확인','헤어 에센스 모발에 소량 도포'],evening:['두피 전용 샴푸 세발 (2분 마사지)','두피 에센스 → 저온(130도 이하) 드라이'],tip:'샴푸 시 두피를 문지르지 말고 지그시 눌러서 마사지하세요.'},
+          {date:'7/4 (금)',theme:'스타일링 연습',morning:['타월 드라이 → 에센스 → 왁스 순서','드라이 방향 잡기 (방향이 스타일 결정)'],evening:['가벼운 물 세발 또는 드라이 샴푸 활용'],tip:'금요일 저녁은 두피에 쌓인 피로를 씻어내는 날입니다.'},
+          {date:'7/5 (토)',theme:'두피 스페셜 케어',morning:['두피 스케일러 → 10분 방치 → 세발 (주 1회)','세발 후 두피 팩 5분'],evening:['헤어 에센스 집중 도포'],tip:'두피 스케일링은 주 1회가 적당합니다. 그 이상은 오히려 자극이 돼요.'},
+          {date:'7/6 (일)',theme:'그루밍 점검',morning:['면도 후 애프터쉐이브 또는 수분크림','눈썹 정리 (비대칭 확인)'],evening:['전신 샤워 후 바디 로션','헤어 상태 사진 비교'],tip:'그루밍의 완성은 디테일입니다. 눈썹과 면도 라인을 오늘 점검하세요.'},
+          {date:'7/7 (월)',theme:'마무리',morning:['두피 마사지 1분 → 스타일링','이번 루틴 최종 점검'],evening:['세발 → 두피 에센스','카카오 채널에서 후기 남기기'],tip:'5일 완주 축하드려요. 이제 이 루틴은 당신의 것입니다.'},
         ],
         products:[
           {name:'TS 샴푸',reason:'탈모 관리 대표 제품',price:'18,000원대',link:'https://www.coupang.com/np/search?q=TS샴푸'},
@@ -1578,7 +1571,7 @@
       </div>
 
       <div style="background:rgba(232,237,242,0.05);border:1px solid rgba(232,237,242,0.12);border-radius:18px;padding:20px 18px;margin-bottom:4px">
-        <div style="font-size:13px;color:var(--gray);line-height:1.8">지금부터 1주일간<br>매일 아침과 저녁 루틴을 함께해요.</div>
+        <div style="font-size:13px;color:var(--gray);line-height:1.8">지금부터 5일간<br>매일 아침과 저녁 루틴을 함께해요.</div>
         <div style="font-size:15px;font-weight:700;margin-top:10px;color:var(--silver)">하루하루 함께 완주해봅시다.</div>
       </div>
 
@@ -1649,7 +1642,7 @@
         </div>
         <div class="day-tip">💡 ${d.tip||''}</div>
       </div>
-      ${idx < total-1 ? `<div style="text-align:center;font-size:12px;color:var(--gray);padding:8px 0 4px">← 옆으로 밀어서 다음 날 루틴 보기 →</div>` : `<div style="text-align:center;font-size:12px;color:var(--gray);padding:8px 0 4px">1주일 루틴을 모두 확인했어요 ✓</div>`}
+      ${idx < total-1 ? `<div style="text-align:center;font-size:12px;color:var(--gray);padding:8px 0 4px">← 옆으로 밀어서 다음 날 루틴 보기 →</div>` : `<div style="text-align:center;font-size:12px;color:var(--gray);padding:8px 0 4px">5일 루틴을 모두 확인했어요 ✓</div>`}
     `;
   }
 
