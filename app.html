@@ -441,10 +441,11 @@
       background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:11px 14px;
     }
     .notif-item-label { flex:1; font-size:13px; }
-    .notif-item-time {
+    .notif-time-input {
       font-size:13px; font-weight:600; color:var(--silver);
-      background:none; border:none; font-family:inherit; padding:0; cursor:pointer;
-      text-decoration:underline dotted rgba(232,237,242,0.3);
+      background:rgba(232,237,242,0.06); border:1px solid rgba(232,237,242,0.2);
+      border-radius:8px; padding:4px 8px; font-family:inherit; cursor:pointer;
+      color-scheme:dark;
     }
     .notif-enabled { border-color:rgba(232,237,242,0.35); background:rgba(232,237,242,0.04); }
     .notif-status { font-size:12px; color:var(--gray); text-align:center; margin-top:8px; }
@@ -1035,6 +1036,12 @@
   function pickCat(cat, el) {
     document.querySelectorAll('.cat-card:not(.locked)').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
+    if (state.cat !== cat) {
+      state.concerns = []; state.skinType = null;
+      state.morningTime = null; state.routineLevel = null;
+      state.hairAnalysis = null;
+      photoFiles.front = null; photoFiles.side = null;
+    }
     state.cat = cat;
     document.getElementById('btn8').disabled = false;
   }
@@ -1553,6 +1560,7 @@
     localStorage.setItem('myro_routine', JSON.stringify({
       routine: data,
       name: name,
+      cat: state.cat,
       startDate: new Date().toISOString().split('T')[0],
     }));
   }
@@ -1561,19 +1569,20 @@
     const saved = localStorage.getItem('myro_routine');
     if (!saved) return null;
     try {
-      const { routine, name, startDate } = JSON.parse(saved);
+      const { routine, name, cat, startDate } = JSON.parse(saved);
       const start = new Date(startDate);
       const today = new Date();
       today.setHours(0,0,0,0); start.setHours(0,0,0,0);
       const diffDays = Math.floor((today - start) / 86400000);
       if (diffDays < 0 || diffDays >= (routine.days||[]).length) return null;
-      return { routine, name, dayIndex: diffDays };
+      return { routine, name, cat: cat || null, dayIndex: diffDays };
     } catch { return null; }
   }
 
   function resumeRoutine() {
     const saved = getTodayDayIndex();
     if (!saved) return false;
+    if (saved.cat) state.cat = saved.cat;
     renderResult(saved.routine, saved.name, saved.dayIndex);
     return true;
   }
@@ -1698,7 +1707,7 @@
 
         <div class="notif-box" id="notif-box">
           <div class="notif-title">루틴 알림 설정</div>
-          <div class="notif-sub">스케줄을 분석해 딱 맞는 시간에 알림을 보내드릴게요.<br>귀갓길엔 "도착하자마자 클렌징" 같은 맥락 알림이에요.</div>
+          <div class="notif-sub">자기관리에 가장 집중하고 싶은 시간으로 직접 설정해보세요.<br>매일 그 시간에 딱 맞는 루틴 알림을 보내드릴게요.</div>
           <div class="notif-list" id="notif-list"></div>
           <button class="btn-primary" id="notif-btn" onclick="enableNotifications()">알림 받기</button>
           <div class="notif-status" id="notif-status"></div>
@@ -2006,9 +2015,11 @@
 
   function restart() {
     localStorage.removeItem('myro_routine');
-    Object.assign(state,{name:'',phone:'',callStart:'',callEnd:'',schedule:[],budget:null,cat:null,concerns:[],skinType:null,morningTime:null,routineLevel:null});
-    document.getElementById('name-input').value='';
-    document.getElementById('phone-input').value='';
+    Object.assign(state,{name:'',phone:'',callStart:'',callEnd:'',location:'',schedule:[],budget:null,cat:null,concerns:[],skinType:null,morningTime:null,routineLevel:null,hairAnalysis:null,photoFrontUrl:'',photoSideUrl:''});
+    photoFiles.front = null; photoFiles.side = null;
+    const nameEl = document.getElementById('name-input'); if (nameEl) nameEl.value = '';
+    const locEl  = document.getElementById('location-input'); if (locEl) locEl.value = '';
+    const phoneEl = document.getElementById('phone-input'); if (phoneEl) phoneEl.value = '';
     document.querySelectorAll('.budget-card').forEach(c=>c.classList.remove('selected'));
     document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
     ['btn5','btn7','btn8','btn9'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=true;});
@@ -2055,16 +2066,18 @@
 
   function findScheduleTime(keywords) {
     const weekdays = state.schedule.filter((_, i) => i !== 3 && i !== 4);
-    const times = [];
+    const freq = {};
     weekdays.forEach(d => {
-      (d.events || []).forEach(e => {
-        if (keywords.some(k => (e.label || '').includes(k))) times.push(e.time);
+      (d.evtStr || '').split(',').forEach(part => {
+        const m = part.trim().match(/^(.+?)\s+(\d{2}:\d{2})$/);
+        if (!m) return;
+        const [, label, time] = m;
+        if (keywords.some(k => label.includes(k))) freq[time] = (freq[time] || 0) + 1;
       });
     });
-    if (!times.length) return null;
-    return times.sort((a, b) =>
-      times.filter(v => v === b).length - times.filter(v => v === a).length
-    )[0];
+    const entries = Object.entries(freq);
+    if (!entries.length) return null;
+    return entries.sort((a, b) => b[1] - a[1])[0][0];
   }
 
   function deriveNotifications(category) {
@@ -2105,21 +2118,22 @@
     derivedNotifs = deriveNotifications(state.cat);
     const list = document.getElementById('notif-list');
     if (!list) return;
-    list.innerHTML = derivedNotifs.map((n, i) => `
-      <div class="notif-item" id="ni-${i}">
-        <span style="font-size:14px">${n.label === '아침 루틴' || n.label === '아침 스타일링' ? '☀️' : n.label.includes('점심') ? '🌤' : n.label.includes('저녁') ? '🌙' : '💤'}</span>
-        <span class="notif-item-label">${n.label}</span>
-        <button class="notif-item-time" onclick="editNotifTime(${i})" id="nt-${i}">${n.time}</button>
-      </div>
-    `).join('');
+    list.innerHTML = derivedNotifs.map((n, i) => {
+      const icon = (n.label.includes('아침') || n.label.includes('스타일링')) ? '☀️'
+        : n.label.includes('점심') ? '🌤'
+        : n.label.includes('저녁') || n.label.includes('두피') ? '🌙' : '💤';
+      return `
+        <div class="notif-item" id="ni-${i}">
+          <span style="font-size:14px">${icon}</span>
+          <span class="notif-item-label">${n.label}</span>
+          <input type="time" class="notif-time-input" id="nt-${i}" value="${n.time}"
+            onchange="updateNotifTime(${i}, this.value)">
+        </div>`;
+    }).join('');
   }
 
-  function editNotifTime(i) {
-    const val = prompt(`"${derivedNotifs[i].label}" 알림 시간 변경 (현재: ${derivedNotifs[i].time})`, derivedNotifs[i].time);
-    if (val && /^\d{2}:\d{2}$/.test(val)) {
-      derivedNotifs[i].time = val;
-      document.getElementById(`nt-${i}`).textContent = val;
-    }
+  function updateNotifTime(i, val) {
+    if (val && derivedNotifs[i]) derivedNotifs[i].time = val;
   }
 
   async function enableNotifications() {
