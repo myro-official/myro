@@ -1223,7 +1223,173 @@
         <div class="img-result-tag">자기관리 시작 포인트</div>
         <div class="img-result-text">${coaching}</div>
       </div>` : ''}
+      ${hs.name ? `<button onclick="saveSalonCard()" style="width:100%;margin-top:4px;padding:14px;background:rgba(232,237,242,0.08);border:1px solid rgba(232,237,242,0.2);border-radius:12px;color:var(--silver);font-size:13px;font-weight:600;cursor:pointer;letter-spacing:0.5px">
+        📸 미용실 카드 저장하기
+      </button>` : ''}
     </div>`;
+  }
+
+  async function saveSalonCard() {
+    const hs = (state.hairAnalysis?.primary || state.hairAnalysis?.front)?.hairStyle;
+    if (!hs) return;
+
+    const W = 900, H = 1200;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // 배경
+    ctx.fillStyle = '#0D1B2A';
+    ctx.fillRect(0, 0, W, H);
+
+    // 상단 브랜드
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 32px "Bebas Neue", sans-serif';
+    ctx.letterSpacing = '4px';
+    ctx.fillText('MYRO', 48, 60);
+    ctx.fillStyle = '#A0A9B4';
+    ctx.font = '13px "Noto Sans KR", sans-serif';
+    ctx.fillText('헤어 스타일 추천 카드', 48, 84);
+
+    // 구분선
+    ctx.strokeStyle = 'rgba(232,237,242,0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(48, 100); ctx.lineTo(W - 48, 100); ctx.stroke();
+
+    // 사진 (앞모습)
+    let photoY = 120;
+    const frontFile = photoFiles.front || photoFiles.side;
+    if (frontFile) {
+      await new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+          const photoW = (W - 96) / 2 - 8;
+          const photoH = 300;
+          // 앞모습
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(48, photoY, photoW, photoH, 12);
+          ctx.clip();
+          const scale = Math.max(photoW / img.width, photoH / img.height);
+          const sw = photoW / scale, sh = photoH / scale;
+          const sx = (img.width - sw) / 2, sy = (img.height - sh) / 2;
+          ctx.drawImage(img, sx, sy, sw, sh, 48, photoY, photoW, photoH);
+          ctx.restore();
+
+          // 옆모습
+          const sideFile = photoFiles.side;
+          if (sideFile) {
+            const sideImg = new Image();
+            sideImg.onload = () => {
+              ctx.save();
+              ctx.beginPath();
+              ctx.roundRect(48 + photoW + 16, photoY, photoW, photoH, 12);
+              ctx.clip();
+              const sc2 = Math.max(photoW / sideImg.width, photoH / sideImg.height);
+              const sw2 = photoW / sc2, sh2 = photoH / sc2;
+              const sx2 = (sideImg.width - sw2) / 2, sy2 = (sideImg.height - sh2) / 2;
+              ctx.drawImage(sideImg, sx2, sy2, sw2, sh2, 48 + photoW + 16, photoY, photoW, photoH);
+              ctx.restore();
+              resolve();
+            };
+            sideImg.onerror = resolve;
+            sideImg.src = URL.createObjectURL(sideFile);
+          } else { resolve(); }
+        };
+        img.onerror = resolve;
+        img.src = URL.createObjectURL(frontFile);
+      });
+    }
+
+    // 라벨
+    ctx.fillStyle = '#A0A9B4';
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.fillText('앞모습', 48, photoY + 320);
+    ctx.fillText('옆모습', W / 2 + 8, photoY + 320);
+
+    // 추천 스타일명
+    let y = photoY + 360;
+    ctx.fillStyle = 'rgba(232,237,242,0.12)';
+    roundRect(ctx, 48, y, W - 96, 78, 12);
+    ctx.fill();
+    ctx.fillStyle = '#A0A9B4';
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.fillText('추천 헤어스타일', 68, y + 24);
+    ctx.fillStyle = '#E8EDF2';
+    ctx.font = 'bold 22px "Noto Sans KR", sans-serif';
+    ctx.fillText(hs.name || '', 68, y + 56);
+
+    // 미용실 요청 스크립트
+    y += 100;
+    ctx.fillStyle = '#A0A9B4';
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.fillText('미용실에서 이렇게 말하세요', 48, y);
+    y += 18;
+    ctx.fillStyle = 'rgba(232,237,242,0.06)';
+    const scriptText = `"${hs.salonRequest || ''}"`;
+    const lines = wrapText(ctx, scriptText, W - 128, '13px');
+    const scriptH = lines.length * 24 + 32;
+    roundRect(ctx, 48, y, W - 96, scriptH, 10); ctx.fill();
+    ctx.strokeStyle = 'rgba(232,237,242,0.1)'; ctx.lineWidth = 1;
+    roundRect(ctx, 48, y, W - 96, scriptH, 10); ctx.stroke();
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '13px "Noto Sans KR", sans-serif';
+    lines.forEach((line, i) => { ctx.fillText(line, 68, y + 22 + i * 24); });
+
+    // 강조 포인트
+    y += scriptH + 20;
+    ctx.fillStyle = '#A0A9B4';
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.fillText('강조할 포인트', 48, y);
+    y += 20;
+    (hs.keyPoints || []).forEach(pt => {
+      ctx.fillStyle = '#E8EDF2';
+      ctx.font = '13px "Noto Sans KR", sans-serif';
+      ctx.fillText('✓  ' + pt, 48, y);
+      y += 28;
+    });
+
+    // 하단
+    y = H - 50;
+    ctx.strokeStyle = 'rgba(232,237,242,0.1)';
+    ctx.beginPath(); ctx.moveTo(48, y - 10); ctx.lineTo(W - 48, y - 10); ctx.stroke();
+    ctx.fillStyle = '#A0A9B4';
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.fillText('MYRO — 남자의 자기관리.  myro-official.github.io/myro/app.html', 48, y + 16);
+
+    // 다운로드
+    const link = document.createElement('a');
+    link.download = 'MYRO_헤어스타일_추천.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  function wrapText(ctx, text, maxW, font) {
+    ctx.font = font + ' "Noto Sans KR", sans-serif';
+    const words = text.split('');
+    const lines = [];
+    let cur = '';
+    for (const ch of words) {
+      const test = cur + ch;
+      if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = ch; }
+      else cur = test;
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
   }
 
   function renderDetail() {
