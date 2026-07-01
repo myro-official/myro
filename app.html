@@ -47,20 +47,23 @@
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
     /* ── s0: Welcome ── */
-    .welcome-wrap { padding:52px 0 56px; }
-    .welcome-logo-row { text-align:center; margin-bottom:36px; }
+    #s0 { position:relative; padding:0; overflow:hidden; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+    .s0-video { position:absolute; top:50%; left:50%; min-width:100%; min-height:100%; width:auto; height:auto; transform:translate(-50%,-50%); object-fit:cover; z-index:0; }
+    .s0-overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(10,11,13,0.45) 0%, rgba(10,11,13,0.75) 60%, rgba(10,11,13,1) 100%); z-index:1; }
+    .welcome-wrap { position:relative; z-index:2; padding:0 0 56px; display:flex; flex-direction:column; align-items:center; text-align:center; width:100%; }
+    .welcome-logo-row { text-align:center; margin-bottom:32px; }
     .welcome-logo { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:14px; display:block; margin-bottom:10px; }
     .welcome-badge {
       display:inline-block; font-size:10px; letter-spacing:3px; text-transform:uppercase;
       color:var(--gray); border:1px solid rgba(232,237,242,0.2); padding:5px 14px; border-radius:20px;
     }
     .brand-headline {
-      font-family:'Bebas Neue',sans-serif; font-size:48px; letter-spacing:3px;
-      line-height:1.05; margin-bottom:14px;
+      font-family:'Bebas Neue',sans-serif; font-size:56px; font-weight:700; letter-spacing:4px;
+      line-height:1.05; margin-bottom:14px; text-align:center;
     }
     .brand-copy { font-size:14px; color:var(--gray); line-height:1.9; margin-bottom:28px; }
     .brand-copy em { font-style:normal; color:var(--silver); }
-    .brand-divider { height:1px; background:var(--border); margin:28px 0; }
+    .brand-divider { height:1px; background:var(--border); margin:28px 0; width:100%; }
     .brand-copy2 { font-size:13px; color:var(--gray); line-height:2; }
     .brand-copy2 strong { color:var(--white); font-weight:600; display:block; }
     .feature-card {
@@ -459,6 +462,10 @@
 
   <!-- s0: Welcome -->
   <div class="screen" id="s0">
+    <video class="s0-video" autoplay muted loop playsinline preload="auto">
+      <source src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/ksXQNViyYMgPaVFY.mp4" type="video/mp4">
+    </video>
+    <div class="s0-overlay"></div>
     <div class="welcome-wrap">
 
       <div class="welcome-logo-row">
