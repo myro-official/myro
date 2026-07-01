@@ -1095,6 +1095,10 @@
         </div>
         <button class="img-analyze-btn" id="hair-analyze-btn" onclick="runHairAnalysis()" disabled>AI 정밀 분석 시작하기</button>
         <div id="hair-analysis-result"></div>
+        <div style="margin-top:10px;padding:10px 12px;background:rgba(232,237,242,0.04);border:1px solid rgba(232,237,242,0.1);border-radius:10px">
+          <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);margin-bottom:6px">개인정보 처리방침</div>
+          <div style="font-size:11px;color:rgba(160,169,180,0.7);line-height:1.75">업로드된 사진은 AI 분석 목적으로만 사용되며, 분석 완료 즉시 서버에서 삭제됩니다. 제3자에게 제공되지 않습니다.</div>
+        </div>
         <div class="img-skip-note">사진 없이 고민 입력만으로도 루틴을 받을 수 있어요.</div>
       </div>
 
@@ -1159,6 +1163,8 @@
         sendPhoto(photoFiles.side),
       ]);
       const primary = front || side;
+      state.photoFrontUrl = front?._photoId ? `${BACKEND}/photo/${front._photoId}` : '';
+      state.photoSideUrl = side?._photoId ? `${BACKEND}/photo/${side._photoId}` : '';
       state.hairAnalysis = { front, side, primary };
       renderHairAnalysisResult(primary, front, side);
       btn.textContent = '✓ 분석 완료 — 재촬영하기';
@@ -1562,6 +1568,16 @@
         <div class="notif-status" id="notif-status"></div>
       </div>
 
+      <div style="background:linear-gradient(135deg,rgba(254,229,0,0.08),rgba(254,229,0,0.04));border:1px solid rgba(254,229,0,0.25);border-radius:18px;padding:24px 20px;margin-bottom:16px;text-align:center">
+        <div style="font-size:10px;letter-spacing:2px;color:rgba(254,229,0,0.7);margin-bottom:10px">NEXT STEP</div>
+        <div style="font-size:17px;font-weight:700;color:var(--white);margin-bottom:8px;line-height:1.5">1대1 밀착 코칭까지<br>진행됩니다</div>
+        <div style="font-size:13px;color:var(--gray);line-height:1.75;margin-bottom:18px">해당 진단 내용을 바탕으로<br>카카오톡 채널에서 더욱 밀착 관리를 받아보세요.</div>
+        <a href="http://pf.kakao.com/_VuAxfX" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:#FEE500;color:#191919;font-size:14px;font-weight:700;padding:13px 28px;border-radius:50px;text-decoration:none">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5C4.86 1.5 1.5 4.19 1.5 7.5c0 2.09 1.23 3.93 3.09 5.01L3.75 15l3.18-1.53C7.59 13.65 8.29 13.7 9 13.7c4.14 0 7.5-2.69 7.5-6 0-3.31-3.36-6-7.5-6z" fill="#191919"/></svg>
+          카카오톡 채널 가기
+        </a>
+      </div>
+
       <div style="text-align:center;padding:8px 0 60px">
         <button class="btn-secondary" onclick="restart()" style="font-size:12px;opacity:0.5">처음부터 다시하기</button>
       </div>
@@ -1623,7 +1639,7 @@
   /* ══════════════════════════════════════════
      구글 시트 제출
   ══════════════════════════════════════════ */
-  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwfiEvUvpiUvm3nxW5ZO4sBT6-EXwlhi8K1dFYsBnS1kQP2oqpMjApXHGNqp2gUIg9A/exec';
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwq1PvX6w03n7YXXXpRM0ex3aAtzb7JhT3F96zlrFoa1MJt7ifhxJoqo6N8zbfepoU/exec';
 
   async function saveToSheets() {
     try {
@@ -1640,6 +1656,8 @@
         routineLevel: state.routineLevel || '',
         schedule: scheduleText,
         submittedAt: new Date().toLocaleString('ko-KR'),
+        photoFront: state.photoFrontUrl || '',
+        photoSide: state.photoSideUrl || '',
       });
       await fetch(`${SHEETS_URL}?${params}`, { mode: 'no-cors' });
     } catch(e) { /* 시트 저장 실패해도 루틴 진행 */ }
