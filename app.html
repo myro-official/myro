@@ -1537,7 +1537,6 @@
     curDay = startDayIdx ?? 0;
     const name = nameOverride || state.name || '마이러';
     saveRoutineToStorage(data, name);
-    const name = state.name || '마이러';
 
     const productsHTML = (data.products||[]).filter(p => p.name||p.searchQuery).map(p => {
       const pname = p.name || p.searchQuery || '';
