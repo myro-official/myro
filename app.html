@@ -1055,6 +1055,7 @@
       <div class="subtitle">중복 선택 가능해요.</div>
       <div class="sec-title" style="margin-top:0">주요 고민</div>
       <div class="chips">${chips(['여드름·트러블','번들거림·지성','건조함·당김','모공·블랙헤드','칙칙함·잡티','민감성·홍조'])}</div>
+      <input type="text" id="skin-custom-concern" placeholder="직접 입력하기  (예: 코 주변 각질, 면도 후 자극)" oninput="updateCustomConcern('skin-custom-concern')" style="width:100%;box-sizing:border-box;background:rgba(232,237,242,0.05);border:1px solid rgba(232,237,242,0.15);border-radius:10px;padding:11px 14px;color:var(--white);font-size:13px;outline:none;margin-top:4px" />
       <div class="sec-title">피부 타입</div>
       <div class="radio-list" id="skinType-list">
         ${['지성 피부','건성 피부','복합성 피부','민감성 피부'].map(v =>
@@ -1104,6 +1105,7 @@
 
       <div class="sec-title">헤어 고민</div>
       <div class="chips">${chips(['탈모·모발 빠짐','두피 트러블·비듬','스타일링 안 됨','모발 손상·푸석함','두피 기름기'])}</div>
+      <input type="text" id="hair-custom-concern" placeholder="직접 입력하기  (예: 앞머리가 자꾸 갈라져요)" oninput="updateCustomConcern('hair-custom-concern')" style="width:100%;box-sizing:border-box;background:rgba(232,237,242,0.05);border:1px solid rgba(232,237,242,0.15);border-radius:10px;padding:11px 14px;color:var(--white);font-size:13px;outline:none;margin-top:4px" />
       <div class="sec-title">아침 준비 시간</div>
       <div class="radio-list" id="morning-list">${morningOpts()}</div>
       <div class="sec-title">현재 자기관리 레벨</div>
@@ -1408,6 +1410,15 @@
     el.classList.toggle('selected');
     if (el.classList.contains('selected')) state.concerns.push(val);
     else state.concerns = state.concerns.filter(c => c !== val);
+  }
+
+  let customConcernValues = {};
+  function updateCustomConcern(inputId) {
+    const val = document.getElementById(inputId)?.value.trim();
+    const prev = customConcernValues[inputId];
+    if (prev) state.concerns = state.concerns.filter(c => c !== prev);
+    if (val) { state.concerns.push(val); customConcernValues[inputId] = val; }
+    else delete customConcernValues[inputId];
   }
   function pickField(field, val, el) {
     el.closest('.radio-list').querySelectorAll('.radio-opt').forEach(e => e.classList.remove('selected'));
