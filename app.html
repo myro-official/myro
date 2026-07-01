@@ -1606,6 +1606,65 @@
     renderDayView(curDay);
   }
 
+  function getCheckKey(dayIdx) {
+    return `myro_check_${dayIdx}`;
+  }
+
+  function loadChecks(dayIdx, total) {
+    try { return JSON.parse(localStorage.getItem(getCheckKey(dayIdx))) || Array(total).fill(false); }
+    catch { return Array(total).fill(false); }
+  }
+
+  function saveChecks(dayIdx, checks) {
+    localStorage.setItem(getCheckKey(dayIdx), JSON.stringify(checks));
+  }
+
+  function calcCompletion(dayIdx, morningLen, eveningLen) {
+    const checks = loadChecks(dayIdx, morningLen + eveningLen);
+    const done = checks.filter(Boolean).length;
+    const total = morningLen + eveningLen;
+    return total > 0 ? Math.round(done / total * 100) : 0;
+  }
+
+  function onCheck(dayIdx, checkIdx, morningLen, eveningLen) {
+    const total = morningLen + eveningLen;
+    const checks = loadChecks(dayIdx, total);
+    checks[checkIdx] = !checks[checkIdx];
+    saveChecks(dayIdx, checks);
+
+    const done = checks.filter(Boolean).length;
+    const pct = total > 0 ? Math.round(done / total * 100) : 0;
+
+    // UI 즉시 업데이트
+    const box = document.getElementById(`chk-${dayIdx}-${checkIdx}`);
+    if (box) {
+      box.style.background = checks[checkIdx] ? 'var(--accent)' : 'transparent';
+      box.style.borderColor = checks[checkIdx] ? 'var(--accent)' : 'rgba(232,237,242,0.25)';
+      box.innerHTML = checks[checkIdx] ? '✓' : '';
+    }
+    const stepEl = document.getElementById(`step-${dayIdx}-${checkIdx}`);
+    if (stepEl) stepEl.style.opacity = checks[checkIdx] ? '0.45' : '1';
+
+    const pctEl = document.getElementById('completion-pct');
+    if (pctEl) {
+      pctEl.textContent = done === 0 ? '--' : `${pct}%`;
+      pctEl.style.color = pct === 100 ? '#4ADE80' : pct >= 50 ? 'var(--white)' : 'var(--gray)';
+    }
+
+    // 시트에 완성도 전송 (fire-and-forget)
+    const d = (routineData?.days||[])[dayIdx];
+    const name = (()=>{ try { return JSON.parse(localStorage.getItem('myro_routine')).name; } catch { return state.name||''; } })();
+    const params = new URLSearchParams({
+      action: 'checkin',
+      name,
+      date: d?.date || '',
+      day: `DAY ${dayIdx+1}`,
+      completion: `${pct}%`,
+      checkedAt: new Date().toLocaleString('ko-KR'),
+    });
+    fetch(`${SHEETS_URL}?${params}`, { mode: 'no-cors' }).catch(()=>{});
+  }
+
   function renderDayView(idx) {
     const days = routineData?.days || [];
     if (!days.length) return;
@@ -1613,6 +1672,20 @@
     curDay = idx;
     const d = days[idx];
     const total = days.length;
+    const mLen = (d.morning||[]).length;
+    const eLen = (d.evening||[]).length;
+    const checks = loadChecks(idx, mLen + eLen);
+    const done = checks.filter(Boolean).length;
+    const pct = (mLen + eLen) > 0 ? Math.round(done / (mLen + eLen) * 100) : 0;
+
+    const renderSteps = (steps, offset) => steps.map((s, i) => {
+      const ci = offset + i;
+      const checked = checks[ci] || false;
+      return `<li class="routine-step" id="step-${idx}-${ci}" style="opacity:${checked?'0.45':'1'};cursor:pointer" onclick="onCheck(${idx},${ci},${mLen},${eLen})">
+        <div id="chk-${idx}-${ci}" style="width:18px;height:18px;border-radius:5px;border:1.5px solid ${checked?'var(--accent)':'rgba(232,237,242,0.25)'};background:${checked?'var(--accent)':'transparent'};display:flex;align-items:center;justify-content:center;font-size:11px;color:#0A0B0D;flex-shrink:0;transition:all 0.15s">${checked?'✓':''}</div>
+        <span>${s}</span>
+      </li>`;
+    }).join('');
 
     document.getElementById('day-viewer').innerHTML = `
       <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 0 4px">
@@ -1623,6 +1696,12 @@
         </div>
         <button onclick="renderDayView(${idx+1})" style="background:none;border:none;color:${idx===total-1?'rgba(255,255,255,0.15)':'var(--silver)'};font-size:20px;cursor:${idx===total-1?'default':'pointer'};padding:4px 8px" ${idx===total-1?'disabled':''}>→</button>
       </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(232,237,242,0.05);border:1px solid rgba(232,237,242,0.1);border-radius:12px;margin-bottom:10px">
+        <span style="font-size:12px;color:var(--gray)">오늘의 자기관리 완성도</span>
+        <span id="completion-pct" style="font-size:16px;font-weight:700;color:${pct===100?'#4ADE80':pct>=50?'var(--white)':'var(--gray)'}">${done===0?'--':`${pct}%`}</span>
+      </div>
+
       <div class="day-card" style="margin-top:0">
         <div class="day-card-head">
           <span class="day-card-date" style="font-size:12px;color:var(--gray)">오늘의 테마</span>
@@ -1630,15 +1709,11 @@
         </div>
         <div class="routine-block">
           <div class="routine-label">☀️ 아침 루틴</div>
-          <ul class="routine-steps">
-            ${(d.morning||[]).map((s,i)=>`<li class="routine-step"><span class="routine-step-num">${i+1}</span>${s}</li>`).join('')}
-          </ul>
+          <ul class="routine-steps">${renderSteps(d.morning||[], 0)}</ul>
         </div>
         <div class="routine-block">
           <div class="routine-label">🌙 저녁 루틴</div>
-          <ul class="routine-steps">
-            ${(d.evening||[]).map((s,i)=>`<li class="routine-step"><span class="routine-step-num">${i+1}</span>${s}</li>`).join('')}
-          </ul>
+          <ul class="routine-steps">${renderSteps(d.evening||[], mLen)}</ul>
         </div>
         <div class="day-tip">💡 ${d.tip||''}</div>
       </div>
