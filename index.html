@@ -124,25 +124,24 @@
         }
         .hero-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%,-50%); z-index: 0; object-fit: cover; }
         .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, var(--overlay-dark) 0%, var(--bg-primary) 100%); z-index: 1; }
-        .mega-logo-container { width: 100%; position: relative; z-index: 2; overflow: hidden; margin-bottom: 1rem; display: flex; justify-content: center; align-items: center; }
+        .mega-logo-container { width: 100%; position: relative; z-index: 2; overflow: visible; margin-bottom: 1rem; }
         .mega-logo {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 47vw;
-            line-height: 0.75; letter-spacing: 0.01em;
-            color: #ffffff; display: inline-block;
-            text-shadow: 0 0 80px rgba(0,0,0,0.3);
-            pointer-events: none; white-space: nowrap;
+            font-size: clamp(8rem, 55vw, 50rem);
+            line-height: 0.7; letter-spacing: -0.06em;
+            text-align: center; display: block; color: #ffffff;
+            text-shadow: 0 0 50px rgba(0,0,0,0.5);
+            pointer-events: none; width: 100%; white-space: nowrap; margin-left: -2%;
             animation: heroLogoIn 1.4s cubic-bezier(0.2,0.8,0.2,1) forwards;
         }
         @keyframes heroLogoIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .hero-content {
             position: relative; z-index: 10; text-align: center;
-            padding: 0 1.5rem; width: 100%; max-width: 800px;
-            margin: 1rem auto 0; display: flex; flex-direction: column; align-items: center;
+            padding: 0 1.5rem; width: 100%; max-width: 800px; margin-top: 1rem;
             animation: heroContentIn 1.6s 0.3s cubic-bezier(0.2,0.8,0.2,1) both;
         }
         @keyframes heroContentIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-        .hero-title { font-family: 'Outfit', sans-serif; font-size: clamp(0.75rem, 3.8vw, 1.3rem); font-weight: 400; letter-spacing: 0.25em; padding-left: 0.25em; text-transform: uppercase; margin-bottom: 1.5rem; color: var(--text-primary); text-shadow: 0 2px 10px rgba(0,0,0,0.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .hero-title { font-family: 'Outfit', sans-serif; font-size: clamp(0.75rem, 3.8vw, 1.3rem); font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 1.5rem; color: var(--text-primary); text-shadow: 0 2px 10px rgba(0,0,0,0.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .hero-copy { font-size: clamp(0.9rem, 3.5vw, 1.15rem); font-weight: 300; color: var(--text-muted); margin-bottom: 4rem; letter-spacing: 0.02em; text-shadow: 0 2px 10px rgba(0,0,0,0.5); line-height: 2; }
         .hero-cta { display: inline-block; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; color: var(--bg-primary); background: var(--text-primary); padding: 1.3rem 3.5rem; text-decoration: none; letter-spacing: 0.15em; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
 
