@@ -363,19 +363,23 @@
     /* ── s10: Loading ── */
     .loading-wrap {
       min-height:72vh; display:flex; flex-direction:column;
-      align-items:center; justify-content:center; text-align:center;
+      align-items:center; justify-content:center; text-align:center; padding:0 24px;
     }
-    .loading-logo { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:10px; margin-bottom:20px; opacity:0.92; }
-    .loading-msg { font-size:15px; color:var(--gray); margin-bottom:30px; }
-    .dots { display:flex; gap:8px; justify-content:center; margin-bottom:40px; }
-    .dot { width:7px; height:7px; background:var(--gray); border-radius:50%; animation:pulse 1.4s ease-in-out infinite; }
-    .dot:nth-child(2) { animation-delay:0.2s; }
-    .dot:nth-child(3) { animation-delay:0.4s; }
-    @keyframes pulse { 0%,80%,100%{transform:scale(0.5);opacity:0.3} 40%{transform:scale(1);opacity:1} }
-    .steps-list { text-align:left; width:220px; }
-    .step-item { display:flex; align-items:center; gap:12px; font-size:13px; color:var(--gray); padding:7px 0; transition:color 0.4s; }
+    .loading-logo { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:10px; margin-bottom:28px; opacity:0.92; }
+    .loading-ring-wrap { position:relative; width:130px; height:130px; margin:0 auto 20px; }
+    .loading-ring-wrap svg { transform:rotate(-90deg); }
+    .ring-track { fill:none; stroke:rgba(232,237,242,0.08); stroke-width:7; }
+    .ring-fill { fill:none; stroke:var(--silver); stroke-width:7; stroke-linecap:round;
+      stroke-dasharray:326.7; stroke-dashoffset:326.7;
+      transition:stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1); }
+    .loading-pct-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      font-size:26px; font-weight:800; color:var(--white); letter-spacing:-1px; }
+    .loading-msg { font-size:14px; color:var(--gray); margin-bottom:28px; }
+    .steps-list { text-align:left; width:240px; }
+    .step-item { display:flex; align-items:center; gap:12px; font-size:13px; color:rgba(160,169,180,0.4); padding:7px 0; transition:all 0.4s; border-bottom:1px solid rgba(232,237,242,0.04); }
+    .step-item.active { color:var(--gray); }
     .step-item.done { color:var(--silver); }
-    .step-icon { width:16px; text-align:center; }
+    .step-icon { width:16px; text-align:center; font-size:11px; }
 
     /* ── s11: Result ── */
     .type-card {
@@ -705,13 +709,19 @@
   <div class="screen" id="s10">
     <div class="loading-wrap">
       <div class="loading-logo">MYRO</div>
+      <div class="loading-ring-wrap">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle class="ring-track" cx="65" cy="65" r="52"/>
+          <circle class="ring-fill" id="ring-fill" cx="65" cy="65" r="52"/>
+        </svg>
+        <div class="loading-pct-text" id="loading-pct">0%</div>
+      </div>
       <div class="loading-msg" id="loading-msg">님의 루틴을 설계 중입니다</div>
-      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
       <div class="steps-list">
         <div class="step-item" id="st0"><span class="step-icon">○</span> 입력 정보 분석 중...</div>
         <div class="step-item" id="st1"><span class="step-icon">○</span> MYRO 데이터베이스 조회 중...</div>
         <div class="step-item" id="st2"><span class="step-icon">○</span> 맞춤 루틴 생성 중...</div>
-        <div class="step-item" id="st3"><span class="step-icon">○</span> 루틴 완성 중...</div>
+        <div class="step-item" id="st3"><span class="step-icon">○</span> 제품 정보 수집 중...</div>
       </div>
     </div>
   </div>
@@ -1433,18 +1443,52 @@
       const [result] = await Promise.all([fetchRoutine(), delay(4200)]);
       routine = result;
     } catch { routine = mockRoutine(); }
+    completeLoading();
     renderResult(routine);
-    setTimeout(() => { go(11); renderNotifList(); }, 200);
+    setTimeout(() => { go(11); renderNotifList(); }, 600);
   }
 
   function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function setLoadingPct(pct) {
+    const circ = 326.7;
+    const fill = document.getElementById('ring-fill');
+    const txt  = document.getElementById('loading-pct');
+    if (fill) fill.style.strokeDashoffset = circ - (circ * pct / 100);
+    if (txt)  txt.textContent = Math.round(pct) + '%';
+  }
+
   function animateSteps() {
-    [0,1,2,3].forEach(i => setTimeout(() => {
-      const el = document.getElementById('st'+i);
-      if (!el) return;
-      el.classList.add('done');
-      el.querySelector('.step-icon').textContent = '✓';
-    }, (i+1)*950));
+    // 진행률: 0→15→35→65→88% (실제 완료 시 100%)
+    const stages = [
+      { pct:15,  delay:800,  step:0 },
+      { pct:35,  delay:4000, step:1 },
+      { pct:65,  delay:10000,step:2 },
+      { pct:88,  delay:20000,step:3 },
+    ];
+    setLoadingPct(0);
+    stages.forEach(({ pct, delay: d, step }) => {
+      setTimeout(() => {
+        setLoadingPct(pct);
+        const el = document.getElementById('st' + step);
+        if (!el) return;
+        // 이전 단계 done 처리
+        for (let i = 0; i < step; i++) {
+          const prev = document.getElementById('st' + i);
+          if (prev) { prev.classList.remove('active'); prev.classList.add('done'); prev.querySelector('.step-icon').textContent = '✓'; }
+        }
+        el.classList.add('active');
+        el.querySelector('.step-icon').textContent = '▶';
+      }, d);
+    });
+  }
+
+  function completeLoading() {
+    setLoadingPct(100);
+    [0,1,2,3].forEach(i => {
+      const el = document.getElementById('st' + i);
+      if (el) { el.classList.remove('active'); el.classList.add('done'); el.querySelector('.step-icon').textContent = '✓'; }
+    });
   }
 
   async function fetchRoutine() {
