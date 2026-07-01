@@ -1448,7 +1448,6 @@
     collectSchedule();
     go(10);
     animateSteps();
-    saveToSheets(); // 비동기 fire-and-forget
     let routine;
     try {
       const [result] = await Promise.all([fetchRoutine(), delay(4200)]);
@@ -1456,6 +1455,7 @@
     } catch { routine = mockRoutine(); }
     completeLoading();
     renderResult(routine);
+    saveToSheets(routine); // 루틴 결과 포함해서 저장
     setTimeout(() => { go(11); renderNotifList(); }, 600);
   }
 
@@ -2035,12 +2035,13 @@
   ══════════════════════════════════════════ */
   const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxqZD4om-uKhhbsObZxe1oEP2DTbOvr-1bgG0WQh0fJX0lH4691Ehz78soXhFjerCeN/exec';
 
-  async function saveToSheets() {
+  async function saveToSheets(routine) {
     try {
       const scheduleText = formatScheduleForAPI();
       const params = new URLSearchParams({
         name: state.name || '',
         phone: state.phone || '',
+        location: state.location || '',
         callTime: `${state.callStart}~${state.callEnd}`,
         category: state.cat || '',
         concerns: state.concerns.join(', '),
@@ -2052,6 +2053,9 @@
         submittedAt: new Date().toLocaleString('ko-KR'),
         photoFront: state.photoFrontUrl || '',
         photoSide: state.photoSideUrl || '',
+        typeName: routine?.type_name || '',
+        tagline: routine?.tagline || '',
+        firstAction: routine?.first_action || '',
       });
       await fetch(`${SHEETS_URL}?${params}`, { mode: 'no-cors' });
     } catch(e) { /* 시트 저장 실패해도 루틴 진행 */ }
