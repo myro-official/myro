@@ -1636,6 +1636,33 @@
 
     const isHair = state.cat === 'hair';
 
+    const routineItemsHTML = (() => {
+      const items = data.routine_items || [];
+      if (!items.length) return '';
+      const cards = items.map(item => {
+        const link = item.link || '';
+        const inner = `
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px">${item.name||''}</div>
+            <div style="font-size:11px;color:var(--gray)">${item.usedFor ? `사용: ${item.usedFor}` : ''}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            ${item.price ? `<div style="font-size:13px;font-weight:700;color:var(--silver)">${item.price}</div>` : ''}
+            ${link ? `<div style="font-size:10px;color:var(--gray);margin-top:2px">바로가기 →</div>` : ''}
+          </div>`;
+        if (link) {
+          return `<a href="${link}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;text-decoration:none">${inner}</a>`;
+        }
+        return `<div style="display:flex;align-items:center;gap:12px;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px">${inner}</div>`;
+      }).join('');
+      return `
+        <div class="sec-title" style="margin-top:28px">루틴 필요 아이템</div>
+        <div style="font-size:11px;color:var(--gray);line-height:1.7;margin:6px 0 14px;padding:10px 14px;background:rgba(232,237,242,0.04);border-left:2px solid rgba(200,213,228,0.35);border-radius:0 8px 8px 0">
+          루틴 단계에서 직접 쓰는 소모품·도구예요. 예산에 맞게 후기 많은 제품을 찾아왔어요.
+        </div>
+        ${cards}`;
+    })();
+
     const productsHTML = (data.products||[]).filter(p => p.name||p.searchQuery).map(p => {
       const pname = p.name || p.searchQuery || '';
       const link = p.link || '';
@@ -1700,6 +1727,8 @@
         </div>
 
         <div id="day-viewer" style="margin-top:0"></div>
+
+        ${routineItemsHTML}
 
         ${!isHair ? `
         <div class="sec-title" style="margin-top:28px">추천 제품</div>
