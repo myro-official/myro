@@ -2129,8 +2129,12 @@
           </div>`;
         }).join('')}
         <div style="margin-bottom:12px">
-          <div style="font-size:12px;color:var(--silver);margin-bottom:6px">💧 오늘 마신 것</div>
-          <textarea id="diet-drinks" rows="2" placeholder="물 2L, 아메리카노 2잔, 맥주 1캔 등" style="width:100%;background:rgba(232,237,242,0.06);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 12px;resize:none;outline:none;box-sizing:border-box">${saved.drinks||''}</textarea>
+          <div style="font-size:12px;color:var(--silver);margin-bottom:6px">💧 오늘 물 섭취량</div>
+          <input id="diet-water" type="text" placeholder="예: 1.5L, 500ml 3잔" style="width:100%;background:rgba(232,237,242,0.06);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 12px;outline:none;box-sizing:border-box" value="${saved.water||''}">
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-size:12px;color:var(--silver);margin-bottom:6px">☕ 카페인·술·음료수</div>
+          <textarea id="diet-drinks" rows="2" placeholder="예: 아메리카노 2잔, 맥주 1캔, 콜라 1캔" style="width:100%;background:rgba(232,237,242,0.06);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 12px;resize:none;outline:none;box-sizing:border-box">${saved.drinks||''}</textarea>
         </div>
         <button onclick="submitDiet(${d})" id="diet-submit-btn" style="width:100%;padding:13px;background:var(--accent);color:#0A0B0D;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px">AI 피부 분석 받기</button>
       </div>
@@ -2171,8 +2175,9 @@
     const lunch     = document.getElementById('diet-lunch')?.value.trim() || '';
     const dinner    = document.getElementById('diet-dinner')?.value.trim() || '';
     const drinks    = document.getElementById('diet-drinks')?.value.trim() || '';
+    const water     = document.getElementById('diet-water')?.value.trim() || '';
 
-    if (!breakfast && !lunch && !dinner && !drinks) {
+    if (!breakfast && !lunch && !dinner && !drinks && !water) {
       alert('식단 또는 음료를 하나 이상 입력해주세요.'); return;
     }
 
@@ -2181,7 +2186,7 @@
 
     // 입력값 저장
     const saved = loadDiet(d);
-    Object.assign(saved, { breakfast, lunch, dinner, drinks });
+    Object.assign(saved, { breakfast, lunch, dinner, drinks, water });
     saveDiet(d, saved);
 
     const days = routineData?.days || [];
@@ -2195,7 +2200,7 @@
           name,
           concerns: state.concerns || [],
           day_date: days[d]?.date || `DAY ${d+1}`,
-          breakfast, lunch, dinner, drinks
+          breakfast, lunch, dinner, drinks, water
         })
       });
       const fb = await res.json();
