@@ -2128,6 +2128,10 @@
             <textarea id="diet-${meal}" rows="2" placeholder="먹은 것을 입력하세요" style="width:100%;background:rgba(232,237,242,0.06);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 12px;resize:none;outline:none;box-sizing:border-box">${saved[meal]||''}</textarea>
           </div>`;
         }).join('')}
+        <div style="margin-bottom:12px">
+          <div style="font-size:12px;color:var(--silver);margin-bottom:6px">💧 오늘 마신 것</div>
+          <textarea id="diet-drinks" rows="2" placeholder="물 2L, 아메리카노 2잔, 맥주 1캔 등" style="width:100%;background:rgba(232,237,242,0.06);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:inherit;font-size:13px;padding:10px 12px;resize:none;outline:none;box-sizing:border-box">${saved.drinks||''}</textarea>
+        </div>
         <button onclick="submitDiet(${d})" id="diet-submit-btn" style="width:100%;padding:13px;background:var(--accent);color:#0A0B0D;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px">AI 피부 분석 받기</button>
       </div>
 
@@ -2166,9 +2170,10 @@
     const breakfast = document.getElementById('diet-breakfast')?.value.trim() || '';
     const lunch     = document.getElementById('diet-lunch')?.value.trim() || '';
     const dinner    = document.getElementById('diet-dinner')?.value.trim() || '';
+    const drinks    = document.getElementById('diet-drinks')?.value.trim() || '';
 
-    if (!breakfast && !lunch && !dinner) {
-      alert('식단을 하나 이상 입력해주세요.'); return;
+    if (!breakfast && !lunch && !dinner && !drinks) {
+      alert('식단 또는 음료를 하나 이상 입력해주세요.'); return;
     }
 
     const btn = document.getElementById('diet-submit-btn');
@@ -2176,7 +2181,7 @@
 
     // 입력값 저장
     const saved = loadDiet(d);
-    Object.assign(saved, { breakfast, lunch, dinner });
+    Object.assign(saved, { breakfast, lunch, dinner, drinks });
     saveDiet(d, saved);
 
     const days = routineData?.days || [];
@@ -2190,7 +2195,7 @@
           name,
           concerns: state.concerns || [],
           day_date: days[d]?.date || `DAY ${d+1}`,
-          breakfast, lunch, dinner
+          breakfast, lunch, dinner, drinks
         })
       });
       const fb = await res.json();
