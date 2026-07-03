@@ -168,7 +168,22 @@
     }
     .name-input::placeholder { color:rgba(160,169,180,0.45); font-weight:400; }
     .name-input:focus { outline:none; border-color:rgba(232,237,242,0.5); }
-    .name-hint { font-size:12px; color:var(--gray); margin-bottom:28px; }
+    .name-hint { font-size:12px; color:var(--gray); margin-bottom:24px; }
+
+    /* ── 직업 선택 ── */
+    .job-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:28px;
+    }
+    .job-card {
+      background:var(--card-bg); border:1.5px solid var(--border); border-radius:14px;
+      padding:14px 14px 12px; cursor:pointer; transition:border-color 0.2s, background 0.2s;
+      text-align:left;
+    }
+    .job-card:active { transform:scale(0.97); }
+    .job-card.selected { border-color:var(--white); background:rgba(232,237,242,0.07); }
+    .job-card-icon { font-size:22px; margin-bottom:6px; display:block; }
+    .job-card-name { font-size:13px; font-weight:700; color:var(--white); margin-bottom:2px; }
+    .job-card-desc { font-size:11px; color:var(--gray); line-height:1.5; }
 
     /* ── 공통 타이포 ── */
     .label { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--gray); margin-bottom:8px; }
@@ -612,7 +627,7 @@
     </div>
   </div>
 
-  <!-- s5: 이름 -->
+  <!-- s5: 이름 + 직업 -->
   <div class="screen" id="s5">
     <div class="name-wrap">
       <div class="label">마지막으로</div>
@@ -622,6 +637,41 @@
       <div class="name-hint">최대 12자</div>
       <input class="name-input" id="location-input" type="text" placeholder="사는 곳 (예: 강남, 홍대, 수원)" maxlength="20" oninput="checkName()" style="margin-top:12px">
       <div class="name-hint">맞춤 루틴 · 근처 미용실 · 운동 장소 추천에 활용돼요 · 필수사항</div>
+
+      <div class="sec-title" style="margin-top:4px;">직업 / 생활 유형</div>
+      <div class="subtitle" style="margin-top:-14px;">관리 환경이 루틴에 반영돼요.</div>
+      <div class="job-grid">
+        <div class="job-card" onclick="pickJob('학생',this)">
+          <span class="job-card-icon">📚</span>
+          <div class="job-card-name">학생</div>
+          <div class="job-card-desc">수면 불규칙, 스트레스성 트러블</div>
+        </div>
+        <div class="job-card" onclick="pickJob('직장인',this)">
+          <span class="job-card-icon">💼</span>
+          <div class="job-card-name">직장인</div>
+          <div class="job-card-desc">냉난방, 출퇴근, 데스크 환경</div>
+        </div>
+        <div class="job-card" onclick="pickJob('운동선수',this)">
+          <span class="job-card-icon">⚽</span>
+          <div class="job-card-name">운동선수</div>
+          <div class="job-card-desc">강한 발한, 야외 UV, 경기 후 케어</div>
+        </div>
+        <div class="job-card" onclick="pickJob('야외직',this)">
+          <span class="job-card-icon">☀️</span>
+          <div class="job-card-name">야외 활동직</div>
+          <div class="job-card-desc">자외선, 먼지, 신체 활동 많음</div>
+        </div>
+        <div class="job-card" onclick="pickJob('프리랜서',this)">
+          <span class="job-card-icon">🏠</span>
+          <div class="job-card-name">프리랜서 / 재택</div>
+          <div class="job-card-desc">불규칙한 루틴, 실내 위주</div>
+        </div>
+        <div class="job-card" onclick="pickJob('서비스직',this)">
+          <span class="job-card-icon">🏃</span>
+          <div class="job-card-name">서비스직</div>
+          <div class="job-card-desc">장시간 대면, 마스크 착용</div>
+        </div>
+      </div>
       <button class="btn-primary" id="btn5" onclick="go(6)" disabled>루틴 만들러 가기</button>
     </div>
   </div>
@@ -745,6 +795,7 @@
 
   const state = {
     name: '', phone: '', callStart: '', callEnd: '', location: '',
+    occupation: null,
     schedule: [], budget: null, cat: null,
     concerns: [], skinType: null, morningTime: null, routineLevel: null,
   };
@@ -798,15 +849,27 @@
     document.getElementById('btn4').disabled = v.replace(/\D/g,'').length < 10;
   }
 
-  /* ── s5: 이름 ── */
+  /* ── s5: 이름 + 직업 ── */
   function checkName() {
     const v = document.getElementById('name-input').value.trim();
     const loc = document.getElementById('location-input')?.value.trim() || '';
     state.name = v;
     state.location = loc;
-    document.getElementById('btn5').disabled = v.length === 0 || loc.length === 0;
+    updateBtn5();
     const hl = document.getElementById('welcome-headline');
     if (hl) hl.innerHTML = v ? `마이로의 첫 마이러,<br>${v}님 환영합니다.` : `마이로의 첫 마이러가<br>되어주셔서 감사합니다.`;
+  }
+
+  function pickJob(val, el) {
+    document.querySelectorAll('.job-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.occupation = val;
+    updateBtn5();
+  }
+
+  function updateBtn5() {
+    const loc = document.getElementById('location-input')?.value.trim() || '';
+    document.getElementById('btn5').disabled = !(state.name.length > 0 && loc.length > 0 && state.occupation);
   }
 
   function applyName() {
@@ -1511,6 +1574,7 @@
         category:state.cat, concerns:state.concerns, skinType:state.skinType,
         budget:state.budget, morningTime:state.morningTime, routineLevel:state.routineLevel,
         schedule:scheduleText, userName:state.name, location:state.location||'',
+        occupation: state.occupation || null,
         hairAnalysis: state.hairAnalysis || null,
       }),
     });
@@ -2049,7 +2113,8 @@
 
   function restart() {
     localStorage.removeItem('myro_routine');
-    Object.assign(state,{name:'',phone:'',callStart:'',callEnd:'',location:'',schedule:[],budget:null,cat:null,concerns:[],skinType:null,morningTime:null,routineLevel:null,hairAnalysis:null,photoFrontUrl:'',photoSideUrl:''});
+    Object.assign(state,{name:'',phone:'',callStart:'',callEnd:'',location:'',occupation:null,schedule:[],budget:null,cat:null,concerns:[],skinType:null,morningTime:null,routineLevel:null,hairAnalysis:null,photoFrontUrl:'',photoSideUrl:''});
+    document.querySelectorAll('.job-card').forEach(c => c.classList.remove('selected'));
     photoFiles.front = null; photoFiles.side = null;
     const nameEl = document.getElementById('name-input'); if (nameEl) nameEl.value = '';
     const locEl  = document.getElementById('location-input'); if (locEl) locEl.value = '';
@@ -2072,6 +2137,7 @@
         name: state.name || '',
         phone: state.phone || '',
         location: state.location || '',
+        occupation: state.occupation || '',
         callTime: `${state.callStart}~${state.callEnd}`,
         category: state.cat || '',
         concerns: state.concerns.join(', '),
