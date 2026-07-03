@@ -185,6 +185,19 @@
     .job-card-name { font-size:13px; font-weight:700; color:var(--white); margin-bottom:2px; }
     .job-card-desc { font-size:11px; color:var(--gray); line-height:1.5; }
 
+    /* ── 나이대 선택 ── */
+    .age-opts {
+      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px;
+    }
+    .age-opt {
+      flex:1; min-width:0; background:var(--card-bg); border:1.5px solid var(--border);
+      border-radius:40px; color:var(--gray); font-family:'Montserrat','Noto Sans KR',sans-serif;
+      font-size:12px; font-weight:600; padding:10px 6px; cursor:pointer;
+      transition:border-color 0.2s, color 0.2s, background 0.2s; white-space:nowrap;
+    }
+    .age-opt:active { transform:scale(0.96); }
+    .age-opt.selected { border-color:var(--white); color:var(--white); background:rgba(232,237,242,0.07); }
+
     /* ── 공통 타이포 ── */
     .label { font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--gray); margin-bottom:8px; }
     .title { font-size:22px; font-weight:600; line-height:1.4; margin-bottom:6px; }
@@ -639,7 +652,7 @@
       <div class="name-hint">맞춤 루틴 · 근처 미용실 · 운동 장소 추천에 활용돼요 · 필수사항</div>
 
       <div class="sec-title" style="margin-top:4px;">직업 / 생활 유형</div>
-      <div class="subtitle" style="margin-top:-14px;">관리 환경이 루틴에 반영돼요.</div>
+      <div class="subtitle" style="margin-top:-14px;">같은 고민도 직업에 따라 루틴이 달라져요.<br>운동선수는 경기 후 케어가, 직장인은 냉난방 피지 관리가 먼저예요.</div>
       <div class="job-grid">
         <div class="job-card" onclick="pickJob('학생',this)">
           <span class="job-card-icon">📚</span>
@@ -672,6 +685,17 @@
           <div class="job-card-desc">장시간 대면, 마스크 착용</div>
         </div>
       </div>
+
+      <div class="sec-title" style="margin-top:4px;">나이대</div>
+      <div class="subtitle" style="margin-top:-14px;">나이에 따라 루틴의 핵심 성분과 우선순위가 달라요.</div>
+      <div class="age-opts">
+        <button class="age-opt" onclick="pickAge('10대',this)">10대</button>
+        <button class="age-opt" onclick="pickAge('20대 초반',this)">20대 초반</button>
+        <button class="age-opt" onclick="pickAge('20대 후반',this)">20대 후반</button>
+        <button class="age-opt" onclick="pickAge('30대',this)">30대</button>
+        <button class="age-opt" onclick="pickAge('40대 이상',this)">40대 이상</button>
+      </div>
+
       <button class="btn-primary" id="btn5" onclick="go(6)" disabled>루틴 만들러 가기</button>
     </div>
   </div>
@@ -795,7 +819,7 @@
 
   const state = {
     name: '', phone: '', callStart: '', callEnd: '', location: '',
-    occupation: null,
+    occupation: null, ageGroup: null,
     schedule: [], budget: null, cat: null,
     concerns: [], skinType: null, morningTime: null, routineLevel: null,
   };
@@ -867,9 +891,16 @@
     updateBtn5();
   }
 
+  function pickAge(val, el) {
+    document.querySelectorAll('.age-opt').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.ageGroup = val;
+    updateBtn5();
+  }
+
   function updateBtn5() {
     const loc = document.getElementById('location-input')?.value.trim() || '';
-    document.getElementById('btn5').disabled = !(state.name.length > 0 && loc.length > 0 && state.occupation);
+    document.getElementById('btn5').disabled = !(state.name.length > 0 && loc.length > 0 && state.occupation && state.ageGroup);
   }
 
   function applyName() {
@@ -1575,6 +1606,7 @@
         budget:state.budget, morningTime:state.morningTime, routineLevel:state.routineLevel,
         schedule:scheduleText, userName:state.name, location:state.location||'',
         occupation: state.occupation || null,
+        ageGroup: state.ageGroup || null,
         hairAnalysis: state.hairAnalysis || null,
       }),
     });
@@ -2113,8 +2145,9 @@
 
   function restart() {
     localStorage.removeItem('myro_routine');
-    Object.assign(state,{name:'',phone:'',callStart:'',callEnd:'',location:'',occupation:null,schedule:[],budget:null,cat:null,concerns:[],skinType:null,morningTime:null,routineLevel:null,hairAnalysis:null,photoFrontUrl:'',photoSideUrl:''});
+    Object.assign(state,{name:'',phone:'',callStart:'',callEnd:'',location:'',occupation:null,ageGroup:null,schedule:[],budget:null,cat:null,concerns:[],skinType:null,morningTime:null,routineLevel:null,hairAnalysis:null,photoFrontUrl:'',photoSideUrl:''});
     document.querySelectorAll('.job-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.age-opt').forEach(c => c.classList.remove('selected'));
     photoFiles.front = null; photoFiles.side = null;
     const nameEl = document.getElementById('name-input'); if (nameEl) nameEl.value = '';
     const locEl  = document.getElementById('location-input'); if (locEl) locEl.value = '';
@@ -2138,6 +2171,7 @@
         phone: state.phone || '',
         location: state.location || '',
         occupation: state.occupation || '',
+        ageGroup: state.ageGroup || '',
         callTime: `${state.callStart}~${state.callEnd}`,
         category: state.cat || '',
         concerns: state.concerns.join(', '),
