@@ -1944,7 +1944,7 @@
       pctEl.style.color = pct === 100 ? '#4ADE80' : pct >= 50 ? 'var(--white)' : 'var(--gray)';
     }
 
-    // 시트에 완성도 전송 (fire-and-forget)
+    // 시트에 완성도 전송 — 진행 상황은 항상, 알림은 100% 완료 시에만
     const d = (routineData?.days||[])[dayIdx];
     const name = (()=>{ try { return JSON.parse(localStorage.getItem('myro_routine')).name; } catch { return state.name||''; } })();
     const params = new URLSearchParams({
@@ -1953,6 +1953,7 @@
       date: d?.date || '',
       day: `DAY ${dayIdx+1}`,
       completion: `${pct}%`,
+      done: pct === 100 ? 'true' : 'false',
       checkedAt: new Date().toLocaleString('ko-KR'),
     });
     fetch(`${SHEETS_URL}?${params}`, { mode: 'no-cors' }).catch(()=>{});
@@ -2017,7 +2018,46 @@
         <div class="day-tip">💡 ${d.tip||''}</div>
       </div>
       ${idx < total-1 ? `<div style="text-align:center;font-size:12px;color:var(--gray);padding:8px 0 4px">← 옆으로 밀어서 다음 날 루틴 보기 →</div>` : `<div style="text-align:center;font-size:12px;color:var(--gray);padding:8px 0 4px">5일 루틴을 모두 확인했어요 ✓</div>`}
+
+      <button id="checkin-btn-${idx}" onclick="submitCheckin(${idx})" style="width:100%;margin-top:14px;padding:13px;background:rgba(232,237,242,0.08);border:1px solid rgba(232,237,242,0.2);border-radius:12px;color:var(--silver);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s">오늘 체크인 완료</button>
+      <div id="checkin-followup-${idx}" style="margin-top:10px"></div>
     `;
+  }
+
+  async function submitCheckin(idx) {
+    const days = routineData?.days || [];
+    const d = days[idx];
+    if (!d) return;
+
+    const mLen = (d.morning||[]).length;
+    const lLen = (d.lunch||[]).length;
+    const eLen = (d.evening||[]).length;
+    const allSteps = [...(d.morning||[]), ...(d.lunch||[]), ...(d.evening||[])];
+    const checks = loadChecks(idx, allSteps.length);
+    const completed   = allSteps.filter((_, i) => checks[i]);
+    const uncompleted = allSteps.filter((_, i) => !checks[i]);
+    const pct = allSteps.length > 0 ? Math.round(completed.length / allSteps.length * 100) : 0;
+    const name = (()=>{ try { return JSON.parse(localStorage.getItem('myro_routine')).name; } catch { return state.name||''; } })();
+
+    const btn = document.getElementById(`checkin-btn-${idx}`);
+    if (btn) { btn.textContent = '저장 중...'; btn.disabled = true; }
+
+    try {
+      const res = await fetch(`${BACKEND}/checkin`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ name, date: d.date||'', theme: d.theme||'', category: state.cat||'skin', completed, uncompleted, pct })
+      });
+      const result = await res.json();
+
+      const followupEl = document.getElementById(`checkin-followup-${idx}`);
+      if (followupEl && result.followup) {
+        followupEl.innerHTML = `<div style="background:rgba(232,237,242,0.06);border:1px solid rgba(232,237,242,0.15);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--silver);line-height:1.6">💬 ${result.followup}</div>`;
+      }
+      if (btn) { btn.textContent = `체크인 완료 ✓ (${pct}%)`; btn.style.color = '#4ADE80'; btn.style.borderColor = 'rgba(74,222,128,0.3)'; }
+    } catch(e) {
+      if (btn) { btn.textContent = '오늘 체크인 완료'; btn.disabled = false; }
+    }
   }
 
   /* ── 결과 탭 전환 ── */
