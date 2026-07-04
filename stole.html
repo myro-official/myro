@@ -755,7 +755,7 @@ function goStep(next) {
   currentStep = next;
   document.getElementById('panel-' + currentStep).classList.add('active');
   updateSteps();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.querySelector('.steps').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function updateSteps() {
@@ -786,7 +786,7 @@ document.getElementById('stole-form').addEventListener('submit', async (e) => {
     await fetch(SHEETS_URL, { method: 'POST', body: params, mode: 'no-cors' });
     document.getElementById('panel-3').classList.remove('active');
     document.getElementById('done-screen').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelector('.steps').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (err) {
     btn.textContent = '오류 발생 — 다시 시도해주세요';
     btn.disabled = false;

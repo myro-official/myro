@@ -495,7 +495,7 @@ function goStep(n) {
       line.classList.toggle('done', i < n);
     }
   }
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  document.querySelector('.steps').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function togglePrivacy() {
