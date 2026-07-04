@@ -2151,7 +2151,7 @@
     return `
       <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-          <div style="font-size:10px;letter-spacing:2px;color:var(--gray)">AI 피부 분석 결과</div>
+          <div style="font-size:10px;letter-spacing:2px;color:var(--gray)">AI 식단 평가</div>
           <div style="font-size:22px;font-weight:800;color:${scoreColor}">${score}<span style="font-size:12px;font-weight:400">/100</span></div>
         </div>
         <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:10px">${fb.score_label||''}</div>
@@ -2186,7 +2186,7 @@
 
     document.getElementById('diet-feedback-area').innerHTML = `
       <div id="diet-loading-wrap" style="text-align:center;padding:24px 0">
-        <div style="font-size:11px;letter-spacing:2px;color:var(--gray);margin-bottom:14px">AI 피부 분석 중</div>
+        <div style="font-size:11px;letter-spacing:2px;color:var(--gray);margin-bottom:14px">AI 식단 평가 중</div>
         <div style="background:rgba(232,237,242,0.1);border-radius:999px;height:4px;overflow:hidden;margin:0 auto 10px;max-width:240px">
           <div id="diet-prog-fill" style="height:100%;width:0%;background:var(--accent);border-radius:999px;transition:width 0.4s ease"></div>
         </div>
