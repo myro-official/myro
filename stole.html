@@ -104,21 +104,26 @@
   .ref-gallery::-webkit-scrollbar { display: none; }
   .ref-item {
     flex: 0 0 auto;
-    width: 140px;
-    border-radius: 16px; overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,56,118,0.12);
+    width: 180px;
+    border-radius: 18px; overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,56,118,0.15);
     border: 1.5px solid rgba(255,255,255,0.9);
     position: relative;
   }
   .ref-item img {
-    width: 100%; height: 190px;
+    width: 100%; height: 250px;
     object-fit: cover; display: block;
   }
   .ref-item-label {
     position: absolute; bottom: 0; left: 0; right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.65));
-    color: #fff; font-size: 11px; font-weight: 600;
-    padding: 18px 8px 8px; text-align: center;
+    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 28px 10px 8px; text-align: center;
+    line-height: 1.5;
+  }
+  .ref-item-source {
+    font-size: 10px; font-weight: 400; opacity: 0.75;
+    display: block; margin-top: 2px;
   }
   .ref-scroll-hint {
     text-align: center; font-size: 11px; color: #aaa;
@@ -390,26 +395,34 @@
 <div class="ref-gallery">
   <div class="ref-item">
     <img src="stole-ref/ref-usc1.png" alt="USC 졸업식">
-    <div class="ref-item-label">USC · Class of 2024</div>
+    <div class="ref-item-label">USC · Class of 2024<span class="ref-item-source">University of Southern California</span></div>
   </div>
   <div class="ref-item">
     <img src="stole-ref/ref-usc2.png" alt="USC 졸업식">
-    <div class="ref-item-label">USC · Class of 2025</div>
+    <div class="ref-item-label">USC · Class of 2025<span class="ref-item-source">University of Southern California</span></div>
+  </div>
+  <div class="ref-item">
+    <img src="stole-ref/ref-usc-sash.png" alt="USC 커스텀 스톨">
+    <div class="ref-item-label">USC Custom Sash<span class="ref-item-source">University of Southern California</span></div>
   </div>
   <div class="ref-item">
     <img src="stole-ref/ref-nyu.png" alt="NYU Shanghai 졸업식">
-    <div class="ref-item-label">NYU Shanghai</div>
+    <div class="ref-item-label">NYU Shanghai<span class="ref-item-source">New York University</span></div>
+  </div>
+  <div class="ref-item">
+    <img src="stole-ref/ref-nyu-amb.png" alt="NYU 졸업식">
+    <div class="ref-item-label">NYU · Ambassador<span class="ref-item-source">New York University</span></div>
   </div>
   <div class="ref-item">
     <img src="stole-ref/ref-columbia.png" alt="Columbia 졸업 스톨">
-    <div class="ref-item-label">Columbia Univ.</div>
+    <div class="ref-item-label">Columbia Univ.<span class="ref-item-source">Columbia University</span></div>
   </div>
   <div class="ref-item">
     <img src="stole-ref/ref-ubc.png" alt="UBC 졸업식">
-    <div class="ref-item-label">UBC · Class of 2025</div>
+    <div class="ref-item-label">UBC · Class of 2025<span class="ref-item-source">Univ. of British Columbia</span></div>
   </div>
 </div>
-<div class="ref-scroll-hint">← 옆으로 스크롤 →</div>
+<div class="ref-scroll-hint">← 스크롤해서 더 보기 →</div>
 
 <!-- 뱃지 -->
 <div class="badges">
