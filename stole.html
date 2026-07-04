@@ -5,289 +5,445 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>연세대 졸업 스톨 수요조사</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #0a1628; color: #e8edf2; font-family: 'Noto Sans KR', sans-serif; min-height: 100vh; }
 
-  .hero {
-    background: linear-gradient(160deg, #003876 0%, #001d45 60%, #0a1628 100%);
-    padding: 60px 24px 48px;
+  body {
+    background: linear-gradient(160deg, #eef2ff 0%, #f0ebff 50%, #e8f4ff 100%);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    color: #1a1a2e;
+  }
+
+  /* ── 헤더 ── */
+  .header {
     text-align: center;
-    border-bottom: 1px solid rgba(212,175,55,0.3);
+    padding: 56px 24px 0;
   }
-  .hero-tag { font-size: 11px; letter-spacing: 3px; color: #d4af37; margin-bottom: 16px; font-weight: 600; }
-  .hero-title { font-size: 28px; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 12px; }
-  .hero-sub { font-size: 14px; color: rgba(232,237,242,0.6); line-height: 1.8; }
-  .hero-badge {
-    display: inline-block; margin-top: 20px;
-    background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4);
-    color: #d4af37; border-radius: 20px; padding: 6px 18px; font-size: 12px; font-weight: 600;
+  .header-tag {
+    display: inline-block;
+    background: rgba(0,56,118,0.08);
+    color: #003876;
+    font-size: 11px; font-weight: 600; letter-spacing: 2px;
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 20px;
   }
-
-  .container { max-width: 600px; margin: 0 auto; padding: 40px 20px 80px; }
-
-  .section { margin-bottom: 36px; }
-  .section-label {
-    font-size: 10px; letter-spacing: 2.5px; color: #d4af37; font-weight: 700;
-    margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(212,175,55,0.2);
+  .header-title {
+    font-size: 32px; font-weight: 700; color: #1a1a2e;
+    line-height: 1.3; margin-bottom: 12px;
+  }
+  .header-sub {
+    font-size: 14px; color: #7a7a9a; line-height: 1.8;
   }
 
-  .field { margin-bottom: 16px; }
-  .field label { display: block; font-size: 12px; color: rgba(232,237,242,0.6); margin-bottom: 6px; font-weight: 600; }
-  .field label span.req { color: #d4af37; margin-left: 2px; }
+  /* ── 상품 이미지 ── */
+  .product-wrap {
+    display: flex; justify-content: center;
+    padding: 36px 24px 0;
+  }
+  .product-img-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 28px;
+    box-shadow: 0 8px 40px rgba(100,100,200,0.12);
+    overflow: hidden;
+    max-width: 320px;
+    width: 100%;
+    padding: 24px;
+  }
+  .product-img-card img {
+    width: 100%; border-radius: 16px; display: block;
+  }
+  .product-img-caption {
+    text-align: center; margin-top: 14px;
+    font-size: 12px; color: #7a7a9a; line-height: 1.6;
+  }
+  .product-img-caption strong { color: #003876; }
+
+  /* ── 뱃지 ── */
+  .badges {
+    display: flex; justify-content: center; gap: 8px;
+    flex-wrap: wrap; padding: 24px 24px 0;
+  }
+  .badge {
+    background: rgba(255,255,255,0.8);
+    border: 1px solid rgba(200,200,230,0.5);
+    border-radius: 20px; padding: 7px 16px;
+    font-size: 12px; font-weight: 600; color: #4a4a7a;
+    box-shadow: 0 2px 8px rgba(100,100,200,0.08);
+  }
+
+  /* ── 폼 컨테이너 ── */
+  .form-wrap {
+    max-width: 480px; margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* ── 스텝 인디케이터 ── */
+  .steps {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin-bottom: 28px;
+  }
+  .step-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; transition: all 0.3s;
+    background: rgba(255,255,255,0.6);
+    border: 2px solid rgba(200,200,230,0.5);
+    color: #b0b0cc;
+  }
+  .step-dot.active {
+    background: #003876; border-color: #003876; color: #fff;
+    box-shadow: 0 4px 14px rgba(0,56,118,0.3);
+  }
+  .step-dot.done {
+    background: #d4af37; border-color: #d4af37; color: #fff;
+  }
+  .step-line {
+    flex: 1; height: 2px; max-width: 40px;
+    background: rgba(200,200,230,0.4);
+    transition: background 0.3s;
+  }
+  .step-line.done { background: #d4af37; }
+
+  /* ── 카드 ── */
+  .card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 24px;
+    padding: 28px 24px;
+    box-shadow: 0 8px 32px rgba(100,100,200,0.1);
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 18px; font-weight: 700; color: #1a1a2e;
+    margin-bottom: 6px;
+  }
+  .card-sub {
+    font-size: 13px; color: #9a9aba; margin-bottom: 24px; line-height: 1.6;
+  }
+
+  /* ── 필드 ── */
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label {
+    display: block; font-size: 12px; font-weight: 600;
+    color: #5a5a7a; margin-bottom: 7px; letter-spacing: 0.3px;
+  }
+  .req { color: #7c6af7; margin-left: 2px; }
   .field input, .field select, .field textarea {
-    width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px; color: #e8edf2; font-family: inherit; font-size: 14px;
-    padding: 12px 14px; outline: none; transition: border-color 0.2s;
+    width: 100%;
+    background: rgba(255,255,255,0.9);
+    border: 1.5px solid rgba(200,200,230,0.6);
+    border-radius: 14px; color: #1a1a2e;
+    font-family: inherit; font-size: 14px;
+    padding: 13px 16px; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
   .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: rgba(212,175,55,0.5);
+    border-color: #003876;
+    box-shadow: 0 0 0 3px rgba(0,56,118,0.08);
   }
-  .field select option { background: #0a1628; }
-  .field textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
+  .field textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+  .field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9aba' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
 
-  .stole-preview {
-    background: linear-gradient(135deg, rgba(0,56,118,0.3) 0%, rgba(0,29,69,0.3) 100%);
-    border: 1px solid rgba(212,175,55,0.2); border-radius: 16px;
-    padding: 20px; margin-bottom: 24px;
+  /* ── 선택 버튼 그룹 ── */
+  .choice-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .choice { position: relative; }
+  .choice input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .choice label {
+    display: block; padding: 10px 18px;
+    background: rgba(255,255,255,0.9);
+    border: 1.5px solid rgba(200,200,230,0.6);
+    border-radius: 12px; cursor: pointer;
+    font-size: 13px; font-weight: 500; color: #5a5a7a;
+    transition: all 0.2s;
   }
-  .stole-preview-title { font-size: 11px; letter-spacing: 2px; color: #d4af37; margin-bottom: 14px; font-weight: 600; }
-  .stole-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .stole-col { background: #003876; border-radius: 8px; padding: 14px 12px; border: 1px solid rgba(212,175,55,0.3); }
-  .stole-col-label { font-size: 10px; letter-spacing: 1.5px; color: rgba(212,175,55,0.7); margin-bottom: 10px; text-align: center; }
-  .stole-item { font-size: 11px; color: rgba(255,255,255,0.5); text-align: center; padding: 4px 0; border-bottom: 1px dashed rgba(255,255,255,0.08); }
-  .stole-item:last-child { border-bottom: none; }
-  .stole-item.filled { color: #d4af37; font-weight: 600; }
-  .stole-item.fixed { color: rgba(255,255,255,0.8); font-weight: 700; }
-
-  .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
-  .radio-btn { position: relative; }
-  .radio-btn input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .radio-btn label {
-    display: block; padding: 8px 16px; border-radius: 8px; cursor: pointer;
-    font-size: 13px; font-weight: 600; transition: all 0.2s;
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(232,237,242,0.6);
-  }
-  .radio-btn input:checked + label {
-    background: rgba(0,56,118,0.6); border-color: #d4af37; color: #d4af37;
+  .choice input:checked + label {
+    background: rgba(0,56,118,0.08);
+    border-color: #003876; color: #003876; font-weight: 700;
   }
 
-  .price-group { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-  .price-card { position: relative; }
-  .price-card input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .price-card label {
-    display: block; padding: 14px 10px; border-radius: 12px; cursor: pointer; text-align: center;
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;
+  /* ── 로고 선택 ── */
+  .logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .logo-choice { position: relative; }
+  .logo-choice input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .logo-choice label {
+    display: block; padding: 16px 12px; text-align: center;
+    background: rgba(255,255,255,0.9);
+    border: 1.5px solid rgba(200,200,230,0.6);
+    border-radius: 16px; cursor: pointer;
+    font-size: 13px; font-weight: 500; color: #5a5a7a;
+    transition: all 0.2s; line-height: 1.5;
   }
-  .price-card input:checked + label { background: rgba(0,56,118,0.5); border-color: #d4af37; }
-  .price-card .price-amount { font-size: 18px; font-weight: 700; color: #d4af37; display: block; }
-  .price-card .price-desc { font-size: 11px; color: rgba(232,237,242,0.5); margin-top: 4px; display: block; }
+  .logo-choice input:checked + label {
+    background: rgba(0,56,118,0.08);
+    border-color: #003876; color: #003876; font-weight: 700;
+  }
+  .logo-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+  .logo-note {
+    font-size: 11px; color: #b0b0cc; margin-top: 10px; line-height: 1.6;
+  }
 
-  .logo-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .logo-opt { position: relative; }
-  .logo-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .logo-opt label {
-    display: block; padding: 12px; border-radius: 10px; cursor: pointer; text-align: center;
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;
-    font-size: 13px; color: rgba(232,237,242,0.7);
+  /* ── 가격 카드 ── */
+  .price-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .price-choice { position: relative; }
+  .price-choice input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .price-choice label {
+    display: block; padding: 16px 10px; text-align: center;
+    background: rgba(255,255,255,0.9);
+    border: 1.5px solid rgba(200,200,230,0.6);
+    border-radius: 16px; cursor: pointer; transition: all 0.2s;
   }
-  .logo-opt input:checked + label { background: rgba(0,56,118,0.5); border-color: #d4af37; color: #d4af37; font-weight: 600; }
-  .logo-note { font-size: 11px; color: rgba(232,237,242,0.35); margin-top: 8px; line-height: 1.6; }
+  .price-choice input:checked + label {
+    background: rgba(0,56,118,0.08);
+    border-color: #003876;
+  }
+  .price-amount { font-size: 16px; font-weight: 700; color: #003876; display: block; }
+  .price-desc { font-size: 11px; color: #9a9aba; margin-top: 4px; display: block; }
 
-  .submit-btn {
-    width: 100%; padding: 16px; background: #003876; border: 1px solid #d4af37;
-    color: #d4af37; border-radius: 14px; font-size: 15px; font-weight: 700;
-    cursor: pointer; font-family: inherit; transition: all 0.2s; letter-spacing: 1px;
+  /* ── 안내 박스 ── */
+  .info-box {
+    background: rgba(0,56,118,0.06);
+    border: 1px solid rgba(0,56,118,0.12);
+    border-radius: 14px; padding: 14px 16px;
+    font-size: 12px; color: #6a6a9a; line-height: 1.8;
+    margin-top: 4px;
   }
-  .submit-btn:hover { background: rgba(0,56,118,0.8); }
-  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .notice {
-    background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2);
-    border-radius: 12px; padding: 16px 18px; margin-bottom: 28px;
+  /* ── 버튼 ── */
+  .btn-row { display: flex; gap: 10px; margin-top: 8px; }
+  .btn-back {
+    flex: 0 0 52px; padding: 14px;
+    background: rgba(255,255,255,0.8);
+    border: 1.5px solid rgba(200,200,230,0.6);
+    border-radius: 14px; font-size: 18px; cursor: pointer;
+    color: #9a9aba; transition: all 0.2s;
   }
-  .notice p { font-size: 12px; color: rgba(232,237,242,0.6); line-height: 1.8; }
-  .notice p + p { margin-top: 6px; }
+  .btn-next, .btn-submit {
+    flex: 1; padding: 15px;
+    background: #003876; color: #fff;
+    border: none; border-radius: 14px;
+    font-size: 15px; font-weight: 700; font-family: inherit;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(0,56,118,0.25);
+  }
+  .btn-next:hover, .btn-submit:hover { background: #002a5a; }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .toast {
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
-    background: #003876; border: 1px solid #d4af37; color: #d4af37;
-    padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 600;
-    opacity: 0; transition: all 0.4s; z-index: 999; white-space: nowrap;
+  /* ── 완료 화면 ── */
+  .done-screen {
+    display: none; text-align: center; padding: 20px 0;
   }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .done-icon { font-size: 56px; margin-bottom: 16px; }
+  .done-title { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 10px; }
+  .done-sub { font-size: 14px; color: #7a7a9a; line-height: 1.8; }
 
-  @media (max-width: 480px) {
-    .stole-cols { grid-template-columns: 1fr; }
-    .price-group { grid-template-columns: 1fr; }
-    .hero-title { font-size: 22px; }
-  }
+  /* 스텝 패널 */
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-tag">YONSEI UNIVERSITY · CLASS OF 2026</div>
-  <div class="hero-title">졸업 스톨<br>수요조사</div>
-  <div class="hero-sub">4년을 천 하나에 새겨,<br>졸업 가운 위에 걸치십시오.</div>
-  <div class="hero-badge">📋 한정 100명 · 선제작 후 판매 예정</div>
+<!-- 헤더 -->
+<div class="header">
+  <div class="header-tag">YONSEI UNIVERSITY · 2026</div>
+  <div class="header-title">졸업 스톨<br>수요조사</div>
+  <div class="header-sub">4년을 천 하나에 새겨,<br>졸업 가운 위에 걸치십시오.</div>
 </div>
 
-<div class="container">
-
-  <div class="notice">
-    <p>📌 지금은 <strong>수요조사 단계</strong>입니다. 제출하셔도 즉시 구매가 확정되지 않습니다.</p>
-    <p>📌 확정 시 입력하신 연락처로 가장 먼저 안내드리겠습니다.</p>
-    <p>📌 학교 로고 사용은 허가 확인 후 적용 예정입니다.</p>
-  </div>
-
-  <!-- 스톨 구성 미리보기 -->
-  <div class="stole-preview">
-    <div class="stole-preview-title">STOLE LAYOUT PREVIEW</div>
-    <div class="stole-cols">
-      <div class="stole-col">
-        <div class="stole-col-label">LEFT SIDE</div>
-        <div class="stole-item" id="prev-name">이름</div>
-        <div class="stole-item" id="prev-college">단과대</div>
-        <div class="stole-item" id="prev-year">졸업년도</div>
-        <div class="stole-item" id="prev-major">전공 (영문)</div>
-        <div class="stole-item fixed">YONSEI</div>
-        <div class="stole-item" id="prev-logo">로고 / 국기</div>
-      </div>
-      <div class="stole-col">
-        <div class="stole-col-label">RIGHT SIDE</div>
-        <div class="stole-item" id="prev-right" style="text-align:left;padding:6px 4px;line-height:1.7;white-space:pre-wrap">자유입력 내용</div>
-      </div>
+<!-- 상품 이미지 -->
+<div class="product-wrap">
+  <div class="product-img-card">
+    <img src="stole-sample.png" alt="연세대 졸업 스톨 샘플">
+    <div class="product-img-caption">
+      <strong>샘플 이미지</strong> — 실제 제작 시 본인 정보로 커스텀됩니다.<br>
+      연세블루 + 골드 자수
     </div>
+  </div>
+</div>
+
+<!-- 뱃지 -->
+<div class="badges">
+  <div class="badge">📋 수요조사 중</div>
+  <div class="badge">👤 한정 100명</div>
+  <div class="badge">💰 1~2만원대</div>
+</div>
+
+<!-- 폼 -->
+<div class="form-wrap">
+
+  <!-- 스텝 인디케이터 -->
+  <div class="steps">
+    <div class="step-dot active" id="sd1">1</div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step-dot" id="sd2">2</div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step-dot" id="sd3">3</div>
   </div>
 
   <form id="stole-form">
 
-    <!-- 기본 정보 -->
-    <div class="section">
-      <div class="section-label">CONTACT INFO · 연락처</div>
+    <!-- STEP 1: 연락처 -->
+    <div class="step-panel active" id="panel-1">
+      <div class="card">
+        <div class="card-title">연락처 정보</div>
+        <div class="card-sub">확정 시 가장 먼저 연락드리겠습니다.</div>
 
-      <div class="field">
-        <label>이름 <span class="req">*</span></label>
-        <input type="text" name="name" placeholder="홍길동" required oninput="updatePreview()">
-      </div>
-      <div class="field">
-        <label>전화번호 <span class="req">*</span></label>
-        <input type="tel" name="phone" placeholder="010-0000-0000" required>
-      </div>
-      <div class="field">
-        <label>이메일 <span class="req">*</span></label>
-        <input type="email" name="email" placeholder="yonsei@yonsei.ac.kr" required>
-      </div>
-      <div class="field">
-        <label>구분 <span class="req">*</span></label>
-        <div class="radio-group">
-          <div class="radio-btn"><input type="radio" name="grade" id="g1" value="학부 4학년" required><label for="g1">학부 4학년</label></div>
-          <div class="radio-btn"><input type="radio" name="grade" id="g2" value="졸업예정자"><label for="g2">졸업예정자</label></div>
-          <div class="radio-btn"><input type="radio" name="grade" id="g3" value="대학원생"><label for="g3">대학원생</label></div>
+        <div class="field">
+          <label>이름 <span class="req">*</span></label>
+          <input type="text" name="name" placeholder="홍길동" required>
         </div>
+        <div class="field">
+          <label>전화번호 <span class="req">*</span></label>
+          <input type="tel" name="phone" placeholder="010-0000-0000" required>
+        </div>
+        <div class="field">
+          <label>이메일 <span class="req">*</span></label>
+          <input type="email" name="email" placeholder="yonsei@yonsei.ac.kr" required>
+        </div>
+        <div class="field">
+          <label>구분 <span class="req">*</span></label>
+          <div class="choice-group">
+            <div class="choice"><input type="radio" name="grade" id="g1" value="학부 4학년" required><label for="g1">학부 4학년</label></div>
+            <div class="choice"><input type="radio" name="grade" id="g2" value="졸업예정자"><label for="g2">졸업예정자</label></div>
+            <div class="choice"><input type="radio" name="grade" id="g3" value="대학원생"><label for="g3">대학원생</label></div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn-next" onclick="goStep(2)">다음 →</button>
+    </div>
+
+    <!-- STEP 2: 왼쪽 스톨 -->
+    <div class="step-panel" id="panel-2">
+      <div class="card">
+        <div class="card-title">왼쪽 스톨 정보</div>
+        <div class="card-sub">이름 · 단과대 · 졸업년도 · 전공 · YONSEI · 로고/국기 순서로 새겨집니다.</div>
+
+        <div class="field">
+          <label>단과대 <span class="req">*</span></label>
+          <input type="text" name="college" placeholder="예: 경영대학, 공과대학, 사회과학대학" required>
+        </div>
+        <div class="field">
+          <label>졸업년도 <span class="req">*</span></label>
+          <select name="grad_year" required>
+            <option value="">선택해주세요</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>전공 (영문) <span class="req">*</span></label>
+          <input type="text" name="major" placeholder="예: Business Administration, Computer Science">
+        </div>
+        <div class="field">
+          <label>하단 로고 / 국기 <span class="req">*</span></label>
+          <div class="logo-grid">
+            <div class="logo-choice"><input type="radio" name="logo" id="l1" value="태극기" required><label for="l1"><span class="logo-emoji">🇰🇷</span>태극기</label></div>
+            <div class="logo-choice"><input type="radio" name="logo" id="l2" value="연세대 로고"><label for="l2"><span class="logo-emoji">🏫</span>연세대 로고<br><span style="font-size:10px;color:#b0b0cc">허가 확인 후 적용</span></label></div>
+          </div>
+          <div class="logo-note">※ 연세대 로고는 사용 허가 확인 후 적용 예정입니다. 허가가 어려울 경우 태극기로 대체됩니다.</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn-back" onclick="goStep(1)">←</button>
+        <button type="button" class="btn-next" onclick="goStep(3)">다음 →</button>
       </div>
     </div>
 
-    <!-- 왼쪽 스톨 -->
-    <div class="section">
-      <div class="section-label">LEFT SIDE · 왼쪽 스톨 정보</div>
+    <!-- STEP 3: 오른쪽 + 가격 -->
+    <div class="step-panel" id="panel-3">
+      <div class="card">
+        <div class="card-title">오른쪽 스톨 · 가격</div>
+        <div class="card-sub">오른쪽은 자유롭게 원하는 내용을 새길 수 있습니다.</div>
 
-      <div class="field">
-        <label>단과대 <span class="req">*</span></label>
-        <input type="text" name="college" placeholder="예: 경영대학, 공과대학, 사회과학대학" required oninput="updatePreview()">
-      </div>
-      <div class="field">
-        <label>졸업년도 <span class="req">*</span></label>
-        <select name="grad_year" required onchange="updatePreview()">
-          <option value="">선택</option>
-          <option value="2025">2025</option>
-          <option value="2026">2026</option>
-          <option value="2027">2027</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>전공 (영문) <span class="req">*</span></label>
-        <input type="text" name="major" placeholder="예: Business Administration, Computer Science" required oninput="updatePreview()">
-      </div>
-      <div class="field">
-        <label>하단 로고 / 국기 선택 <span class="req">*</span></label>
-        <div class="logo-group">
-          <div class="logo-opt"><input type="radio" name="logo" id="l1" value="태극기" required onchange="updatePreview()"><label for="l1">🇰🇷 태극기</label></div>
-          <div class="logo-opt"><input type="radio" name="logo" id="l2" value="연세대 로고 (허가 확인 후)" onchange="updatePreview()"><label for="l2">🏫 연세대 로고<br><span style="font-size:10px;opacity:0.5">허가 확인 후 적용</span></label></div>
+        <div class="field">
+          <label>오른쪽 자유입력 <span class="req">*</span></label>
+          <textarea name="right_side" placeholder="예시)&#10;교환학생: 미국 / NYU / Sports Management / 2025.09–2026.02&#10;우등졸업: Magna Cum Laude&#10;동아리: 연세 산악회&#10;학회: 경영학회 IYC&#10;&#10;넣고 싶은 내용을 자유롭게 적어주세요." required></textarea>
+          <div class="info-box">
+            교환학생 다녀오신 분 → 국가 / 학교명 / 전공 / 기간<br>
+            교환 안 가신 분 → 동아리, 학회, 우등졸업 등 자유 입력
+          </div>
         </div>
-        <div class="logo-note">※ 연세대 로고는 학교 측 사용 허가 확인 후 적용 예정입니다. 허가가 어려울 경우 태극기로 대체됩니다.</div>
+
+        <div class="field" style="margin-top:20px">
+          <label>희망 가격대 <span class="req">*</span></label>
+          <div class="price-grid">
+            <div class="price-choice"><input type="radio" name="price" id="p1" value="~13,000원" required><label for="p1"><span class="price-amount">~13,000</span><span class="price-desc">기본</span></label></div>
+            <div class="price-choice"><input type="radio" name="price" id="p2" value="~17,000원"><label for="p2"><span class="price-amount">~17,000</span><span class="price-desc">일반</span></label></div>
+            <div class="price-choice"><input type="radio" name="price" id="p3" value="~20,000원"><label for="p3"><span class="price-amount">~20,000</span><span class="price-desc">풀 커스텀</span></label></div>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:20px">
+          <label>추가 요청사항</label>
+          <textarea name="notes" placeholder="궁금한 점이나 추가 요청사항을 자유롭게 적어주세요." style="min-height:80px"></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn-back" onclick="goStep(2)">←</button>
+        <button type="submit" class="btn-next btn-submit" id="submit-btn">제출하기</button>
       </div>
     </div>
 
-    <!-- 오른쪽 스톨 -->
-    <div class="section">
-      <div class="section-label">RIGHT SIDE · 오른쪽 스톨 자유입력</div>
-      <div class="field">
-        <label>넣고 싶은 내용 자유입력 <span class="req">*</span></label>
-        <textarea name="right_side" placeholder="예시)&#10;교환학생: 미국 / NYU / Sports Management / 2025.09–2026.02&#10;우등졸업: Magna Cum Laude&#10;동아리: 연세 산악회&#10;학회: 경영학회 IYC&#10;소모임: 테니스 소모임&#10;&#10;넣고 싶은 내용을 자유롭게 적어주세요." required oninput="updatePreview()"></textarea>
-      </div>
-    </div>
-
-    <!-- 희망 가격대 -->
-    <div class="section">
-      <div class="section-label">PRICE · 희망 가격대</div>
-      <div class="price-group">
-        <div class="price-card">
-          <input type="radio" name="price" id="p1" value="1만원대 초반" required>
-          <label for="p1"><span class="price-amount">~13,000</span><span class="price-desc">기본 구성</span></label>
-        </div>
-        <div class="price-card">
-          <input type="radio" name="price" id="p2" value="1만원대 중후반">
-          <label for="p2"><span class="price-amount">~17,000</span><span class="price-desc">일반 구성</span></label>
-        </div>
-        <div class="price-card">
-          <input type="radio" name="price" id="p3" value="2만원대">
-          <label for="p3"><span class="price-amount">~20,000</span><span class="price-desc">풀 커스텀</span></label>
+    <!-- 완료 -->
+    <div class="done-screen" id="done-screen">
+      <div class="card" style="padding:40px 24px">
+        <div class="done-icon">🎓</div>
+        <div class="done-title">제출 완료!</div>
+        <div class="done-sub">
+          수요조사에 참여해주셔서 감사합니다.<br>
+          제작이 확정되면 입력하신 연락처로<br>가장 먼저 안내드리겠습니다.
         </div>
       </div>
     </div>
-
-    <!-- 추가 요청사항 -->
-    <div class="section">
-      <div class="section-label">ETC · 추가 요청사항</div>
-      <div class="field">
-        <label>기타 문의 또는 요청사항</label>
-        <textarea name="notes" placeholder="궁금한 점이나 추가로 넣고 싶은 내용을 자유롭게 적어주세요." style="min-height:70px"></textarea>
-      </div>
-    </div>
-
-    <button type="submit" class="submit-btn" id="submit-btn">수요조사 제출하기</button>
 
   </form>
 </div>
 
-<div class="toast" id="toast">✓ 제출이 완료되었습니다. 확정 시 연락드리겠습니다!</div>
-
 <script>
 const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxc1OMnE9oZYUpi1Z5vnWMq5b_gpSIs85-n-XPnzsnVcSf7wICGQ_dMZrYiq_MR61UW2g/exec';
 
-function updatePreview() {
-  const name    = document.querySelector('[name=name]').value || '이름';
-  const college = document.querySelector('[name=college]').value || '단과대';
-  const year    = document.querySelector('[name=grad_year]').value || '졸업년도';
-  const major   = document.querySelector('[name=major]').value || '전공 (영문)';
-  const logo    = document.querySelector('[name=logo]:checked')?.value || '로고 / 국기';
-  const right   = document.querySelector('[name=right_side]').value || '자유입력 내용';
+let currentStep = 1;
 
-  const set = (id, val, filled) => {
-    const el = document.getElementById(id);
-    el.textContent = val;
-    el.className = 'stole-item' + (filled ? ' filled' : '');
-  };
+function goStep(next) {
+  // 현재 스텝 검증
+  if (next > currentStep) {
+    const panel = document.getElementById('panel-' + currentStep);
+    const required = panel.querySelectorAll('[required]');
+    for (const el of required) {
+      if (!el.value && !(el.type === 'radio' && panel.querySelector(`[name=${el.name}]:checked`))) {
+        el.focus();
+        el.style.borderColor = '#ef4444';
+        setTimeout(() => el.style.borderColor = '', 1500);
+        return;
+      }
+    }
+  }
 
-  set('prev-name',    name,    name !== '이름');
-  set('prev-college', college, college !== '단과대');
-  set('prev-year',    year,    year !== '졸업년도');
-  set('prev-major',   major,   major !== '전공 (영문)');
-  set('prev-logo',    logo,    logo !== '로고 / 국기');
-  document.getElementById('prev-right').textContent = right || '자유입력 내용';
+  document.getElementById('panel-' + currentStep).classList.remove('active');
+  currentStep = next;
+  document.getElementById('panel-' + currentStep).classList.add('active');
+  updateSteps();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateSteps() {
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('sd' + i);
+    dot.classList.remove('active', 'done');
+    if (i < currentStep) dot.classList.add('done'), dot.textContent = '✓';
+    else if (i === currentStep) dot.classList.add('active'), dot.textContent = i;
+    else dot.textContent = i;
+  }
+  for (let i = 1; i <= 2; i++) {
+    const line = document.getElementById('sl' + i);
+    line.classList.toggle('done', i < currentStep);
+  }
 }
 
 document.getElementById('stole-form').addEventListener('submit', async (e) => {
@@ -299,24 +455,17 @@ document.getElementById('stole-form').addEventListener('submit', async (e) => {
   const fd = new FormData(e.target);
   const params = new URLSearchParams();
   for (const [k, v] of fd.entries()) params.append(k, v);
-  params.append('action', 'stole');
 
   try {
     await fetch(SHEETS_URL, { method: 'POST', body: params, mode: 'no-cors' });
-    const toast = document.getElementById('toast');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 4000);
-    e.target.reset();
-    updatePreview();
-    btn.textContent = '제출 완료 ✓';
+    document.getElementById('panel-3').classList.remove('active');
+    document.getElementById('done-screen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (err) {
     btn.textContent = '오류 발생 — 다시 시도해주세요';
     btn.disabled = false;
   }
 });
-
-document.querySelectorAll('[name=logo]').forEach(r => r.addEventListener('change', updatePreview));
-document.querySelectorAll('[name=grad_year]').forEach(r => r.addEventListener('change', updatePreview));
 </script>
 </body>
 </html>
