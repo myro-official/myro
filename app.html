@@ -2182,7 +2182,25 @@
     }
 
     const btn = document.getElementById('diet-submit-btn');
-    btn.textContent = '분석 중...'; btn.disabled = true;
+    btn.style.display = 'none';
+
+    document.getElementById('diet-feedback-area').innerHTML = `
+      <div id="diet-loading-wrap" style="text-align:center;padding:24px 0">
+        <div style="font-size:11px;letter-spacing:2px;color:var(--gray);margin-bottom:14px">AI 피부 분석 중</div>
+        <div style="background:rgba(232,237,242,0.1);border-radius:999px;height:4px;overflow:hidden;margin:0 auto 10px;max-width:240px">
+          <div id="diet-prog-fill" style="height:100%;width:0%;background:var(--accent);border-radius:999px;transition:width 0.4s ease"></div>
+        </div>
+        <div id="diet-prog-pct" style="font-size:20px;font-weight:800;color:var(--accent)">0%</div>
+      </div>`;
+
+    let _prog = 0;
+    const _iv = setInterval(() => {
+      _prog = Math.min(_prog + Math.random() * 10 + 4, 88);
+      const f = document.getElementById('diet-prog-fill');
+      const t = document.getElementById('diet-prog-pct');
+      if (f) f.style.width = _prog + '%';
+      if (t) t.textContent = Math.round(_prog) + '%';
+    }, 400);
 
     // 입력값 저장
     const saved = loadDiet(d);
@@ -2209,12 +2227,20 @@
       saved.feedback = fb;
       saveDiet(d, saved);
 
+      clearInterval(_iv);
+      const f = document.getElementById('diet-prog-fill');
+      const t = document.getElementById('diet-prog-pct');
+      if (f) f.style.width = '100%';
+      if (t) t.textContent = '100%';
+      await delay(350);
+
       document.getElementById('diet-feedback-area').innerHTML = renderDietFeedbackHTML(fb);
     } catch(e) {
+      clearInterval(_iv);
       document.getElementById('diet-feedback-area').innerHTML =
         `<div style="color:#F87171;font-size:13px;padding:12px">분석 중 오류가 발생했어요. 다시 시도해주세요.</div>`;
     } finally {
-      btn.textContent = 'AI 피부 분석 받기'; btn.disabled = false;
+      btn.style.display = '';
     }
   }
 
