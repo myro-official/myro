@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yonsei Exchange Stole · Demand Survey</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: linear-gradient(160deg, #eef2ff 0%, #f0ebff 50%, #e8f4ff 100%);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    color: #1a1a2e;
+  }
+
+  .header { text-align: center; padding: 56px 24px 0; }
+  .header-tag {
+    display: inline-block;
+    background: rgba(0,56,118,0.08); color: #003876;
+    font-size: 11px; font-weight: 600; letter-spacing: 2px;
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 20px;
+  }
+  .header-title { font-size: 30px; font-weight: 700; color: #1a1a2e; line-height: 1.3; margin-bottom: 12px; }
+  .header-sub { font-size: 14px; color: #7a7a9a; line-height: 1.8; }
+
+  .product-wrap { display: flex; justify-content: center; padding: 36px 24px 0; }
+  .product-img-card {
+    background: rgba(255,255,255,0.7); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.9); border-radius: 28px;
+    box-shadow: 0 8px 40px rgba(100,100,200,0.12);
+    overflow: hidden; max-width: 320px; width: 100%; padding: 24px;
+  }
+  .product-img-card img { width: 100%; border-radius: 16px; display: block; }
+  .product-img-caption { text-align: center; margin-top: 14px; font-size: 12px; color: #7a7a9a; line-height: 1.6; }
+
+  .hero-section { max-width: 480px; margin: 32px auto 0; padding: 0 20px; }
+  .hero-label {
+    display: inline-block;
+    background: linear-gradient(135deg, #003876, #1a5cb8); color: #fff;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 14px;
+  }
+  .hero-title { font-size: 20px; font-weight: 700; color: #1a1a2e; line-height: 1.4; margin-bottom: 16px; }
+  .hero-unis { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .hero-unis span {
+    background: rgba(255,255,255,0.85); border: 1px solid rgba(0,56,118,0.15);
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 13px; font-weight: 600; color: #003876;
+    box-shadow: 0 2px 8px rgba(0,56,118,0.08);
+  }
+  .hero-desc {
+    font-size: 14px; color: #5a5a7a; line-height: 1.8;
+    background: rgba(255,255,255,0.6); border-radius: 16px; padding: 16px 18px;
+    border: 1px solid rgba(200,200,230,0.4);
+  }
+  .hero-desc strong { color: #003876; }
+
+  .ref-gallery {
+    display: flex; gap: 10px; overflow-x: auto; padding: 16px 20px 4px;
+    scrollbar-width: none; -ms-overflow-style: none;
+    max-width: 480px; margin: 0 auto;
+  }
+  .ref-gallery::-webkit-scrollbar { display: none; }
+  .ref-item {
+    flex: 0 0 auto; width: 180px; border-radius: 18px; overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,56,118,0.15);
+    border: 1.5px solid rgba(255,255,255,0.9); position: relative;
+  }
+  .ref-item img { width: 100%; height: 250px; object-fit: cover; display: block; }
+  .ref-item-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 28px 10px 8px; text-align: center; line-height: 1.5;
+  }
+  .ref-item-source { font-size: 10px; font-weight: 400; opacity: 0.75; display: block; margin-top: 2px; }
+  .ref-scroll-hint { text-align: center; font-size: 11px; color: #aaa; padding: 6px 0 0; letter-spacing: 0.5px; }
+
+  .badges { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 24px 24px 0; }
+  .badge {
+    background: rgba(255,255,255,0.8); border: 1px solid rgba(200,200,230,0.5);
+    border-radius: 20px; padding: 7px 16px;
+    font-size: 12px; font-weight: 600; color: #4a4a7a;
+    box-shadow: 0 2px 8px rgba(100,100,200,0.08);
+  }
+
+  .intro-box { max-width: 480px; margin: 28px auto 0; padding: 0 24px; text-align: center; }
+  .intro-box p { font-size: 13px; color: #7a7a9a; line-height: 2; margin-bottom: 8px; }
+  .intro-box strong { color: #1a1a2e; font-weight: 700; font-size: 15px; }
+
+  .form-wrap { max-width: 480px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  .steps { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 28px; }
+  .step-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; transition: all 0.3s;
+    background: rgba(255,255,255,0.6); border: 2px solid rgba(200,200,230,0.5); color: #b0b0cc;
+  }
+  .step-dot.active { background: #003876; border-color: #003876; color: #fff; box-shadow: 0 4px 14px rgba(0,56,118,0.3); }
+  .step-dot.done { background: #d4af37; border-color: #d4af37; color: #fff; }
+  .step-line { flex: 1; height: 2px; max-width: 40px; background: rgba(200,200,230,0.4); transition: background 0.3s; }
+  .step-line.done { background: #d4af37; }
+
+  .card {
+    background: rgba(255,255,255,0.75); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.9); border-radius: 24px;
+    padding: 28px 24px; box-shadow: 0 8px 32px rgba(100,100,200,0.1); margin-bottom: 16px;
+  }
+  .card-title { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .card-sub { font-size: 13px; color: #9a9aba; margin-bottom: 24px; line-height: 1.6; }
+
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label { display: block; font-size: 12px; font-weight: 600; color: #5a5a7a; margin-bottom: 7px; letter-spacing: 0.3px; }
+  .req { color: #7c6af7; margin-left: 2px; }
+  .field input, .field select, .field textarea {
+    width: 100%; background: rgba(255,255,255,0.9);
+    border: 1.5px solid rgba(200,200,230,0.6); border-radius: 14px;
+    color: #1a1a2e; font-family: inherit; font-size: 14px;
+    padding: 13px 16px; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: #003876; box-shadow: 0 0 0 3px rgba(0,56,118,0.08);
+  }
+  .field textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+  .field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9aba' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
+  }
+
+  .choice-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .choice { position: relative; }
+  .choice input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .choice label {
+    display: block; padding: 10px 18px;
+    background: rgba(255,255,255,0.9); border: 1.5px solid rgba(200,200,230,0.6);
+    border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 500; color: #5a5a7a; transition: all 0.2s;
+  }
+  .choice input:checked + label { background: rgba(0,56,118,0.08); border-color: #003876; color: #003876; font-weight: 700; }
+
+  .logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .logo-choice { position: relative; }
+  .logo-choice input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .logo-choice label {
+    display: block; padding: 16px 12px; text-align: center;
+    background: rgba(255,255,255,0.9); border: 1.5px solid rgba(200,200,230,0.6);
+    border-radius: 16px; cursor: pointer; font-size: 13px; font-weight: 500; color: #5a5a7a;
+    transition: all 0.2s; line-height: 1.5;
+  }
+  .logo-choice input:checked + label { background: rgba(0,56,118,0.08); border-color: #003876; color: #003876; font-weight: 700; }
+  .logo-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+
+  .price-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .price-choice { position: relative; }
+  .price-choice input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .price-choice label {
+    display: block; padding: 16px 10px; text-align: center;
+    background: rgba(255,255,255,0.9); border: 1.5px solid rgba(200,200,230,0.6);
+    border-radius: 16px; cursor: pointer; transition: all 0.2s;
+  }
+  .price-choice input:checked + label { background: rgba(0,56,118,0.08); border-color: #003876; }
+  .price-amount { font-size: 16px; font-weight: 700; color: #003876; display: block; }
+  .price-desc { font-size: 11px; color: #9a9aba; margin-top: 4px; display: block; }
+
+  .info-box {
+    background: rgba(0,56,118,0.06); border: 1px solid rgba(0,56,118,0.12);
+    border-radius: 14px; padding: 14px 16px;
+    font-size: 12px; color: #6a6a9a; line-height: 1.8; margin-top: 4px;
+  }
+
+  .privacy-toggle {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(200,200,230,0.4); cursor: pointer;
+  }
+  .privacy-toggle input[type=checkbox] { width: 18px; height: 18px; accent-color: #003876; cursor: pointer; flex-shrink: 0; }
+  .privacy-toggle-label { font-size: 13px; color: #5a5a7a; line-height: 1.5; }
+  .privacy-toggle-label span { color: #003876; font-weight: 600; cursor: pointer; text-decoration: underline; }
+  .privacy-box {
+    display: none; margin-top: 12px;
+    background: rgba(0,56,118,0.04); border: 1px solid rgba(0,56,118,0.1);
+    border-radius: 14px; padding: 18px 16px;
+    font-size: 12px; color: #6a6a9a; line-height: 1.9;
+    max-height: 260px; overflow-y: auto;
+  }
+  .privacy-box.open { display: block; }
+  .privacy-box h4 { font-size: 12px; color: #003876; font-weight: 700; margin: 14px 0 6px; }
+  .privacy-box h4:first-child { margin-top: 0; }
+
+  .btn-row { display: flex; gap: 10px; margin-top: 8px; }
+  .btn-back {
+    flex: 0 0 52px; padding: 14px; background: rgba(255,255,255,0.8);
+    border: 1.5px solid rgba(200,200,230,0.6); border-radius: 14px;
+    font-size: 18px; cursor: pointer; color: #9a9aba; transition: all 0.2s;
+  }
+  .btn-next, .btn-submit {
+    flex: 1; padding: 15px; background: #003876; color: #fff;
+    border: none; border-radius: 14px; font-size: 15px; font-weight: 700;
+    font-family: inherit; cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(0,56,118,0.25);
+  }
+  .btn-next:hover, .btn-submit:hover { background: #002a5a; }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .done-screen { display: none; text-align: center; padding: 20px 0; }
+  .done-icon { font-size: 56px; margin-bottom: 16px; }
+  .done-title { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 10px; }
+  .done-sub { font-size: 14px; color: #7a7a9a; line-height: 1.8; }
+
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-tag">YONSEI UNIVERSITY · EXCHANGE</div>
+  <div class="header-title">Custom Exchange<br>Stole</div>
+  <div class="header-sub">Your semester in Korea.<br>Engraved. Forever.</div>
+</div>
+
+<!-- Sample Image -->
+<div class="product-wrap">
+  <div class="product-img-card">
+    <img src="stole-sample.png" alt="Yonsei Exchange Stole Sample">
+    <div class="product-img-caption">
+      <span style="color:#b0b0cc;font-size:11px">Sample image · Customized with your own info</span>
+    </div>
+  </div>
+</div>
+
+<!-- Intro -->
+<div class="intro-box">
+  <p><strong>You came all the way to Korea.</strong></p>
+  <p>The courses you took, the friends you made,<br>the streets you wandered, the moments you'll never forget —<br>all of it, woven into one stole.<br><br>Wear it at your home university graduation.<br>Keep it forever.</p>
+</div>
+
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="hero-label">🎓 Already Trending</div>
+  <div class="hero-title">The hottest graduation culture<br>at top universities worldwide</div>
+  <div class="hero-unis">
+    <span>Harvard</span>
+    <span>Yale</span>
+    <span>Columbia</span>
+    <span>UCLA</span>
+    <span>UBC</span>
+    <span>+ more</span>
+  </div>
+  <div class="hero-desc">Every year, thousands of graduates engrave their story onto a single stole.<br><strong>Now, exchange students at Yonsei can do the same.</strong></div>
+</div>
+
+<!-- Reference Gallery -->
+<div class="ref-gallery">
+  <div class="ref-item">
+    <img src="stole-ref/ref-usc1.png" alt="USC Graduation">
+    <div class="ref-item-label">USC · Class of 2024<span class="ref-item-source">Photo: University of Southern California</span></div>
+  </div>
+  <div class="ref-item">
+    <img src="stole-ref/ref-usc2.png" alt="USC Graduation">
+    <div class="ref-item-label">USC · Class of 2025<span class="ref-item-source">Photo: University of Southern California</span></div>
+  </div>
+  <div class="ref-item">
+    <img src="stole-ref/ref-usc-sash.png" alt="USC Custom Sash">
+    <div class="ref-item-label">USC Custom Sash<span class="ref-item-source">Photo: University of Southern California</span></div>
+  </div>
+  <div class="ref-item">
+    <img src="stole-ref/ref-nyu.png" alt="NYU Shanghai">
+    <div class="ref-item-label">NYU Shanghai<span class="ref-item-source">Photo: New York University</span></div>
+  </div>
+  <div class="ref-item">
+    <img src="stole-ref/ref-nyu-amb.png" alt="NYU Graduation">
+    <div class="ref-item-label">NYU · Ambassador<span class="ref-item-source">Photo: New York University</span></div>
+  </div>
+  <div class="ref-item">
+    <img src="stole-ref/ref-columbia.png" alt="Columbia Stole">
+    <div class="ref-item-label">Columbia Univ.<span class="ref-item-source">Photo: Columbia University</span></div>
+  </div>
+  <div class="ref-item">
+    <img src="stole-ref/ref-ubc.png" alt="UBC Graduation">
+    <div class="ref-item-label">UBC · Class of 2025<span class="ref-item-source">Photo: Univ. of British Columbia</span></div>
+  </div>
+</div>
+<div class="ref-scroll-hint">← Scroll for more →</div>
+
+<!-- Badges -->
+<div class="badges">
+  <div class="badge">📋 Demand Survey</div>
+  <div class="badge">👤 Limited 100</div>
+  <div class="badge">💰 ~$10–20 USD</div>
+</div>
+
+<!-- Form -->
+<div class="form-wrap">
+
+  <div class="steps">
+    <div class="step-dot active" id="sd1">1</div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step-dot" id="sd2">2</div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step-dot" id="sd3">3</div>
+  </div>
+
+  <form id="stole-form">
+
+    <!-- STEP 1: Contact -->
+    <div class="step-panel active" id="panel-1">
+      <div class="card">
+        <div class="card-title">Your Info</div>
+        <div class="card-sub">We'll contact you first when the order is confirmed.</div>
+
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" name="name" placeholder="Jane Smith" required>
+        </div>
+        <div class="field">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" name="email" placeholder="jane@university.edu" required>
+        </div>
+        <div class="field">
+          <label>Phone (optional)</label>
+          <input type="tel" name="phone" placeholder="+1-000-000-0000">
+        </div>
+        <div class="field">
+          <label>Home Country <span class="req">*</span></label>
+          <input type="text" name="country" placeholder="e.g. United States, Germany, France" required>
+        </div>
+
+        <!-- Privacy Policy -->
+        <div class="privacy-toggle">
+          <input type="checkbox" id="privacy-agree" required>
+          <div class="privacy-toggle-label">
+            I agree to the <span onclick="togglePrivacy()">Privacy Policy</span>. <span class="req">*</span>
+          </div>
+        </div>
+        <div class="privacy-box" id="privacy-box">
+          <h4>1. Items Collected</h4>
+          Name, phone number, email address, university info, custom stole content
+          <h4>2. Purpose</h4>
+          Demand survey, order confirmation, delivery coordination
+          <h4>3. Retention Period</h4>
+          Deleted within 6 months after order fulfillment (or immediately upon request)
+          <h4>4. Third Parties</h4>
+          Your information will not be shared with third parties without consent
+          <h4>5. Contact</h4>
+          kiro8932@gmail.com
+        </div>
+
+        <div class="btn-row" style="margin-top:24px">
+          <button type="button" class="btn-next" onclick="goStep(2)">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: University & Exchange Info -->
+    <div class="step-panel" id="panel-2">
+      <div class="card">
+        <div class="card-title">Your University & Exchange</div>
+        <div class="card-sub">This info will appear on the left side of your stole.</div>
+
+        <div class="field">
+          <label>Home University <span class="req">*</span></label>
+          <input type="text" name="home_univ" placeholder="e.g. University of Toronto, ETH Zurich" required>
+        </div>
+        <div class="field">
+          <label>Major / Field of Study <span class="req">*</span></label>
+          <input type="text" name="major" placeholder="e.g. Computer Science, Economics" required>
+        </div>
+        <div class="field">
+          <label>Exchange Period at Yonsei <span class="req">*</span></label>
+          <div class="choice-group">
+            <div class="choice"><input type="radio" name="period" id="p1" value="Spring 2025" required><label for="p1">Spring 2025</label></div>
+            <div class="choice"><input type="radio" name="period" id="p2" value="Fall 2025"><label for="p2">Fall 2025</label></div>
+            <div class="choice"><input type="radio" name="period" id="p3" value="Spring 2026"><label for="p3">Spring 2026</label></div>
+            <div class="choice"><input type="radio" name="period" id="p4" value="Fall 2026"><label for="p4">Fall 2026</label></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Bottom of Stole</label>
+          <div class="logo-grid">
+            <div class="logo-choice">
+              <input type="radio" name="logo" id="l1" value="Home Country Flag">
+              <label for="l1"><span class="logo-emoji">🏳️</span>Home Country Flag</label>
+            </div>
+            <div class="logo-choice">
+              <input type="radio" name="logo" id="l2" value="None" checked>
+              <label for="l2"><span class="logo-emoji">✖️</span>None</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn-back" onclick="goStep(1)">←</button>
+          <button type="button" class="btn-next" onclick="goStep(3)">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Custom Content & Price -->
+    <div class="step-panel" id="panel-3">
+      <div class="card">
+        <div class="card-title">Your Korea Story</div>
+        <div class="card-sub">What do you want to engrave on the right side?</div>
+
+        <div class="field">
+          <label>Right Side — Free Custom</label>
+          <textarea name="right_side" placeholder="e.g.&#10;Club: Yonsei Hiking Club&#10;Cities: Seoul, Busan, Jeju&#10;Friends: Sarah, Min, Takuya&#10;Korean phrase: 연세대에서의 봄"></textarea>
+          <div class="info-box">
+            You can include anything — clubs at Yonsei, Korean cities you visited, friends' names, a meaningful Korean phrase, or anything that made your exchange special.
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Preferred Price Range</label>
+          <div class="price-grid">
+            <div class="price-choice">
+              <input type="radio" name="price" id="pr1" value="~$10 USD">
+              <label for="pr1"><span class="price-amount">~$10</span><span class="price-desc">Basic</span></label>
+            </div>
+            <div class="price-choice">
+              <input type="radio" name="price" id="pr2" value="~$15 USD" checked>
+              <label for="pr2"><span class="price-amount">~$15</span><span class="price-desc">Standard</span></label>
+            </div>
+            <div class="price-choice">
+              <input type="radio" name="price" id="pr3" value="~$20 USD">
+              <label for="pr3"><span class="price-amount">~$20</span><span class="price-desc">Full Custom</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Anything else?</label>
+          <textarea name="notes" placeholder="Additional requests, design ideas, questions..." style="min-height:80px"></textarea>
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn-back" onclick="goStep(2)">←</button>
+          <button type="submit" class="btn-submit" id="submit-btn">Submit ✓</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Done -->
+    <div class="done-screen" id="done-screen">
+      <div class="done-icon">🎓</div>
+      <div class="done-title">All done!</div>
+      <div class="done-sub">Thank you for your interest.<br>We'll reach out as soon as the order is confirmed.<br><br>Your Korea semester deserves to be remembered.</div>
+    </div>
+
+  </form>
+</div>
+
+<script>
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxc1OMnE9oZYUpi1Z5vnWMq5b_gpSIs85-n-XPnzsnVcSf7wICGQ_dMZrYiq_MR61UW2g/exec';
+
+function goStep(n) {
+  const cur = document.querySelector('.step-panel.active');
+  if (!cur) return;
+  const curNum = parseInt(cur.id.replace('panel-',''));
+
+  if (n > curNum) {
+    const inputs = cur.querySelectorAll('[required]');
+    for (const el of inputs) {
+      if (!el.value || (el.type === 'radio' && !cur.querySelector(`[name=${el.name}]:checked`))) {
+        el.focus();
+        el.style.borderColor = '#e05';
+        setTimeout(() => el.style.borderColor = '', 1500);
+        return;
+      }
+    }
+    const radios = cur.querySelectorAll('input[type=radio][required]');
+    const radioNames = [...new Set([...radios].map(r => r.name))];
+    for (const name of radioNames) {
+      if (!cur.querySelector(`[name=${name}]:checked`)) {
+        alert('Please select all required options.');
+        return;
+      }
+    }
+  }
+
+  cur.classList.remove('active');
+  document.getElementById('panel-' + n).classList.add('active');
+
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('sd' + i);
+    dot.classList.remove('active','done');
+    if (i < n) dot.classList.add('done');
+    else if (i === n) dot.classList.add('active');
+    if (i < 3) {
+      const line = document.getElementById('sl' + i);
+      line.classList.toggle('done', i < n);
+    }
+  }
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function togglePrivacy() {
+  document.getElementById('privacy-box').classList.toggle('open');
+}
+
+document.getElementById('stole-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  const fd = new FormData(this);
+  const data = Object.fromEntries(fd.entries());
+  data.form_type = 'exchange_en';
+
+  try {
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: new URLSearchParams(data).toString()
+    });
+  } catch(err) {}
+
+  document.getElementById('panel-3').classList.remove('active');
+  document.getElementById('done-screen').style.display = 'block';
+});
+</script>
+</body>
+</html>
