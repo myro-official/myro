@@ -166,6 +166,25 @@
   }
 
   /* ── 로고 선택 ── */
+  /* 개인정보 처리방침 */
+  .privacy-toggle {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(200,200,230,0.4);
+    cursor: pointer;
+  }
+  .privacy-toggle input[type=checkbox] { width: 18px; height: 18px; accent-color: #003876; cursor: pointer; flex-shrink: 0; }
+  .privacy-toggle-label { font-size: 13px; color: #5a5a7a; line-height: 1.5; }
+  .privacy-toggle-label span { color: #003876; font-weight: 600; cursor: pointer; text-decoration: underline; }
+  .privacy-box {
+    display: none; margin-top: 12px;
+    background: rgba(0,56,118,0.04); border: 1px solid rgba(0,56,118,0.1);
+    border-radius: 14px; padding: 18px 16px;
+    font-size: 12px; color: #6a6a9a; line-height: 1.9;
+    max-height: 260px; overflow-y: auto;
+  }
+  .privacy-box.open { display: block; }
+  .privacy-box h4 { font-size: 12px; color: #003876; font-weight: 700; margin: 14px 0 6px; }
+  .privacy-box h4:first-child { margin-top: 0; }
   .logo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .auto-eng {
     margin-top: 8px; padding: 10px 14px;
@@ -277,6 +296,20 @@
   </div>
 </div>
 
+<!-- 소개글 -->
+<div style="max-width:480px;margin:28px auto 0;padding:0 24px;text-align:center">
+  <p style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:12px;line-height:1.6">
+    군대 전역복에서 아이디어를 얻었습니다.<br>
+    외국 대학 졸업식엔 <span style="color:#003876">스톨</span>이 있습니다.
+  </p>
+  <p style="font-size:13px;color:#7a7a9a;line-height:2;margin-bottom:20px">
+    교환학생 다녀온 나라의 국기, 함께한 학교,<br>
+    동아리·학회·소모임, 우등 졸업 —<br>
+    4년을 천 하나에 새겨 졸업 가운 위에 걸치는 것입니다.<br><br>
+    연세대엔 없었습니다. 그래서 만들어보려 합니다.
+  </p>
+</div>
+
 <!-- 뱃지 -->
 <div class="badges">
   <div class="badge">📋 수요조사 중</div>
@@ -323,6 +356,34 @@
             <div class="choice"><input type="radio" name="grade" id="g2" value="졸업예정자"><label for="g2">졸업예정자</label></div>
             <div class="choice"><input type="radio" name="grade" id="g3" value="대학원생"><label for="g3">대학원생</label></div>
           </div>
+        </div>
+
+        <!-- 개인정보 동의 -->
+        <div class="privacy-toggle">
+          <input type="checkbox" id="privacy-agree" required>
+          <div class="privacy-toggle-label">
+            <span onclick="togglePrivacy()">개인정보 처리방침</span>에 동의합니다. <span class="req">*</span>
+          </div>
+        </div>
+        <div class="privacy-box" id="privacy-box">
+          <h4>1. 수집하는 개인정보 항목</h4>
+          이름, 전화번호, 이메일 주소, 소속 구분 (학부생·졸업예정자·대학원생)
+
+          <h4>2. 수집 및 이용 목적</h4>
+          연세대학교 졸업 스톨 수요조사 참여 확인 및 제작 확정 시 우선 안내 연락
+
+          <h4>3. 보유 및 이용 기간</h4>
+          수요조사 종료 후 6개월 이내 파기.<br>
+          제작이 진행될 경우 거래 완료 후 1년 이내 파기.
+
+          <h4>4. 제3자 제공</h4>
+          수집된 개인정보는 제3자에게 제공하지 않습니다.
+
+          <h4>5. 동의 거부 권리</h4>
+          개인정보 수집·이용에 동의하지 않으실 수 있습니다. 단, 동의 거부 시 수요조사 참여가 제한됩니다.
+
+          <h4>6. 문의</h4>
+          개인정보 관련 문의: kiro8932@gmail.com
         </div>
       </div>
       <button type="button" class="btn-next" onclick="goStep(2)">다음 →</button>
@@ -486,6 +547,11 @@ const majorMap = {
   '일어일문학':'Japanese Language and Literature',
   '언론홍보영상학부':'Communication and Media Studies','언론':'Communication and Media Studies',
 };
+
+function togglePrivacy() {
+  const box = document.getElementById('privacy-box');
+  box.classList.toggle('open');
+}
 
 function autoEng(inputId, outputId, map) {
   const val = document.querySelector('[name=' + inputId + ']').value.trim();
