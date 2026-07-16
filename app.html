@@ -32,7 +32,7 @@
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: linear-gradient(to bottom, rgba(13,27,42,0.35) 0%, rgba(13,27,42,0.6) 100%), url('hero-bg.jpg') center center / cover no-repeat fixed, var(--bg);
+      background: linear-gradient(to bottom, rgba(13,27,42,0.45) 0%, rgba(13,27,42,0.7) 100%), url('app-bg.jpg') center center / cover no-repeat fixed, var(--bg);
       color: var(--white);
       font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
       min-height: 100vh;
@@ -40,6 +40,10 @@
     }
     @media (max-width: 600px) {
       body { background-attachment: scroll, scroll, scroll; }
+    }
+    /* 웰컴 화면(s0)에서만 배경 사진 교체 */
+    body.on-welcome {
+      background: linear-gradient(to bottom, rgba(13,27,42,0.35) 0%, rgba(13,27,42,0.6) 100%), url('hero-bg.jpg') center center / cover no-repeat fixed, var(--bg);
     }
     .app { max-width: 480px; margin: 0 auto; padding: 0 20px; min-height: 100vh; }
     /* 큰 화면(태블릿/데스크탑)에서도 레퍼런스 원본 비율(650px)까지는 커지되,
@@ -843,6 +847,7 @@
     if (prev) prev.classList.remove('active');
     cur = n;
     document.getElementById('s' + n).classList.add('active');
+    document.body.classList.toggle('on-welcome', n === 0);
     updateUI(n);
   }
 
