@@ -26,11 +26,14 @@
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: var(--bg);
+      background: linear-gradient(to bottom, rgba(13,27,42,0.55) 0%, rgba(13,27,42,0.82) 100%), url('hero-bg.jpg') center center / cover no-repeat fixed, var(--bg);
       color: var(--white);
       font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+    }
+    @media (max-width: 600px) {
+      body { background-attachment: scroll, scroll, scroll; }
     }
     .app { max-width: 480px; margin: 0 auto; padding: 0 20px; min-height: 100vh; }
     /* 큰 화면(태블릿/데스크탑)에서도 레퍼런스 원본 비율(650px)까지는 커지되,
@@ -57,12 +60,8 @@
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
     /* ── s0: Welcome (레퍼런스 픽셀 좌표 기반 절대배치, 650×792 기준) ── */
-    #s0 { position:relative; padding:0; background:url('hero-bg.jpg') center center / cover no-repeat #0D1B2A; }
-    #s0::before {
-      content:''; position:absolute; inset:0; z-index:0;
-      background:linear-gradient(to bottom, rgba(13,27,42,0.55) 0%, rgba(13,27,42,0.78) 100%);
-    }
-    .welcome-wrap { position:relative; z-index:1; padding:0 0 40px; width:100%; }
+    #s0 { position:relative; padding:0; }
+    .welcome-wrap { position:relative; padding:0 0 40px; width:100%; }
 
     .hero-frame {
       position:relative; width:100%; aspect-ratio:650/792; margin:0 auto;
