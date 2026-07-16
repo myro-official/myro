@@ -1834,13 +1834,13 @@
     document.getElementById('result-area').innerHTML = `
       <div class="label" style="margin-bottom:12px">${name}님의 맞춤 루틴</div>
       <div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
-        <span style="font-size:10px;letter-spacing:1px;color:#A0A9B4;background:rgba(232,237,242,0.07);border:1px solid rgba(232,237,242,0.12);padding:4px 10px;border-radius:20px">✓ AI 분석 완료</span>
-        <span style="font-size:10px;letter-spacing:1px;color:#A0A9B4;background:rgba(232,237,242,0.07);border:1px solid rgba(232,237,242,0.12);padding:4px 10px;border-radius:20px">✓ MYRO DB 조회</span>
-        <span style="font-size:10px;letter-spacing:1px;color:#E8EDF2;background:rgba(232,237,242,0.1);border:1px solid rgba(232,237,242,0.25);padding:4px 10px;border-radius:20px">✓ 개인화 루틴 완성</span>
+        <span style="font-size:10px;letter-spacing:1px;color:#E8EDF2;background:rgba(13,27,42,0.75);border:1px solid rgba(232,237,242,0.4);padding:4px 10px;border-radius:20px">✓ AI 분석 완료</span>
+        <span style="font-size:10px;letter-spacing:1px;color:#E8EDF2;background:rgba(13,27,42,0.75);border:1px solid rgba(232,237,242,0.4);padding:4px 10px;border-radius:20px">✓ MYRO DB 조회</span>
+        <span style="font-size:10px;letter-spacing:1px;color:#FFFFFF;background:rgba(13,27,42,0.85);border:1px solid rgba(232,237,242,0.55);padding:4px 10px;border-radius:20px">✓ 개인화 루틴 완성</span>
       </div>
 
       <!-- 탭 스위처 -->
-      <div style="display:flex;gap:0;margin-bottom:20px;background:rgba(232,237,242,0.06);border-radius:12px;padding:4px">
+      <div style="display:flex;gap:0;margin-bottom:20px;background:rgba(13,27,42,0.6);border:1px solid rgba(232,237,242,0.15);border-radius:12px;padding:4px">
         <button id="tab-routine" onclick="switchResultTab('routine')" style="flex:1;padding:10px;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;background:var(--card-bg);color:var(--white)">루틴</button>
         ${isHair
           ? `<button id="tab-diet" onclick="switchResultTab('diet')" style="flex:1;padding:10px;border:none;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--gray)">제품 가이드</button>`
