@@ -71,6 +71,26 @@
     @keyframes heroFadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
     @keyframes heroFadeUpCenter { from{opacity:0;transform:translate(-50%,18px)} to{opacity:1;transform:translate(-50%,0)} }
 
+    /* 온보딩 화면(s4~) 공통 진입 애니메이션 — 라벨→타이틀→서브타이틀→본문→버튼 순서로 자연스럽게 */
+    .screen.active .label { opacity:0; animation:heroFadeUp 0.5s ease forwards; animation-delay:0.05s; }
+    .screen.active .title { opacity:0; animation:heroFadeUp 0.5s ease forwards; animation-delay:0.12s; }
+    .screen.active .subtitle,
+    .screen.active .sec-title { opacity:0; animation:heroFadeUp 0.5s ease forwards; animation-delay:0.19s; }
+    .screen.active .text-input,
+    .screen.active .name-input,
+    .screen.active .job-grid,
+    .screen.active .age-opts,
+    .screen.active .budget-list,
+    .screen.active .cat-list,
+    .screen.active .schedule-list,
+    .screen.active .time-input-row,
+    .screen.active .privacy-box,
+    .screen.active .input-hint,
+    .screen.active .name-hint,
+    .screen.active #detail-area { opacity:0; animation:heroFadeUp 0.5s ease forwards; animation-delay:0.28s; }
+    .screen.active .btn-primary,
+    .screen.active .btn-secondary { opacity:0; animation:heroFadeUp 0.5s ease forwards; animation-delay:0.4s; }
+
     /* ── s0: Welcome (레퍼런스 픽셀 좌표 기반 절대배치, 650×792 기준) ── */
     #s0 { position:relative; padding:0; }
     .welcome-wrap { position:relative; padding:56px 0 40px; width:100%; }
@@ -136,10 +156,8 @@
       display:inline-block; font-size:10px; letter-spacing:3px; text-transform:uppercase;
       color:var(--gray); border:1px solid rgba(232,237,242,0.2); padding:5px 14px; border-radius:20px;
     }
-    .hero-cta-wrap {
-      max-width:280px; margin:24px auto 0;
-      opacity:0; animation:heroFadeUp 0.7s ease forwards; animation-delay:0.86s;
-    }
+    .hero-cta-wrap { max-width:280px; margin:24px auto 0; }
+    #s0 .btn-primary { animation-delay:0.86s; }
     .brand-headline {
       font-family:'Bebas Neue',sans-serif; font-size:56px; font-weight:700; letter-spacing:4px;
       line-height:1.05; margin-bottom:14px; text-align:center;
