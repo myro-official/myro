@@ -68,6 +68,8 @@
     .screen { display:none; animation:fadeUp 0.35s ease; }
     .screen.active { display:block; }
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes heroFadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes heroFadeUpCenter { from{opacity:0;transform:translate(-50%,18px)} to{opacity:1;transform:translate(-50%,0)} }
 
     /* ── s0: Welcome (레퍼런스 픽셀 좌표 기반 절대배치, 650×792 기준) ── */
     #s0 { position:relative; padding:0; }
@@ -78,13 +80,13 @@
       container-type:inline-size;
     }
     .hero-abs { position:absolute; }
-    .hero-photo { overflow:hidden; background:var(--card-bg); }
+    .hero-photo { overflow:hidden; background:var(--card-bg); opacity:0; animation:heroFadeUp 0.7s ease forwards; }
     .hero-photo img { width:100%; height:100%; object-fit:cover; display:block; }
 
     /* 상단 nav */
-    .hero-nav-left  { top:0; left:0; }
+    .hero-nav-left  { top:0; left:0; opacity:0; animation:heroFadeUp 0.7s ease forwards; }
     .hero-nav-left .logo { font-family:'EliceDX','Bebas Neue',sans-serif; font-size:4.3cqw; letter-spacing:0.12em; }
-    .hero-nav-right { top:0; right:0; display:flex; gap:1.4cqw; }
+    .hero-nav-right { top:0; right:0; display:flex; gap:1.4cqw; opacity:0; animation:heroFadeUp 0.7s ease forwards; animation-delay:0.06s; }
     .hero-link-btn {
       font-size:1.9cqw; letter-spacing:0.3px; color:var(--silver); text-decoration:none;
       background:rgba(232,237,242,0.14); border:1px solid rgba(232,237,242,0.45);
@@ -97,33 +99,39 @@
       top:12%; left:50%; transform:translateX(-50%); z-index:2;
       font-family:'EliceDX','Bebas Neue',sans-serif; font-size:20cqw; letter-spacing:0.02em;
       line-height:0.85; white-space:nowrap; text-align:center;
+      opacity:0; animation:heroFadeUpCenter 0.7s ease forwards; animation-delay:0.14s;
     }
 
     /* 사진 3장 — 상단 구성 (레퍼런스 좌표 그대로, 좌우 사진은 .app 패딩 밖으로 진짜 가장자리까지 붙임) */
-    .hero-photo-topright { top:12%; right:-20px; width:26%; height:19%; }
-    .hero-photo-center   { top:19%; left:25%;    width:47%; height:36%; z-index:1; }
-    .hero-photo-midleft  { top:32%; left:-20px;  width:17%; height:24%; }
+    .hero-photo-topright { top:12%; right:-20px; width:26%; height:19%; animation-delay:0.24s; }
+    .hero-photo-center   { top:19%; left:25%;    width:47%; height:36%; z-index:1; animation-delay:0.32s; }
+    .hero-photo-midleft  { top:32%; left:-20px;  width:17%; height:24%; animation-delay:0.4s; }
 
     /* 태그라인 + 설명 */
     .hero-tagline {
       top:61.5%; left:50%; transform:translateX(-50%); width:76%; text-align:center;
       font-family:'EliceDX','Montserrat',serif; font-style:normal; font-size:4.2cqw; color:var(--white);
+      opacity:0; animation:heroFadeUpCenter 0.7s ease forwards; animation-delay:0.5s;
     }
     .hero-desc {
       top:67%; left:50%; transform:translateX(-50%); width:76%; text-align:center;
       font-size:2.25cqw; line-height:1.75; color:var(--gray);
+      opacity:0; animation:heroFadeUpCenter 0.7s ease forwards; animation-delay:0.56s;
     }
 
     /* 하단 사진 3장 */
-    .hero-photo-bl { top:82%; left:-20px;  width:24%; height:18%; }
-    .hero-photo-bm { top:82%; left:42%;    width:24%; height:18%; }
-    .hero-photo-br { top:82%; right:-20px; width:32%; height:18%; }
+    .hero-photo-bl { top:82%; left:-20px;  width:24%; height:18%; animation-delay:0.64s; }
+    .hero-photo-bm { top:82%; left:42%;    width:24%; height:18%; animation-delay:0.7s; }
+    .hero-photo-br { top:82%; right:-20px; width:32%; height:18%; animation-delay:0.76s; }
 
     .welcome-badge {
       display:inline-block; font-size:10px; letter-spacing:3px; text-transform:uppercase;
       color:var(--gray); border:1px solid rgba(232,237,242,0.2); padding:5px 14px; border-radius:20px;
     }
-    .hero-cta-wrap { max-width:280px; margin:24px auto 0; }
+    .hero-cta-wrap {
+      max-width:280px; margin:24px auto 0;
+      opacity:0; animation:heroFadeUp 0.7s ease forwards; animation-delay:0.86s;
+    }
     .brand-headline {
       font-family:'Bebas Neue',sans-serif; font-size:56px; font-weight:700; letter-spacing:4px;
       line-height:1.05; margin-bottom:14px; text-align:center;
@@ -591,7 +599,7 @@
         <div class="hero-abs hero-photo hero-photo-br"><img src="hero-br.jpg" alt=""></div>
       </div>
 
-      <div style="text-align:center;margin-top:28px"><span class="welcome-badge">1ST MYRER</span></div>
+      <div style="text-align:center;margin-top:28px;opacity:0;animation:heroFadeUp 0.7s ease forwards;animation-delay:0.8s"><span class="welcome-badge">1ST MYRER</span></div>
       <div class="hero-cta-wrap">
         <button class="btn-primary" onclick="go(4)">시작하기</button>
       </div>
