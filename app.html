@@ -522,96 +522,16 @@
       </div>
       <div class="brand-headline">남자의<br>자기관리.</div>
       <div style="font-size:13px;color:rgba(232,237,242,0.5);letter-spacing:0.05em;margin-bottom:52px">당신이 되고 싶은 진짜 당신의 모습.</div>
-      <button class="btn-primary" onclick="go(1)" style="min-width:180px">시작하기</button>
+      <button class="btn-primary" onclick="go(4)" style="min-width:180px">시작하기</button>
     </div>
   </div>
 
-  <!-- s1: 베타 안내 -->
-  <div class="screen" id="s1">
-    <div class="notice-wrap">
-      <div class="label">베타 서비스 안내</div>
-      <div class="title">시작 전 꼭<br>확인해 주세요.</div>
-      <div class="subtitle" style="margin-bottom:20px">마이로 베타 이용에 관한 내용이에요.</div>
-
-      <div class="notice-card">
-        <div class="notice-section-title">이용 기간 & 루틴 제공 방식</div>
-        <div class="notice-item">
-          <div class="notice-dot"></div>
-          <div class="notice-text"><em>7/3(금) ~ 7/7(화)</em>, 5일간 마이로 서비스를 이용하실 수 있습니다.</div>
-        </div>
-        <div class="notice-item">
-          <div class="notice-dot"></div>
-          <div class="notice-text">AI가 이번 주 스케줄을 분석해 <em>하루하루 맞춤 루틴을 설계</em>합니다. 이후 MYRO만의 논문·피부과학·심리·행동과학 근거 데이터베이스 검토 및 <em>영역별 전문가 2차 검토</em>를 통해 정리된 루틴을 제공해드립니다.</div>
-        </div>
-        <div class="notice-item">
-          <div class="notice-dot"></div>
-          <div class="notice-text">아직 다듬어지지 않은 부분이 있을 수 있으니 넓은 마음으로 양해 부탁드립니다.</div>
-        </div>
-      </div>
-
-      <div class="notice-card">
-        <div class="notice-section-title">베타 참여 필수 조건</div>
-        <div class="notice-item">
-          <div class="notice-dot"></div>
-          <div class="notice-text">7/7(화) 체험 종료 후 <em>카카오톡 후기 및 마이러 1기 리뷰 조사에 반드시 참여</em>하셔야 합니다.</div>
-        </div>
-        <div class="notice-item">
-          <div class="notice-dot"></div>
-          <div class="notice-text">이는 베타 서비스 이용의 필수 조건이며, 마이로 서비스 개선에 직접 기여하게 됩니다.</div>
-        </div>
-        <a class="kakao-btn" href="http://pf.kakao.com/_VuAxfX" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.72 2 11.28c0 2.88 1.68 5.4 4.2 6.96L5.04 21l4.08-2.16c.9.24 1.88.36 2.88.36 5.52 0 10-3.72 10-8.28S17.52 3 12 3z"/></svg>
-          카카오채널 채널 추가하기
-        </a>
-      </div>
-
-      <button class="btn-primary" onclick="go(2)">확인했어요</button>
-    </div>
-  </div>
-
-  <!-- s2: 동의 1 — 카톡 후기 -->
-  <div class="screen" id="s2">
-    <div class="consent-wrap">
-      <div class="consent-card">
-        <span class="consent-tag">동의 1 / 2</span>
-        <div class="consent-title">사용 후 카카오톡<br>후기 참여에 동의하시나요?</div>
-        <div class="consent-desc">7/7(화) 베타 서비스 종료 후, 카카오톡 채널을 통해 솔직한 사용 후기를 남겨주시면 됩니다.</div>
-        <ul class="consent-list">
-          <li>형식: 카카오채널 채팅 (자유 형식)</li>
-          <li>내용: 서비스 사용 소감, 개선 사항 등</li>
-          <li>소요시간: 10분 내외</li>
-          <li>시기: 7/7(화) 체험 종료 이후</li>
-        </ul>
-      </div>
-      <button class="btn-consent" onclick="go(3)">✓ &nbsp;동의합니다</button>
-      <button class="btn-secondary" onclick="go(3)">건너뛰기</button>
-    </div>
-  </div>
-
-  <!-- s3: 동의 2 — 마이러 1기 리뷰 -->
-  <div class="screen" id="s3">
-    <div class="consent-wrap">
-      <div class="consent-card">
-        <span class="consent-tag">동의 2 / 2</span>
-        <div class="consent-title">마이러 1기 공식<br>리뷰 참여에 동의하시나요?</div>
-        <div class="consent-desc">베타 이용자 마이러님께서는 서비스 체험 후 마이러 1기 공식 리뷰에 <em style="font-style:normal;color:var(--white);font-weight:600">반드시 참여</em>하셔야 합니다. 이는 베타 이용의 필수 조건입니다.</div>
-        <ul class="consent-list">
-          <li>형식: 짧은 텍스트 또는 음성 인터뷰</li>
-          <li>활용: 마이로 서비스 개선 및 홍보 자료</li>
-          <li>소요시간: 15~20분 내외</li>
-          <li>보상: 정식 출시 시 마이러 1기 특별 혜택</li>
-        </ul>
-      </div>
-      <button class="btn-consent" onclick="go(4)">✓ &nbsp;동의합니다</button>
-    </div>
-  </div>
-
-  <!-- s4: 전화번호 + 전화 가능 시간대 -->
+  <!-- s4: 연락처 (사용자 정보 등록) -->
   <div class="screen" id="s4">
     <div class="phone-wrap">
       <div class="label">연락처</div>
-      <div class="title">연락받으실<br>전화번호를 알려주세요.</div>
-      <div class="subtitle">7/7 종료 후 인터뷰 일정 조율에 활용돼요.</div>
+      <div class="title">전화번호를<br>알려주세요.</div>
+      <div class="subtitle">계정 확인 및 맞춤 서비스 제공에 활용돼요.</div>
 
       <input
         class="text-input"
@@ -623,20 +543,11 @@
       >
       <div class="input-hint">숫자만 입력하면 자동으로 형식이 맞춰져요.</div>
 
-      <div class="sec-title">전화 가능 시간대</div>
-      <div class="subtitle" style="margin-bottom:8px">7/7(화) 이후 언제 전화드리면 될까요?</div>
-      <div class="time-input-row">
-        <input class="text-input" id="call-start" type="time" value="10:00" style="font-size:15px;padding:14px 16px;margin:0">
-        <span class="time-sep">~</span>
-        <input class="text-input" id="call-end" type="time" value="21:00" style="font-size:15px;padding:14px 16px;margin:0">
-      </div>
-      <div class="input-hint" style="margin-bottom:0">해당 시간대에 모르는 번호로 전화드릴 수 있어요.</div>
-
       <div class="privacy-box">
         <div class="privacy-title">개인정보 처리 방침</div>
         <div class="privacy-row"><span class="privacy-key">수집 항목</span><span class="privacy-val">전화번호</span></div>
-        <div class="privacy-row"><span class="privacy-key">수집 목적</span><span class="privacy-val">베타 인터뷰 일정 조율</span></div>
-        <div class="privacy-row"><span class="privacy-key">보관 기간</span><span class="privacy-val">인터뷰 완료 후 즉시 파기</span></div>
+        <div class="privacy-row"><span class="privacy-key">수집 목적</span><span class="privacy-val">서비스 이용자 정보 등록</span></div>
+        <div class="privacy-row"><span class="privacy-key">보관 기간</span><span class="privacy-val">서비스 이용 종료 후 즉시 파기</span></div>
         <div class="privacy-row"><span class="privacy-key">제3자 제공</span><span class="privacy-val">없음</span></div>
         <div class="privacy-row"><span class="privacy-key">관리 주체</span><span class="privacy-val">MYRO (개인사업자)</span></div>
       </div>
@@ -868,9 +779,8 @@
   }
 
   function handleBack() {
-    const map = {5:4,6:5,7:6,8:7,9:8};
-    if (map[cur]) go(map[cur]);
-    else if (cur >= 1 && cur <= 4) go(cur - 1);
+    const map = {4:0,5:4,6:5,7:6,8:7,9:8};
+    if (map[cur] !== undefined) go(map[cur]);
     else window.location.href = 'index.html';
   }
 
