@@ -99,10 +99,10 @@
       line-height:0.85; white-space:nowrap; text-align:center;
     }
 
-    /* 사진 3장 — 상단 구성 (레퍼런스 좌표 그대로) */
-    .hero-photo-topright { top:12%; right:0;   width:26%; height:19%; }
-    .hero-photo-center   { top:19%; left:25%;  width:47%; height:36%; z-index:1; }
-    .hero-photo-midleft  { top:32%; left:0;    width:17%; height:24%; }
+    /* 사진 3장 — 상단 구성 (레퍼런스 좌표 그대로, 좌우 사진은 .app 패딩 밖으로 진짜 가장자리까지 붙임) */
+    .hero-photo-topright { top:12%; right:-20px; width:26%; height:19%; }
+    .hero-photo-center   { top:19%; left:25%;    width:47%; height:36%; z-index:1; }
+    .hero-photo-midleft  { top:32%; left:-20px;  width:17%; height:24%; }
 
     /* 태그라인 + 설명 */
     .hero-tagline {
