@@ -734,6 +734,7 @@
     <div class="label">Step 1 of 4</div>
     <div class="title" id="schedule-title">님의 이번 주<br>스케줄을 입력해주세요.</div>
     <div class="subtitle" id="schedule-sub">고정 스케줄을 입력할수록 <em style="font-style:normal;color:var(--silver);font-weight:600">님께 더 정교하게 맞춤화된</em> 루틴을 설계해 드릴 수 있어요.</div>
+    <input class="text-input" type="date" id="schedule-start-date" style="margin-bottom:16px" onchange="onStartDateChange(this.value)">
     <div class="schedule-list" id="schedule-list"></div>
     <button class="btn-primary" onclick="go(7)">다음</button>
   </div>
@@ -843,8 +844,7 @@
 
 <script>
   const BACKEND = 'https://web-production-0e945.up.railway.app';
-  const DATES = ['7/3','7/4','7/5','7/6','7/7'];
-  const DAYS_KR = ['금','토','일','월','화'];
+  const DAY_NAMES_KR = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
 
   const state = {
     name: '', phone: '', callStart: '', callEnd: '', location: '',
@@ -875,7 +875,7 @@
 
   function go(n) {
     if (n === 5) applyName();
-    if (n === 6) { applyTitles(); setTimeout(renderSchedule, 0); }
+    if (n === 6) { applyTitles(); setTimeout(initScheduleDate, 0); }
     if (n === 9) renderDetail();
     const prev = document.getElementById('s' + cur);
     if (prev) prev.classList.remove('active');
@@ -883,6 +883,7 @@
     document.getElementById('s' + n).classList.add('active');
     document.body.classList.toggle('on-welcome', n === 0);
     updateUI(n);
+    window.scrollTo(0, 0);
   }
 
   function handleBack() {
@@ -961,20 +962,49 @@
     state.callEnd = document.getElementById('call-end')?.value || '';
   }
 
-  /* ── s6: 동적 스케줄 ── */
-  const DAY_INFO = [
-    {date:'7/3', day:'금요일', weekend:false},
-    {date:'7/4', day:'토요일', weekend:true},
-    {date:'7/5', day:'일요일', weekend:true},
-    {date:'7/6', day:'월요일', weekend:false},
-    {date:'7/7', day:'화요일', weekend:false},
-  ];
-
+  /* ── s6: 동적 스케줄 (시작일 기준 7일 자동 생성) ── */
+  let DAY_INFO = [];
   // events[dayIdx] = [{label, time}, ...]
-  const events = DAY_INFO.map((d) => d.weekend
-    ? [{label:'기상', time:'09:00'}, {label:'귀가', time:'21:00'}]
-    : [{label:'기상', time:'07:00'}, {label:'귀가', time:'18:00'}]
-  );
+  let events = [];
+
+  function buildDayInfo(startDateStr) {
+    const start = new Date(startDateStr + 'T00:00:00');
+    const info = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      const dow = d.getDay(); // 0=일 ... 6=토
+      info.push({
+        date: `${d.getMonth() + 1}/${d.getDate()}`,
+        day: DAY_NAMES_KR[dow],
+        weekend: (dow === 0 || dow === 6),
+      });
+    }
+    return info;
+  }
+
+  function onStartDateChange(val) {
+    if (!val) return;
+    DAY_INFO = buildDayInfo(val);
+    events = DAY_INFO.map((d) => d.weekend
+      ? [{label:'기상', time:'09:00'}, {label:'귀가', time:'21:00'}]
+      : [{label:'기상', time:'07:00'}, {label:'귀가', time:'18:00'}]
+    );
+    renderSchedule();
+  }
+
+  function initScheduleDate() {
+    const input = document.getElementById('schedule-start-date');
+    if (!input) return;
+    if (!input.value) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      input.value = `${yyyy}-${mm}-${dd}`;
+    }
+    onStartDateChange(input.value);
+  }
 
   function renderSchedule() {
     const list = document.getElementById('schedule-list');
