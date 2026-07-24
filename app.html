@@ -236,6 +236,21 @@
     .time-input-row { display:flex; align-items:center; gap:10px; margin:10px 0 6px; }
     .time-input-row .text-input { margin:0; font-size:16px; }
     .time-sep { color:var(--gray); font-size:14px; flex-shrink:0; }
+
+    /* ── s6: 시작일 카드 ── */
+    .schedule-date-section { margin-bottom:22px; }
+    .schedule-date-label { font-size:14px; font-weight:600; color:var(--white); margin-bottom:6px; }
+    .schedule-date-desc { font-size:12.5px; color:var(--gray); line-height:1.6; margin-bottom:12px; }
+    .schedule-date-display {
+      background:var(--card-bg); border:1.5px solid var(--border); border-radius:14px;
+      padding:16px 20px; font-size:14px; line-height:1.6; color:var(--gray);
+      cursor:pointer; transition:border-color 0.2s;
+    }
+    .schedule-date-display:hover { border-color:rgba(232,237,242,0.5); }
+    .schedule-date-display strong { color:var(--silver); font-weight:700; }
+    .schedule-date-input-hidden {
+      position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;
+    }
     .privacy-box {
       background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px;
       padding:16px; margin:20px 0 0;
@@ -734,7 +749,12 @@
     <div class="label">Step 1 of 4</div>
     <div class="title" id="schedule-title">님의 이번 주<br>스케줄을 입력해주세요.</div>
     <div class="subtitle" id="schedule-sub">고정 스케줄을 입력할수록 <em style="font-style:normal;color:var(--silver);font-weight:600">님께 더 정교하게 맞춤화된</em> 루틴을 설계해 드릴 수 있어요.</div>
-    <input class="text-input" type="date" id="schedule-start-date" style="margin-bottom:16px" onchange="onStartDateChange(this.value)">
+    <div class="schedule-date-section">
+      <div class="schedule-date-label">관리 시작일을 입력해주세요</div>
+      <div class="schedule-date-desc">이번주부터 일주일씩 시작합니다. 고정 스케줄을 입력해주시면 더 정교한 루틴을 설계해 드릴 수 있어요.</div>
+      <div class="schedule-date-display" id="schedule-date-display" onclick="openDatePicker()"></div>
+      <input type="date" id="schedule-start-date" class="schedule-date-input-hidden" onchange="onStartDateChange(this.value)">
+    </div>
     <div class="schedule-list" id="schedule-list"></div>
     <button class="btn-primary" onclick="go(7)">다음</button>
   </div>
@@ -983,6 +1003,35 @@
     return info;
   }
 
+  function todayStr() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function formatKoreanDate(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
+  }
+
+  function updateDateDisplay(val) {
+    const disp = document.getElementById('schedule-date-display');
+    if (!disp) return;
+    const kr = formatKoreanDate(val);
+    const label = (val === todayStr()) ? '변화의 시작인 오늘은' : '변화의 시작일은';
+    disp.innerHTML = `${label}?<br><strong>${kr}</strong>입니다.<br>시작일을 변경해주세요.`;
+  }
+
+  function openDatePicker() {
+    const input = document.getElementById('schedule-start-date');
+    if (!input) return;
+    if (input.showPicker) { try { input.showPicker(); return; } catch (e) {} }
+    input.focus();
+    input.click();
+  }
+
   function onStartDateChange(val) {
     if (!val) return;
     DAY_INFO = buildDayInfo(val);
@@ -990,19 +1039,14 @@
       ? [{label:'기상', time:'09:00'}, {label:'귀가', time:'21:00'}]
       : [{label:'기상', time:'07:00'}, {label:'귀가', time:'18:00'}]
     );
+    updateDateDisplay(val);
     renderSchedule();
   }
 
   function initScheduleDate() {
     const input = document.getElementById('schedule-start-date');
     if (!input) return;
-    if (!input.value) {
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const dd = String(today.getDate()).padStart(2, '0');
-      input.value = `${yyyy}-${mm}-${dd}`;
-    }
+    if (!input.value) input.value = todayStr();
     onStartDateChange(input.value);
   }
 
