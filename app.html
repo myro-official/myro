@@ -249,8 +249,9 @@
     }
     .schedule-date-display:hover { border-color:rgba(232,237,242,0.5); }
     .schedule-date-display strong { color:var(--silver); font-weight:700; }
-    .schedule-date-input-hidden {
-      position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;
+    .schedule-date-input-overlay {
+      position:absolute; inset:0; width:100%; height:100%; opacity:0;
+      border:0; padding:0; margin:0; cursor:pointer; -webkit-appearance:none;
     }
     .privacy-box {
       background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px;
@@ -385,6 +386,19 @@
     .cat-status.soon { color:var(--gray); background:rgba(160,169,180,0.08); }
     .cat-feature { font-size:11px; font-weight:700; color:var(--silver); margin-top:5px; letter-spacing:0.3px; }
 
+    .completer-section { margin-bottom:22px; }
+    .completer-label { font-size:11px; letter-spacing:1px; color:var(--gray); text-transform:uppercase; margin-bottom:10px; }
+    .completer-list { display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; }
+    .completer-card {
+      flex:0 0 auto; width:200px; background:var(--card-bg); border:1.5px solid var(--border);
+      border-radius:14px; padding:14px 16px;
+    }
+    .completer-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+    .completer-name { font-size:13px; font-weight:700; color:var(--silver); }
+    .completer-badge { font-size:10px; color:var(--accent); background:rgba(232,237,242,0.1); padding:3px 8px; border-radius:20px; white-space:nowrap; }
+    .completer-tag { font-size:11px; color:var(--gray); margin-bottom:8px; }
+    .completer-quote { font-size:12px; color:var(--silver); line-height:1.55; }
+
     /* ── s9: 세부고민 ── */
     .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:4px; }
     .chip {
@@ -442,6 +456,12 @@
     .trait-bar-bg { flex:1; height:4px; background:rgba(232,237,242,0.1); border-radius:2px; }
     .trait-bar-fill { height:100%; background:var(--silver); border-radius:2px; }
     .trait-val { font-size:11px; color:var(--gray); min-width:32px; text-align:right; flex-shrink:0; }
+    .analyzing-wrap { display:flex; flex-direction:column; align-items:center; gap:10px; padding:14px 0; }
+    .analyzing-label { font-size:13px; color:var(--gray); }
+    .analyzing-bar-row { display:flex; align-items:center; gap:10px; width:100%; }
+    .analyzing-bar-bg { flex:1; height:4px; background:rgba(232,237,242,0.1); border-radius:2px; }
+    .analyzing-bar-fill { height:100%; background:var(--silver); border-radius:2px; transition:width 0.4s ease; }
+    .analyzing-pct { font-size:11px; color:var(--gray); min-width:32px; text-align:right; flex-shrink:0; }
 
     /* ── 피부타입 퀴즈 ── */
     .quiz-trigger {
@@ -753,8 +773,10 @@
     <div class="schedule-date-section">
       <div class="schedule-date-label">관리 시작일을 입력해주세요</div>
       <div class="schedule-date-desc">이번주부터 일주일씩 시작합니다. 고정 스케줄을 입력해주시면 더 정교한 루틴을 설계해 드릴 수 있어요.</div>
-      <div class="schedule-date-display" id="schedule-date-display" onclick="openDatePicker()"></div>
-      <input type="date" id="schedule-start-date" class="schedule-date-input-hidden" onchange="onStartDateChange(this.value)">
+      <div style="position:relative">
+        <div class="schedule-date-display" id="schedule-date-display" onclick="openDatePicker()"></div>
+        <input type="date" id="schedule-start-date" class="schedule-date-input-overlay" onchange="onStartDateChange(this.value)">
+      </div>
     </div>
     <div class="schedule-list" id="schedule-list"></div>
     <button class="btn-primary" onclick="go(7)">다음</button>
@@ -791,6 +813,35 @@
     <div class="label">Step 3 of 4</div>
     <div class="title">어디서부터<br>시작할까요?</div>
     <div class="subtitle">베타에서는 2개 카테고리를 먼저 선보여요.</div>
+    <div class="completer-section">
+      <div class="completer-label">먼저 완주한 마이러들</div>
+      <div class="completer-list">
+        <div class="completer-card">
+          <div class="completer-top">
+            <span class="completer-name">박★님</span>
+            <span class="completer-badge">✓ 루틴 완주</span>
+          </div>
+          <div class="completer-tag">피부 · 복합성 트러블</div>
+          <div class="completer-quote">클렌징부터 식단까지, 5일 루틴 습관을 끝까지 완주했어요.</div>
+        </div>
+        <div class="completer-card">
+          <div class="completer-top">
+            <span class="completer-name">엽★님</span>
+            <span class="completer-badge">✓ 루틴 완주</span>
+          </div>
+          <div class="completer-tag">피부 · 건성 여드름 · 운동선수</div>
+          <div class="completer-quote">"식단이나 피부 루틴을 대신 짜주고 챙겨주는 시스템이 큰 도움이 됐어요."</div>
+        </div>
+        <div class="completer-card">
+          <div class="completer-top">
+            <span class="completer-name">최★님</span>
+            <span class="completer-badge">✓ 루틴 완주</span>
+          </div>
+          <div class="completer-tag">피부 · 민감성·홍조 복합성</div>
+          <div class="completer-quote">"피부과와 미용실 가기 전 최고의 가이드였어요."</div>
+        </div>
+      </div>
+    </div>
     <div class="cat-list">
       <div class="cat-card" onclick="pickCat('skin',this)">
         <span class="cat-icon">🧴</span>
@@ -971,7 +1022,6 @@
     const n = state.name || '마이러';
     const hl = document.getElementById('welcome-headline');
     if (hl) hl.innerHTML = `마이로의 첫 마이러,<br>${n}님 환영합니다.`;
-    document.getElementById('loading-msg').textContent = `${n}님의 루틴을 설계 중입니다`;
   }
 
   function applyTitles() {
@@ -1022,7 +1072,7 @@
     if (!disp) return;
     const kr = formatKoreanDate(val);
     const label = (val === todayStr()) ? '변화의 시작인 오늘은' : '변화의 시작일은';
-    disp.innerHTML = `${label}?<br><strong>${kr}</strong>입니다.<br>시작일을 변경해주세요.`;
+    disp.innerHTML = `${label}?<br><strong>${kr}</strong>입니다.<br>터치하여 시작일을 설정해주세요.`;
   }
 
   function openDatePicker() {
@@ -1357,12 +1407,43 @@
     document.getElementById('hair-analyze-btn').disabled = false;
   }
 
+  let hairAnalysisTimers = [];
+
+  function setHairAnalysisPct(pct) {
+    const fill = document.getElementById('hair-analyzing-fill');
+    const txt = document.getElementById('hair-analyzing-pct');
+    if (fill) fill.style.width = pct + '%';
+    if (txt) txt.textContent = Math.round(pct) + '%';
+  }
+
+  function animateHairAnalysisProgress() {
+    hairAnalysisTimers.forEach(clearTimeout);
+    hairAnalysisTimers = [];
+    setHairAnalysisPct(0);
+    [[30, 400], [60, 1800], [85, 4000]].forEach(([pct, d]) => {
+      hairAnalysisTimers.push(setTimeout(() => setHairAnalysisPct(pct), d));
+    });
+  }
+
+  function finishHairAnalysisProgress() {
+    hairAnalysisTimers.forEach(clearTimeout);
+    hairAnalysisTimers = [];
+    setHairAnalysisPct(100);
+  }
+
   async function runHairAnalysis() {
     const resultEl = document.getElementById('hair-analysis-result');
     const btn = document.getElementById('hair-analyze-btn');
     btn.disabled = true;
     btn.textContent = '분석 중...';
-    resultEl.innerHTML = `<div class="img-analyzing"><div class="dot"></div><div class="dot"></div><div class="dot"></div>&nbsp;AI 정밀 분석 중...</div>`;
+    resultEl.innerHTML = `<div class="analyzing-wrap">
+      <div class="analyzing-label">얼굴 AI 정밀 분석 중...</div>
+      <div class="analyzing-bar-row">
+        <div class="analyzing-bar-bg"><div class="analyzing-bar-fill" id="hair-analyzing-fill" style="width:0%"></div></div>
+        <div class="analyzing-pct" id="hair-analyzing-pct">0%</div>
+      </div>
+    </div>`;
+    animateHairAnalysisProgress();
 
     const sendPhoto = async (file) => {
       if (!file) return null;
@@ -1378,6 +1459,7 @@
         sendPhoto(photoFiles.front),
         sendPhoto(photoFiles.side),
       ]);
+      finishHairAnalysisProgress();
       const primary = front || side;
       state.photoFrontUrl = front?._photoId ? `${BACKEND}/photo/${front._photoId}` : '';
       state.photoSideUrl = side?._photoId ? `${BACKEND}/photo/${side._photoId}` : '';
@@ -1386,6 +1468,7 @@
       btn.textContent = '✓ 분석 완료 — 재촬영하기';
       btn.disabled = false;
     } catch {
+      finishHairAnalysisProgress();
       state.hairAnalysis = null;
       resultEl.innerHTML = `<div class="img-skip-note" style="color:var(--gray);padding:12px 0">분석에 실패했어요. 고민 입력으로 계속합니다.</div>`;
       btn.textContent = '다시 시도하기';
@@ -1658,6 +1741,7 @@
   /* ── Analysis ── */
   async function startAnalysis() {
     collectSchedule();
+    document.getElementById('loading-msg').textContent = `${state.name || '마이러'}님의 루틴을 설계 중입니다`;
     go(10);
     animateSteps();
     let routine;
