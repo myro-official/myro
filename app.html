@@ -581,6 +581,11 @@
     .img-result-card.expanded .img-result-arrow { transform:rotate(90deg); }
     .img-result-detail { display:none; padding:0 16px 16px; }
     .img-result-card.expanded .img-result-detail { display:block; }
+    .face-preview-once-note {
+      margin-top:14px; padding:10px 14px; background:rgba(200,213,228,0.08);
+      border:1px solid rgba(200,213,228,0.2); border-radius:10px;
+      font-size:12px; font-weight:700; color:var(--accent); text-align:center;
+    }
     .traits-row { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
     .trait-item { display:flex; align-items:center; gap:10px; }
     .trait-name { font-size:11px; color:var(--gray); min-width:62px; flex-shrink:0; }
@@ -1118,7 +1123,7 @@
         </div>
       </div>
     </div>
-    <button class="face-preview-trigger" onclick="openFacePreview()">
+    <button class="face-preview-trigger" id="face-preview-trigger-btn" onclick="openFacePreview()">
       <div>AI 얼굴분석으로 현재 본인의 인상과 분위기,<br>어울리는 체형과 패션을 먼저 확인해보세요!</div>
       <div class="face-preview-trigger-cta">터치해서 시작하기 <span class="face-preview-trigger-arrow">→</span></div>
     </button>
@@ -1228,6 +1233,20 @@
   /* ── AI 얼굴분석 체험 (s8 진입 전 미리보기) ── */
   const facePreviewFiles = { front: null, side: null };
   let facePreviewTimers = [];
+  let lastFacePreviewResult = null;
+
+  function hasUsedFacePreview() {
+    return localStorage.getItem('myro_face_preview_used') === '1';
+  }
+
+  function markFacePreviewUsed() {
+    localStorage.setItem('myro_face_preview_used', '1');
+  }
+
+  function applyFacePreviewTriggerVisibility() {
+    const btn = document.getElementById('face-preview-trigger-btn');
+    if (btn) btn.style.display = hasUsedFacePreview() ? 'none' : '';
+  }
 
   function openFacePreview() {
     document.getElementById('face-preview-privacy-modal').classList.add('open');
@@ -1250,6 +1269,7 @@
     document.getElementById('face-preview-screen').classList.remove('open');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
+    applyFacePreviewTriggerVisibility();
   }
 
   function previewFacePreviewPhoto(slot, input) {
@@ -1318,10 +1338,12 @@
         sendPhoto(facePreviewFiles.side),
       ]);
       const data = front || side;
+      lastFacePreviewResult = data;
       finishFacePreviewProgress();
       renderFacePreviewResult(data);
-      btn.textContent = '✓ 분석 완료 — 다시 해보기';
-      btn.disabled = false;
+      markFacePreviewUsed();
+      btn.textContent = '✓ 분석 완료';
+      btn.style.display = 'none';
     } catch {
       finishFacePreviewProgress();
       resultEl.innerHTML = `<div class="img-skip-note" style="color:var(--gray);padding:12px 0">분석에 실패했어요. 다시 시도해주세요.</div>`;
@@ -1374,13 +1396,109 @@
           <span class="img-result-arrow">›</span>
         </div>
         <div class="img-result-detail">${s.body}</div>
-      </div>`).join('')}</div>`;
+      </div>`).join('')}</div>
+      <div class="face-preview-once-note">🔒 무료체험은 한 번만 가능해요!</div>
+      <button class="img-analyze-btn" style="margin-top:10px" onclick="saveFacePreviewCard()">📸 결과 다운로드하기</button>`;
 
     document.getElementById('face-preview-cta').style.display = 'block';
   }
 
   function toggleFaceResultCard(idx) {
     document.getElementById(`face-result-card-${idx}`)?.classList.toggle('expanded');
+  }
+
+  async function saveFacePreviewCard() {
+    const data = lastFacePreviewResult;
+    if (!data) return;
+    const items = data.items || {};
+    const hs = data.hairStyle || {};
+    const impression = data.impression?.description || '';
+    const fashionText = [items.summer, items.winter].filter(Boolean).join(' ');
+
+    const sections = [];
+    if (impression) sections.push(['인상 & 분위기', impression]);
+    if (hs.name) sections.push([`헤어스타일 추천 · ${hs.name}`, hs.reason || '']);
+    if (items.workout) sections.push(['어울리는 체형', items.workout]);
+    if (fashionText) sections.push(['어울리는 패션', fashionText]);
+    if (data.coaching) sections.push(['패션 분석 & 코칭', data.coaching]);
+
+    const W = 900;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const photoFile = facePreviewFiles.front || facePreviewFiles.side;
+    let img = null;
+    if (photoFile) {
+      img = await new Promise(resolve => {
+        const el = new Image();
+        el.onload = () => resolve(el);
+        el.onerror = () => resolve(null);
+        el.src = URL.createObjectURL(photoFile);
+      });
+    }
+    const photoH = img ? 420 : 0;
+
+    ctx.font = '13px "Noto Sans KR", sans-serif';
+    const wrapped = sections.map(([tag, text]) => {
+      const lines = wrapText(ctx, text, W - 96, '13px');
+      return { tag, lines, h: 26 + lines.length * 22 + 20 };
+    });
+    const bodyH = wrapped.reduce((sum, s) => sum + s.h, 0);
+
+    const H = 120 + (photoH ? photoH + 24 : 12) + bodyH + 60;
+    canvas.width = W; canvas.height = H;
+
+    ctx.fillStyle = '#0D1B2A';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 32px "Bebas Neue", sans-serif';
+    ctx.fillText('MYRO', 48, 60);
+    ctx.fillStyle = '#A0A9B4';
+    ctx.font = '13px "Noto Sans KR", sans-serif';
+    ctx.fillText('AI 얼굴분석 체험 결과', 48, 84);
+
+    ctx.strokeStyle = 'rgba(232,237,242,0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(48, 100); ctx.lineTo(W - 48, 100); ctx.stroke();
+
+    let y = 120;
+    if (img) {
+      const photoW = W - 96;
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(48, y, photoW, photoH, 12);
+      ctx.clip();
+      const scale = Math.max(photoW / img.width, photoH / img.height);
+      const sw = photoW / scale, sh = photoH / scale;
+      const sx = (img.width - sw) / 2, sy = (img.height - sh) / 2;
+      ctx.drawImage(img, sx, sy, sw, sh, 48, y, photoW, photoH);
+      ctx.restore();
+      y += photoH + 24;
+    }
+
+    wrapped.forEach(({ tag, lines }) => {
+      ctx.fillStyle = '#C8D5E4';
+      ctx.font = '11px "Noto Sans KR", sans-serif';
+      ctx.fillText(tag.toUpperCase(), 48, y);
+      y += 24;
+      ctx.fillStyle = '#E8EDF2';
+      ctx.font = '13px "Noto Sans KR", sans-serif';
+      lines.forEach(line => { ctx.fillText(line, 48, y); y += 22; });
+      y += 20;
+    });
+
+    y = H - 34;
+    ctx.strokeStyle = 'rgba(232,237,242,0.1)';
+    ctx.beginPath(); ctx.moveTo(48, y - 10); ctx.lineTo(W - 48, y - 10); ctx.stroke();
+    ctx.fillStyle = '#A0A9B4';
+    ctx.font = '11px "Noto Sans KR", sans-serif';
+    ctx.fillText('MYRO — 남자의 자기관리.  myro-official.github.io/myro/app.html', 48, y + 6);
+
+    const link = document.createElement('a');
+    link.download = 'MYRO_AI얼굴분석_체험결과.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
   }
 
   function openCommunityModal() {
@@ -3122,6 +3240,7 @@
     `;
     document.body.appendChild(resumeBanner);
   }
+  applyFacePreviewTriggerVisibility();
   go(0);
 </script>
 </body>
