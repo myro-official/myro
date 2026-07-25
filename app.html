@@ -158,6 +158,107 @@
     }
     .hero-cta-wrap { max-width:280px; margin:24px auto 0; }
     #s0 .btn-primary { animation-delay:0.86s; }
+    .community-btn {
+      width:100%; margin-top:10px; padding:13px; background:none; border:1.5px solid var(--border);
+      border-radius:14px; color:var(--gray); font-size:12px; font-weight:700; letter-spacing:1px;
+      font-family:inherit; cursor:pointer; transition:all 0.2s;
+    }
+    .community-btn:hover { border-color:rgba(232,237,242,0.4); color:var(--silver); }
+    .community-modal-overlay {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999;
+      align-items:center; justify-content:center; padding:24px; overscroll-behavior:contain;
+    }
+    .community-modal-overlay.open { display:flex; }
+    .community-modal-card {
+      position:relative; width:100%; max-width:340px; background:var(--card-bg);
+      border:1.5px solid var(--border); border-radius:18px; padding:26px 22px 22px;
+    }
+    .community-modal-close {
+      position:absolute; top:14px; right:14px; background:none; border:none; color:var(--gray);
+      font-size:16px; cursor:pointer; padding:4px;
+    }
+    .community-modal-title { font-size:17px; font-weight:800; color:var(--silver); margin-bottom:18px; }
+    .community-modal-section { margin-bottom:16px; }
+    .community-modal-role { font-size:11px; letter-spacing:1px; color:var(--accent); text-transform:uppercase; margin-bottom:5px; }
+    .community-modal-desc { font-size:13px; color:var(--silver); line-height:1.6; }
+    .community-modal-note { font-size:11.5px; color:var(--gray); line-height:1.55; border-top:1px solid var(--border); padding-top:14px; margin-top:4px; }
+    .community-modal-cta {
+      width:100%; margin-top:20px; padding:13px; background:var(--silver); color:#0A0B0D; border:none;
+      border-radius:14px; font-size:13px; font-weight:800; cursor:pointer;
+    }
+    .community-board-screen {
+      display:none; flex-direction:column; position:fixed; inset:0; background:var(--bg); z-index:10000;
+      overflow-y:auto; overscroll-behavior:contain;
+    }
+    .community-board-screen.open { display:flex; }
+    .community-board-header {
+      display:flex; align-items:center; justify-content:space-between; padding:20px; flex-shrink:0;
+      width:100%; max-width:650px; margin:0 auto; box-sizing:border-box;
+    }
+    .community-board-header-title { font-size:13px; font-weight:800; letter-spacing:1px; color:var(--silver); }
+    .community-board-back, .community-board-x {
+      background:none; border:none; color:var(--gray); font-size:16px; cursor:pointer; padding:6px;
+    }
+
+    .community-hero {
+      position:relative; height:230px; flex-shrink:0; overflow:hidden;
+      width:100%; max-width:650px; margin:0 auto;
+    }
+    .community-hero-img { width:100%; height:100%; object-fit:cover; display:block; }
+    .community-hero-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(13,27,42,0.05) 0%, rgba(13,27,42,0.35) 55%, var(--bg) 100%);
+    }
+    .community-hero-back, .community-hero-close {
+      position:absolute; top:16px; width:32px; height:32px; border-radius:50%; border:none; cursor:pointer;
+      background:rgba(13,27,42,0.45); backdrop-filter:blur(6px); color:#fff; font-size:14px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .community-hero-back { left:16px; }
+    .community-hero-close { right:16px; }
+    .community-hero-text { position:absolute; left:20px; right:20px; bottom:18px; }
+    .community-hero-label {
+      font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.65); margin-bottom:8px;
+    }
+    .community-hero-headline { font-size:19px; font-weight:800; color:#fff; line-height:1.42; letter-spacing:-0.2px; }
+
+    .community-board-body { padding:22px 20px 28px; width:100%; max-width:650px; margin:0 auto; box-sizing:border-box; }
+    .board-section-row {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:17px 2px; border-bottom:1px solid var(--border); cursor:pointer; transition:opacity 0.15s;
+    }
+    .board-section-row:last-child { border-bottom:none; }
+    .board-section-row:active { opacity:0.6; }
+    .board-section-name { font-size:14.5px; font-weight:700; color:var(--silver); margin-bottom:4px; }
+    .board-section-desc { font-size:12px; color:var(--gray); }
+    .board-section-arrow { font-size:17px; color:var(--gray); flex-shrink:0; }
+
+    .board-detail-body { padding:0 20px 24px; width:100%; max-width:650px; margin:0 auto; box-sizing:border-box; flex:1; display:flex; flex-direction:column; }
+    .board-example-label {
+      font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:10px;
+    }
+    .board-example-card {
+      background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px 18px; margin-bottom:20px;
+    }
+    .board-example-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .board-example-avatar {
+      width:30px; height:30px; border-radius:50%; background:rgba(232,237,242,0.1); color:var(--silver);
+      font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    }
+    .board-example-name { font-size:13px; font-weight:700; color:var(--silver); }
+    .board-example-text { font-size:13px; color:var(--silver); line-height:1.6; }
+
+    .board-skeleton-wrap { position:relative; margin-top:4px; }
+    .board-skeleton-row {
+      height:60px; border-radius:14px; background:rgba(232,237,242,0.05); border:1px solid var(--border);
+      margin-bottom:10px; filter:blur(3px); opacity:0.55;
+    }
+    .board-locked-badge {
+      position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center; padding:24px;
+    }
+    .board-locked-title { font-size:14.5px; font-weight:800; color:var(--silver); margin-bottom:6px; }
+    .board-locked-desc { font-size:12.5px; color:var(--gray); line-height:1.6; max-width:260px; }
     .brand-headline {
       font-family:'Bebas Neue',sans-serif; font-size:56px; font-weight:700; letter-spacing:4px;
       line-height:1.05; margin-bottom:14px; text-align:center;
@@ -398,6 +499,20 @@
     .completer-badge { font-size:10px; color:var(--accent); background:rgba(232,237,242,0.1); padding:3px 8px; border-radius:20px; white-space:nowrap; }
     .completer-tag { font-size:11px; color:var(--gray); margin-bottom:8px; }
     .completer-quote { font-size:12px; color:var(--silver); line-height:1.55; }
+    .completer-more-card {
+      flex:0 0 auto; width:150px; background:rgba(232,237,242,0.06); border:1.5px dashed var(--border);
+      border-radius:14px; padding:14px 16px; display:flex; flex-direction:column; align-items:center;
+      justify-content:center; text-align:center;
+    }
+    .completer-more-num { font-size:24px; font-weight:800; color:var(--silver); line-height:1; margin-bottom:6px; }
+    .completer-more-text { font-size:11.5px; color:var(--gray); line-height:1.5; }
+    .face-preview-trigger {
+      width:100%; margin-bottom:22px; padding:16px 18px; background:rgba(200,213,228,0.08);
+      border:1.5px solid rgba(200,213,228,0.28); border-radius:14px; color:var(--silver);
+      font-size:13px; font-weight:700; line-height:1.55; text-align:left; cursor:pointer;
+      font-family:inherit; transition:border-color 0.2s;
+    }
+    .face-preview-trigger:hover { border-color:rgba(200,213,228,0.5); }
 
     /* ── s9: 세부고민 ── */
     .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:4px; }
@@ -664,7 +779,132 @@
       <div style="text-align:center;margin-top:28px;opacity:0;animation:heroFadeUp 0.7s ease forwards;animation-delay:0.8s"><span class="welcome-badge">1ST MYRER</span></div>
       <div class="hero-cta-wrap">
         <button class="btn-primary" onclick="go(4)">시작하기</button>
+        <button class="community-btn" onclick="openCommunityModal()">MYRO COMMUNITY</button>
       </div>
+    </div>
+  </div>
+
+  <div class="community-modal-overlay" id="community-modal">
+    <div class="community-modal-card">
+      <button class="community-modal-close" onclick="closeCommunityModal()">✕</button>
+      <div class="community-modal-title">마이로 커뮤니티란?</div>
+      <div class="community-modal-section">
+        <div class="community-modal-role">피니셔 마이러 · 멘토</div>
+        <div class="community-modal-desc">루틴을 완주하면 자동으로 커뮤니티에 가입돼요. 피니셔 마이러는 멘토가 되어 자신의 경험을 나눌 수 있어요.</div>
+      </div>
+      <div class="community-modal-section">
+        <div class="community-modal-role">스타터 마이러 · 멘티</div>
+        <div class="community-modal-desc">완주를 목표로 하는 스타터 마이러는 멘티가 되어, 먼저 완주한 피니셔 마이러 멘토에게 질문을 요청하고 답을 받을 수 있어요.</div>
+      </div>
+      <button class="community-modal-cta" onclick="openBoardList()">게시판 둘러보기</button>
+    </div>
+
+    <div class="community-board-screen" id="community-board-list">
+      <div class="community-hero">
+        <img src="community-hero.jpg" alt="" class="community-hero-img">
+        <div class="community-hero-overlay"></div>
+        <button class="community-hero-back" onclick="backToCommunityIntro()">←</button>
+        <button class="community-hero-close" onclick="closeCommunityModal()">✕</button>
+        <div class="community-hero-text">
+          <div class="community-hero-label">Finish first, lead next.</div>
+          <div class="community-hero-headline">완주는 끝이 아니라 기준이 됩니다.<br>먼저 해낸 사람이 다음 사람의 출발선이 됩니다.</div>
+        </div>
+      </div>
+      <div class="community-board-body">
+        <div class="board-section-row" onclick="openBoardDetail('review')">
+          <div>
+            <div class="board-section-name">완주 후기</div>
+            <div class="board-section-desc">먼저 완주한 피니셔 마이러들의 생생한 후기</div>
+          </div>
+          <span class="board-section-arrow">›</span>
+        </div>
+        <div class="board-section-row" onclick="openBoardDetail('free')">
+          <div>
+            <div class="board-section-name">그루밍 자유 게시판</div>
+            <div class="board-section-desc">고민, 잡담 편하게 나누는 공간</div>
+          </div>
+          <span class="board-section-arrow">›</span>
+        </div>
+        <div class="board-section-row" onclick="openBoardDetail('qna')">
+          <div>
+            <div class="board-section-name">그루밍 Q&amp;A</div>
+            <div class="board-section-desc">피니셔 마이러 멘토에게 궁금한 점 질문하기</div>
+          </div>
+          <span class="board-section-arrow">›</span>
+        </div>
+        <div class="board-section-row" onclick="openBoardDetail('tips')">
+          <div>
+            <div class="board-section-name">전문가 데일리 꿀팁</div>
+            <div class="board-section-desc">전문가가 매일 전하는 관리 정보</div>
+          </div>
+          <span class="board-section-arrow">›</span>
+        </div>
+        <div class="board-section-row" onclick="openBoardDetail('event')">
+          <div>
+            <div class="board-section-name">오프라인 피니셔 이벤트</div>
+            <div class="board-section-desc">피니셔 마이러만 초대되는 오프라인 모임 안내</div>
+          </div>
+          <span class="board-section-arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="community-board-screen" id="community-board-detail">
+      <div class="community-board-header">
+        <button class="community-board-back" onclick="backToBoardList()">←</button>
+        <div class="community-board-header-title" id="board-detail-title-text">게시판</div>
+        <button class="community-board-x" onclick="closeCommunityModal()">✕</button>
+      </div>
+      <div class="board-detail-body">
+        <div class="board-example-label">예시 미리보기</div>
+        <div class="board-example-card">
+          <div class="board-example-top">
+            <div class="board-example-avatar" id="board-example-avatar">박</div>
+            <div class="board-example-name" id="board-example-name">박★님</div>
+          </div>
+          <div class="board-example-text" id="board-example-text">5일 루틴을 완주했더니 아침 준비가 훨씬 빨라졌어요.</div>
+        </div>
+        <div class="board-skeleton-wrap">
+          <div class="board-skeleton-row"></div>
+          <div class="board-skeleton-row"></div>
+          <div class="board-locked-badge">
+            <div class="board-locked-title">정식 출시 준비중이에요</div>
+            <div class="board-locked-desc">게시판 구현을 진행하고 있어요.<br>완주하면 가장 먼저 알려드릴게요.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="community-board-screen" id="face-preview-screen">
+    <div class="community-board-header">
+      <button class="community-board-back" onclick="closeFacePreview()">←</button>
+      <div class="community-board-header-title">AI 얼굴분석 체험</div>
+      <button class="community-board-x" onclick="closeFacePreview()">✕</button>
+    </div>
+    <div class="board-detail-body" style="flex:none">
+      <div class="img-analysis-box" style="margin-top:0">
+        <div class="img-analysis-desc">앞모습·옆모습 사진이면 인상·헤어스타일·체형·패션까지 가볍게 체험해볼 수 있어요.</div>
+        <div class="img-upload-row">
+          <div class="img-upload-slot">
+            <div class="img-slot-label">앞모습</div>
+            <label class="img-upload-label" id="face-preview-slot-front" for="face-preview-front-input">
+              <span>🖼</span><span>업로드</span>
+              <input type="file" id="face-preview-front-input" accept="image/*" style="display:none" onchange="previewFacePreviewPhoto('front',this)">
+            </label>
+          </div>
+          <div class="img-upload-slot">
+            <div class="img-slot-label">옆모습</div>
+            <label class="img-upload-label" id="face-preview-slot-side" for="face-preview-side-input">
+              <span>🖼</span><span>업로드</span>
+              <input type="file" id="face-preview-side-input" accept="image/*" style="display:none" onchange="previewFacePreviewPhoto('side',this)">
+            </label>
+          </div>
+        </div>
+        <button class="img-analyze-btn" id="face-preview-analyze-btn" onclick="runFacePreviewAnalysis()" disabled>AI 얼굴분석 시작하기</button>
+        <div id="face-preview-result"></div>
+      </div>
+      <button class="community-modal-cta" id="face-preview-cta" style="display:none" onclick="closeFacePreview()">루틴 고민 선택하러 가기</button>
     </div>
   </div>
 
@@ -775,7 +1015,7 @@
       <div class="schedule-date-desc">이번주부터 일주일씩 시작합니다. 고정 스케줄을 입력해주시면 더 정교한 루틴을 설계해 드릴 수 있어요.</div>
       <div style="position:relative">
         <div class="schedule-date-display" id="schedule-date-display" onclick="openDatePicker()"></div>
-        <input type="date" id="schedule-start-date" class="schedule-date-input-overlay" onchange="onStartDateChange(this.value)">
+        <input type="date" id="schedule-start-date" class="schedule-date-input-overlay" onclick="openDatePicker()" onchange="onStartDateChange(this.value)">
       </div>
     </div>
     <div class="schedule-list" id="schedule-list"></div>
@@ -814,7 +1054,7 @@
     <div class="title">어디서부터<br>시작할까요?</div>
     <div class="subtitle">베타에서는 2개 카테고리를 먼저 선보여요.</div>
     <div class="completer-section">
-      <div class="completer-label">먼저 완주한 마이러들</div>
+      <div class="completer-label">먼저 완주한 피니셔 마이러들</div>
       <div class="completer-list">
         <div class="completer-card">
           <div class="completer-top">
@@ -840,8 +1080,13 @@
           <div class="completer-tag">피부 · 민감성·홍조 복합성</div>
           <div class="completer-quote">"피부과와 미용실 가기 전 최고의 가이드였어요."</div>
         </div>
+        <div class="completer-more-card">
+          <div class="completer-more-num">35+</div>
+          <div class="completer-more-text">현재 35명 이상의 남성들이 변화를 시작하고 있어요</div>
+        </div>
       </div>
     </div>
+    <button class="face-preview-trigger" onclick="openFacePreview()">AI 얼굴분석으로 현재 본인의 인상과 분위기,<br>어울리는 체형과 패션을 먼저 확인해보세요!</button>
     <div class="cat-list">
       <div class="cat-card" onclick="pickCat('skin',this)">
         <span class="cat-icon">🧴</span>
@@ -943,6 +1188,185 @@
         else if (i === step) d.classList.add('active');
       }
     }
+  }
+
+  /* ── AI 얼굴분석 체험 (s8 진입 전 미리보기) ── */
+  const facePreviewFiles = { front: null, side: null };
+  let facePreviewTimers = [];
+
+  function openFacePreview() {
+    document.getElementById('face-preview-screen').classList.add('open');
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeFacePreview() {
+    document.getElementById('face-preview-screen').classList.remove('open');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
+  function previewFacePreviewPhoto(slot, input) {
+    if (!input.files?.[0]) return;
+    facePreviewFiles[slot] = input.files[0];
+    const slotEl = document.getElementById(`face-preview-slot-${slot}`);
+    const url = URL.createObjectURL(input.files[0]);
+    slotEl.querySelectorAll('.img-preview').forEach(e => e.remove());
+    const img = document.createElement('img');
+    img.className = 'img-preview';
+    img.src = url;
+    slotEl.appendChild(img);
+    slotEl.classList.add('has-photo');
+    document.getElementById('face-preview-analyze-btn').disabled = false;
+  }
+
+  function setFacePreviewPct(pct) {
+    const fill = document.getElementById('face-preview-fill');
+    const txt = document.getElementById('face-preview-pct');
+    if (fill) fill.style.width = pct + '%';
+    if (txt) txt.textContent = Math.round(pct) + '%';
+  }
+
+  function animateFacePreviewProgress() {
+    facePreviewTimers.forEach(clearTimeout);
+    facePreviewTimers = [];
+    setFacePreviewPct(0);
+    [[30, 400], [60, 1800], [85, 4000]].forEach(([pct, d]) => {
+      facePreviewTimers.push(setTimeout(() => setFacePreviewPct(pct), d));
+    });
+  }
+
+  function finishFacePreviewProgress() {
+    facePreviewTimers.forEach(clearTimeout);
+    facePreviewTimers = [];
+    setFacePreviewPct(100);
+  }
+
+  async function runFacePreviewAnalysis() {
+    if (!facePreviewFiles.front && !facePreviewFiles.side) return;
+    const resultEl = document.getElementById('face-preview-result');
+    const btn = document.getElementById('face-preview-analyze-btn');
+    btn.disabled = true;
+    btn.textContent = '분석 중...';
+    resultEl.innerHTML = `<div class="analyzing-wrap">
+      <div class="analyzing-label">얼굴 AI 정밀 분석 중...</div>
+      <div class="analyzing-bar-row">
+        <div class="analyzing-bar-bg"><div class="analyzing-bar-fill" id="face-preview-fill" style="width:0%"></div></div>
+        <div class="analyzing-pct" id="face-preview-pct">0%</div>
+      </div>
+    </div>`;
+    animateFacePreviewProgress();
+
+    const sendPhoto = async (file) => {
+      if (!file) return null;
+      const form = new FormData();
+      form.append('photo', file);
+      const res = await fetch(`${BACKEND}/analyze`, { method: 'POST', body: form });
+      if (!res.ok) throw new Error('failed');
+      return res.json();
+    };
+
+    try {
+      const [front, side] = await Promise.all([
+        sendPhoto(facePreviewFiles.front),
+        sendPhoto(facePreviewFiles.side),
+      ]);
+      const data = front || side;
+      finishFacePreviewProgress();
+      renderFacePreviewResult(data);
+      btn.textContent = '✓ 분석 완료 — 다시 해보기';
+      btn.disabled = false;
+    } catch {
+      finishFacePreviewProgress();
+      resultEl.innerHTML = `<div class="img-skip-note" style="color:var(--gray);padding:12px 0">분석에 실패했어요. 다시 시도해주세요.</div>`;
+      btn.textContent = '다시 시도하기';
+      btn.disabled = false;
+    }
+  }
+
+  function renderFacePreviewResult(data) {
+    const resultEl = document.getElementById('face-preview-result');
+    const items = data.items || {};
+    const hs = data.hairStyle || {};
+    const impression = data.impression?.description || '';
+    const fashionText = [items.summer, items.winter].filter(Boolean).join(' ');
+
+    resultEl.innerHTML = `<div class="img-result-wrap">
+      ${impression ? `<div class="img-result-card">
+        <div class="img-result-tag">인상 &amp; 분위기</div>
+        <div class="img-result-text">${impression}</div>
+      </div>` : ''}
+      ${hs.name ? `<div class="img-result-card">
+        <div class="img-result-tag">헤어스타일 분석 · 추천</div>
+        <div style="font-size:15px;font-weight:700;color:var(--silver);margin:4px 0 8px">${hs.name}</div>
+        <div class="img-result-text">${hs.reason || ''}</div>
+      </div>` : ''}
+      ${items.workout ? `<div class="img-result-card">
+        <div class="img-result-tag">어울리는 체형</div>
+        <div class="img-result-text">${items.workout}</div>
+      </div>` : ''}
+      ${fashionText ? `<div class="img-result-card">
+        <div class="img-result-tag">어울리는 패션</div>
+        <div class="img-result-text">${fashionText}</div>
+      </div>` : ''}
+      ${data.coaching ? `<div class="img-result-card" style="border-color:rgba(232,237,242,0.2)">
+        <div class="img-result-tag">지금 입고 있는 패션 분석 &amp; 코칭</div>
+        <div class="img-result-text">${data.coaching}</div>
+      </div>` : ''}
+    </div>`;
+
+    document.getElementById('face-preview-cta').style.display = 'block';
+  }
+
+  function openCommunityModal() {
+    document.getElementById('community-modal').classList.add('open');
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCommunityModal() {
+    document.getElementById('community-modal').classList.remove('open');
+    document.getElementById('community-board-list').classList.remove('open');
+    document.getElementById('community-board-detail').classList.remove('open');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
+  function openBoardList() {
+    document.getElementById('community-board-list').classList.add('open');
+  }
+
+  function backToCommunityIntro() {
+    document.getElementById('community-board-list').classList.remove('open');
+  }
+
+  const BOARD_INFO = {
+    review: '완주 후기',
+    free: '그루밍 자유 게시판',
+    qna: '그루밍 Q&A',
+    tips: '전문가 데일리 꿀팁',
+    event: '오프라인 완주자 이벤트',
+  };
+
+  const BOARD_EXAMPLE = {
+    review: { avatar: '박', name: '박★님', text: '5일 루틴을 완주했더니 아침 준비가 훨씬 빨라졌어요. 습관이 됐다는 게 실감나네요.' },
+    free:   { avatar: '최', name: '최★님', text: '세안 후에 당김이 좀 심한데, 다들 어떤 크림 쓰세요?' },
+    qna:    { avatar: '엽', name: '엽★님 · 멘토', text: '건성 트러블은 장벽 복구가 먼저예요. 저도 그렇게 좋아졌어요.' },
+    tips:   { avatar: 'M', name: 'MYRO 전문가', text: '자외선 차단제는 루틴 마지막 단계에 발라야 효과가 유지돼요.' },
+    event:  { avatar: 'M', name: 'MYRO', text: '8월 완주자 오프라인 모임 신청이 곧 시작돼요.' },
+  };
+
+  function openBoardDetail(key) {
+    document.getElementById('board-detail-title-text').textContent = BOARD_INFO[key] || '게시판';
+    const ex = BOARD_EXAMPLE[key] || BOARD_EXAMPLE.review;
+    document.getElementById('board-example-avatar').textContent = ex.avatar;
+    document.getElementById('board-example-name').textContent = ex.name;
+    document.getElementById('board-example-text').textContent = ex.text;
+    document.getElementById('community-board-detail').classList.add('open');
+  }
+
+  function backToBoardList() {
+    document.getElementById('community-board-detail').classList.remove('open');
   }
 
   function go(n) {
@@ -1080,7 +1504,6 @@
     if (!input) return;
     if (input.showPicker) { try { input.showPicker(); return; } catch (e) {} }
     input.focus();
-    input.click();
   }
 
   function onStartDateChange(val) {
