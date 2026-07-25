@@ -565,6 +565,15 @@
     }
     .img-result-tag { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
     .img-result-text { font-size:13px; color:var(--silver); line-height:1.75; }
+    .img-result-card.collapsible { padding:0; }
+    .img-result-cover { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px; cursor:pointer; }
+    .img-result-cover-text { flex:1; min-width:0; }
+    .img-result-cover-text .img-result-tag { margin-bottom:3px; }
+    .img-result-hook { font-size:13.5px; font-weight:700; color:var(--silver); line-height:1.4; }
+    .img-result-arrow { font-size:18px; color:var(--gray); flex-shrink:0; transition:transform 0.25s ease; }
+    .img-result-card.expanded .img-result-arrow { transform:rotate(90deg); }
+    .img-result-detail { display:none; padding:0 16px 16px; }
+    .img-result-card.expanded .img-result-detail { display:block; }
     .traits-row { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
     .trait-item { display:flex; align-items:center; gap:10px; }
     .trait-name { font-size:11px; color:var(--gray); min-width:62px; flex-shrink:0; }
@@ -873,6 +882,22 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="community-modal-overlay" id="face-preview-privacy-modal">
+    <div class="community-modal-card">
+      <button class="community-modal-close" onclick="closeFacePreviewPrivacy()">✕</button>
+      <div class="community-modal-title">시작 전에 확인해주세요</div>
+      <div class="community-modal-section">
+        <div class="community-modal-desc">업로드하신 사진은 AI 얼굴분석 체험 용도로만 그 순간 즉시 처리되며, 저희는 얼굴 분석 외에 사진 저장, 데이터 저장·활용을 일체 진행하지 않아요.</div>
+      </div>
+      <div class="community-modal-note">
+        · 분석이 끝나면 사진은 서버에 남기지 않고 즉시 폐기돼요.<br>
+        · 분석 결과 외 어떠한 개인정보도 별도로 수집·저장하지 않아요.<br>
+        · 제3자에게 사진이나 분석 결과를 제공하지 않아요.
+      </div>
+      <button class="community-modal-cta" onclick="confirmFacePreviewPrivacy()">확인했어요, 체험 진행할게요</button>
     </div>
   </div>
 
@@ -1195,9 +1220,20 @@
   let facePreviewTimers = [];
 
   function openFacePreview() {
-    document.getElementById('face-preview-screen').classList.add('open');
+    document.getElementById('face-preview-privacy-modal').classList.add('open');
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
+  }
+
+  function closeFacePreviewPrivacy() {
+    document.getElementById('face-preview-privacy-modal').classList.remove('open');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
+  function confirmFacePreviewPrivacy() {
+    document.getElementById('face-preview-privacy-modal').classList.remove('open');
+    document.getElementById('face-preview-screen').classList.add('open');
   }
 
   function closeFacePreview() {
@@ -1291,31 +1327,50 @@
     const impression = data.impression?.description || '';
     const fashionText = [items.summer, items.winter].filter(Boolean).join(' ');
 
-    resultEl.innerHTML = `<div class="img-result-wrap">
-      ${impression ? `<div class="img-result-card">
-        <div class="img-result-tag">인상 &amp; 분위기</div>
-        <div class="img-result-text">${impression}</div>
-      </div>` : ''}
-      ${hs.name ? `<div class="img-result-card">
-        <div class="img-result-tag">헤어스타일 분석 · 추천</div>
-        <div style="font-size:15px;font-weight:700;color:var(--silver);margin:4px 0 8px">${hs.name}</div>
-        <div class="img-result-text">${hs.reason || ''}</div>
-      </div>` : ''}
-      ${items.workout ? `<div class="img-result-card">
-        <div class="img-result-tag">어울리는 체형</div>
-        <div class="img-result-text">${items.workout}</div>
-      </div>` : ''}
-      ${fashionText ? `<div class="img-result-card">
-        <div class="img-result-tag">어울리는 패션</div>
-        <div class="img-result-text">${fashionText}</div>
-      </div>` : ''}
-      ${data.coaching ? `<div class="img-result-card" style="border-color:rgba(232,237,242,0.2)">
-        <div class="img-result-tag">지금 입고 있는 패션 분석 &amp; 코칭</div>
-        <div class="img-result-text">${data.coaching}</div>
-      </div>` : ''}
-    </div>`;
+    const sections = [];
+    if (impression) sections.push({
+      tag: '인상 &amp; 분위기',
+      hook: '당신의 첫인상, 지금 어떻게 보이고 있을까요?',
+      body: `<div class="img-result-text">${impression}</div>`
+    });
+    if (hs.name) sections.push({
+      tag: '헤어스타일 분석 · 추천',
+      hook: '지금 헤어스타일, 그대로 괜찮을까요?',
+      body: `<div style="font-size:15px;font-weight:700;color:var(--silver);margin:4px 0 8px">${hs.name}</div><div class="img-result-text">${hs.reason || ''}</div>`
+    });
+    if (items.workout) sections.push({
+      tag: '어울리는 체형',
+      hook: '당신에게 맞는 체형 관리법, 따로 있어요',
+      body: `<div class="img-result-text">${items.workout}</div>`
+    });
+    if (fashionText) sections.push({
+      tag: '어울리는 패션',
+      hook: '당신에게 어울리는 스타일, 따로 있어요',
+      body: `<div class="img-result-text">${fashionText}</div>`
+    });
+    if (data.coaching) sections.push({
+      tag: '지금 입고 있는 패션 분석 &amp; 코칭',
+      hook: '지금 스타일, 전문가는 이렇게 봐요',
+      body: `<div class="img-result-text">${data.coaching}</div>`
+    });
+
+    resultEl.innerHTML = `<div class="img-result-wrap">${sections.map((s, idx) => `
+      <div class="img-result-card collapsible" id="face-result-card-${idx}">
+        <div class="img-result-cover" onclick="toggleFaceResultCard(${idx})">
+          <div class="img-result-cover-text">
+            <div class="img-result-tag">${s.tag}</div>
+            <div class="img-result-hook">${s.hook}</div>
+          </div>
+          <span class="img-result-arrow">›</span>
+        </div>
+        <div class="img-result-detail">${s.body}</div>
+      </div>`).join('')}</div>`;
 
     document.getElementById('face-preview-cta').style.display = 'block';
+  }
+
+  function toggleFaceResultCard(idx) {
+    document.getElementById(`face-result-card-${idx}`)?.classList.toggle('expanded');
   }
 
   function openCommunityModal() {
