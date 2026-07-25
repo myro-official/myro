@@ -511,8 +511,15 @@
       border:1.5px solid rgba(200,213,228,0.28); border-radius:14px; color:var(--silver);
       font-size:13px; font-weight:700; line-height:1.55; text-align:left; cursor:pointer;
       font-family:inherit; transition:border-color 0.2s;
+      display:flex; flex-direction:column; gap:10px;
     }
     .face-preview-trigger:hover { border-color:rgba(200,213,228,0.5); }
+    .face-preview-trigger-cta {
+      display:flex; align-items:center; gap:5px; font-size:11.5px; font-weight:800;
+      letter-spacing:0.5px; color:var(--accent);
+    }
+    .face-preview-trigger-arrow { transition:transform 0.2s; }
+    .face-preview-trigger:hover .face-preview-trigger-arrow { transform:translateX(3px); }
 
     /* ── s9: 세부고민 ── */
     .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:4px; }
@@ -1111,7 +1118,10 @@
         </div>
       </div>
     </div>
-    <button class="face-preview-trigger" onclick="openFacePreview()">AI 얼굴분석으로 현재 본인의 인상과 분위기,<br>어울리는 체형과 패션을 먼저 확인해보세요!</button>
+    <button class="face-preview-trigger" onclick="openFacePreview()">
+      <div>AI 얼굴분석으로 현재 본인의 인상과 분위기,<br>어울리는 체형과 패션을 먼저 확인해보세요!</div>
+      <div class="face-preview-trigger-cta">터치해서 시작하기 <span class="face-preview-trigger-arrow">→</span></div>
+    </button>
     <div class="cat-list">
       <div class="cat-card" onclick="pickCat('skin',this)">
         <span class="cat-icon">🧴</span>
