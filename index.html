@@ -143,7 +143,14 @@
         @keyframes heroContentIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
         .hero-title { font-family: 'Outfit', sans-serif; font-size: clamp(0.75rem, 3.8vw, 1.3rem); font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 1.5rem; color: var(--text-primary); text-shadow: 0 2px 10px rgba(0,0,0,0.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .hero-copy { font-size: clamp(0.9rem, 3.5vw, 1.15rem); font-weight: 300; color: var(--text-muted); margin-bottom: 4rem; letter-spacing: 0.02em; text-shadow: 0 2px 10px rgba(0,0,0,0.5); line-height: 2; }
-        .hero-cta { display: inline-block; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; color: var(--bg-primary); background: var(--text-primary); padding: 1.3rem 3.5rem; text-decoration: none; letter-spacing: 0.15em; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+        .hero-cta {
+            display: inline-block; font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+            color: var(--bg-primary); background: var(--text-primary);
+            padding: 1.1rem 3rem; border-radius: 999px; text-decoration: none; letter-spacing: 0.12em;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+        }
+        .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.35); }
 
         /* ── 추구미란? 섹션 ── */
         .chugumi-intro {
@@ -1420,6 +1427,7 @@
             <h2 class="section-title reveal" style="margin-bottom: 1.5rem;"><span class="cta-text-bg" style="font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; padding: 1rem 2rem;">Define Your Mirror.</span></h2>
             <div class="reveal reveal-delay-1" style="margin-bottom: 3rem; text-align: center;">
                 <p><span class="cta-text-bg" style="font-size: 0.9rem; font-weight: 300; line-height: 1.9; opacity: 0.9;">자기관리, 더 이상 미루지 마세요.<br>지금 시작하면 당신이 MYRO의 첫 번째 주인공입니다.</span></p>
+                <p style="margin-top: 1.2rem;"><span class="cta-text-bg" style="font-size: 0.82rem; font-weight: 300; line-height: 1.9; opacity: 0.75;">완벽한 개인화를 위해, 피부·행동·운동 과학 논문과<br>축적된 루틴 데이터를 기반으로 구축한<br><strong style="font-weight: 700; opacity: 1;">자체 데이터베이스와 AI 엔진</strong>이<br>당신만을 위한 최적의 코칭을 설계합니다.</span></p>
             </div>
 
             <div class="reveal reveal-delay-2" style="text-align: center;">
