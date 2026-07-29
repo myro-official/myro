@@ -481,6 +481,19 @@
         #topBtn { position: fixed; bottom: 2rem; right: 1.5rem; z-index: 9998; width: 42px; height: 42px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); border-radius: 50%; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: 1rem; display: none; align-items: center; justify-content: center; transition: all 0.3s; }
         #topBtn.visible { display: flex; }
         #topBtn:hover { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.4); }
+        .floating-start-cta {
+            position: fixed; bottom: 2rem; left: 1.5rem; z-index: 9998;
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            color: #fff; padding: 0.8rem 1.4rem; border-radius: 999px;
+            font-weight: 600; font-size: 0.82rem; letter-spacing: 0.02em; text-decoration: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            transition: opacity 0.3s ease, transform 0.3s ease, background 0.25s ease, border-color 0.25s ease;
+        }
+        .floating-start-cta:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.45); transform: translateY(-2px); }
+        .floating-start-cta.hide { opacity: 0; transform: translateY(12px); pointer-events: none; }
+        @media (max-width: 600px) { .floating-start-cta { left: 1rem; padding: 0.75rem 1.25rem; font-size: 0.78rem; } }
         .mockup-schedule { margin-top: 0.2rem; }
         .mockup-day-tabs { display: flex; gap: 0.3rem; margin-bottom: 0.9rem; }
         .mockup-day { font-size: 0.7rem; padding: 0.25rem 0.45rem; border-radius: 4px; color: rgba(255,255,255,0.35); cursor: default; border: 1px solid transparent; }
@@ -883,10 +896,10 @@
                 <a href="#chugumi-section" class="nav-link">How it Works</a>
                 <a href="#ai-section" class="nav-link">Face the Mirror</a>
                 <a href="#preview-section" class="nav-link">Preview</a>
-                <a href="https://myro-official.github.io/myro/app.html" class="nav-link">Apply</a>
+                <a href="https://myro-official.github.io/myro/app.html" class="nav-link">Start</a>
             </div>
             <button class="menu-toggle" onclick="toggleMenu()">Menu</button>
-            <a href="https://myro-official.github.io/myro/app.html" class="nav-cta">Apply</a>
+            <a href="https://myro-official.github.io/myro/app.html" class="nav-cta">Start</a>
         </div>
     </nav>
 
@@ -899,7 +912,7 @@
         <a href="#chugumi-section" class="mobile-nav-link" onclick="toggleMenu()">How it Works<span class="mobile-nav-sub">서비스 소개</span></a>
         <a href="#ai-section" class="mobile-nav-link" onclick="toggleMenu()">Face the Mirror<span class="mobile-nav-sub">AI 얼굴 분석</span></a>
         <a href="#preview-section" class="mobile-nav-link" onclick="toggleMenu()">Preview<span class="mobile-nav-sub">서비스 미리보기</span></a>
-        <a href="https://myro-official.github.io/myro/app.html" class="mobile-nav-link" onclick="toggleMenu()">Apply<span class="mobile-nav-sub">지금 시작하기</span></a>
+        <a href="https://myro-official.github.io/myro/app.html" class="mobile-nav-link" onclick="toggleMenu()">Start<span class="mobile-nav-sub">지금 시작하기</span></a>
     </div>
 
     <!-- Hero -->
@@ -1056,7 +1069,7 @@
             </div>
 
             <div class="ai-trust-badges reveal">
-                <span class="ai-trust-badge">🔍 OpenAI Vision 기반 분석</span>
+                <span class="ai-trust-badge">🔍 Claude Vision 기반 분석</span>
                 <span class="ai-trust-badge">🗑 사진은 분석 후 즉시 삭제됩니다</span>
                 <span class="ai-trust-badge">🔒 저장·학습에 사용되지 않습니다</span>
             </div>
@@ -1410,7 +1423,7 @@
             </div>
 
             <div class="reveal reveal-delay-2" style="text-align: center;">
-                <a href="https://myro-official.github.io/myro/app.html" class="hero-cta">지금 바로 시작하기</a>
+                <a href="https://myro-official.github.io/myro/app.html" class="hero-cta" id="final-start-cta">지금 바로 시작하기</a>
             </div>
         </div>
     </section>
@@ -1418,6 +1431,7 @@
 
 
     <button id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="맨 위로">↑</button>
+    <a href="https://myro-official.github.io/myro/app.html" class="floating-start-cta">시작하기 <span>→</span></a>
 
     <footer>
         <div class="footer-content">
@@ -1627,6 +1641,14 @@
             document.getElementById('topBtn').classList.toggle('visible', window.scrollY > 400);
         });
 
+        const floatingStartCta = document.querySelector('.floating-start-cta');
+        const finalStartCta = document.getElementById('final-start-cta');
+        if (floatingStartCta && finalStartCta) {
+            new IntersectionObserver((entries) => {
+                entries.forEach(entry => floatingStartCta.classList.toggle('hide', entry.isIntersecting));
+            }, { threshold: 0.1 }).observe(finalStartCta);
+        }
+
         let currentStyle = 'MUSCLE'; // 기본값
 
         const routineDetails = {
@@ -1723,17 +1745,6 @@
             document.getElementById('routineModal').classList.remove('active');
             document.body.style.overflow = ''; // 스크롤 복원
         }
-        // BGM — 첫 휠/터치 시 재생 (브라우저 정책상 scroll은 오디오 권한 없음)
-        const bgm = new Audio('bgm.mp3');
-        bgm.loop = true;
-        bgm.volume = 0.18;
-        let bgmStarted = false;
-        function startBGM() {
-            if (bgmStarted) return;
-            bgm.play().then(() => { bgmStarted = true; }).catch(() => {});
-        }
-        window.addEventListener('click', startBGM, { once: true });
-        window.addEventListener('touchstart', startBGM, { once: true, passive: true });
     </script>
 </body>
 </html>
