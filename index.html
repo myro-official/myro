@@ -302,7 +302,7 @@
         .how-beyond-close { font-size: clamp(1rem, 3.5vw, 1.4rem); font-weight: 700; color: #fff; letter-spacing: 0.01em; }
 
         /* Naming Section */
-        .naming-section { padding: clamp(6rem, 15vw, 12rem) 1.5rem; position: relative; overflow: hidden; background-color: var(--bg-primary); }
+        .naming-section { padding: clamp(6rem, 15vw, 12rem) 1.5rem; position: relative; overflow: hidden; background-color: var(--bg-primary); background-image: url('origin-bg.jpg'); background-size: cover; background-position: center; }
         .naming-video { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%,-50%); z-index: 0; object-fit: cover; opacity: 0.6; }
         .naming-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--overlay-deep); backdrop-filter: blur(5px); z-index: 1; }
         .naming-container { position: relative; z-index: 2; }
@@ -332,7 +332,7 @@
         .ai-section {
             padding: clamp(5rem, 12vw, 9rem) 1.5rem;
             position: relative; overflow: hidden;
-            background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/NkEMaYOeNWUwSoYD.png');
+            background-image: url('ai-bg.jpg');
             background-size: cover; background-position: center; background-attachment: scroll;
         }
         @media (min-width: 1024px) { .ai-section { background-attachment: fixed; } }
@@ -387,53 +387,9 @@
         .ai-result-gate a:hover { background: #e03e3e; }
         @media (max-width: 480px) { .ai-upload-area { max-width: 320px; } }
 
-        /* Quiz Section */
-        .quiz-section {
-            padding: clamp(6rem, 15vw, 10rem) 1.5rem;
-            position: relative;
-            background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/NkEMaYOeNWUwSoYD.png');
-            background-size: cover; background-position: center; background-attachment: scroll;
-        }
-        @media (min-width: 1024px) { .quiz-section { background-attachment: fixed; } }
-        .quiz-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--overlay-deep); backdrop-filter: blur(5px); z-index: 1; }
-        .quiz-container { position: relative; z-index: 2; }
         .section-title { font-family: 'Outfit', sans-serif; font-size: clamp(2.2rem, 8vw, 4rem); font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
         .section-desc { font-size: 0.95rem; font-weight: 300; color: var(--text-muted); margin-bottom: 4rem; }
 
-        .quiz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-
-        .quiz-card {
-            position: relative;
-            height: clamp(320px, 50vw, 520px);
-            overflow: hidden;
-            background: #000;
-            cursor: pointer;
-            border-radius: 12px;
-            transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
-        }
-        .quiz-card:hover { transform: translateY(-8px); }
-        .quiz-card-photo {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease, filter 0.5s ease;
-            filter: brightness(0.7) grayscale(20%);
-        }
-        .quiz-card:hover .quiz-card-photo { transform: scale(1.05); filter: brightness(0.9) grayscale(0%); }
-        .quiz-card-photo-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top, rgba(5,10,20,0.95) 15%, rgba(5,10,20,0.4) 50%, transparent 100%);
-        }
-        .quiz-card-body {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 2.5rem; color: #fff;
-            transform: translateY(0);
-            transition: transform 0.5s ease;
-        }
-        .quiz-card h3 { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.8rem; }
-        .quiz-card-slogan { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: #fff; }
-        .quiz-card-celebs { font-size: 0.8rem; font-weight: 600; opacity: 0.6; margin-bottom: 1.2rem; }
-        .quiz-card-desc { font-size: 0.9rem; font-weight: 300; line-height: 1.6; opacity: 0; transform: translateY(10px); transition: all 0.5s ease; }
-        .quiz-card:hover .quiz-card-desc { opacity: 0.85; transform: translateY(0); }
 
         .expansion-notice {
             margin-top: 4rem;
@@ -531,7 +487,7 @@
         /* Image Content */
         .image-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); min-height: 80vh; }
         .image-side { 
-            background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/yXgUzrMHKoKQCHrO.png'); 
+            background-image: url('habit.jpg');
             background-size: cover; background-position: center; min-height: 400px; 
         }
         .content-side { padding: clamp(3rem, 8vw, 8rem) clamp(1.5rem, 5vw, 4rem); background: var(--bg-primary); display: flex; flex-direction: column; justify-content: center; }
@@ -835,27 +791,24 @@
             <button class="origin-overlay-close" onclick="closeOriginOverlay()">×</button>
         </div>
         <section class="naming-section">
-            <video class="naming-video" autoplay muted loop playsinline preload="auto" id="originVideo">
-                <source src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/CynFSyMONttkIljQ.mp4" type="video/mp4">
-            </video>
             <div class="container naming-container">
                 <h2 class="naming-main-text">MY MIRROR, <br>MYRO.</h2>
                 <div class="naming-grid">
                     <div class="naming-item">
                         <div style="margin-bottom: 2rem; overflow: hidden; border-radius: 4px;">
-                            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/ZeYYIiMLuDjPjqiI.avif" alt="Mirror" style="width: 100%; height: 350px; object-fit: cover; display: block;">
+                            <img src="mirror.jpg" alt="Mirror" style="width: 100%; height: 350px; object-fit: cover; display: block;">
                         </div>
                         <p><span class="highlight">거울 속의 나.</span> Mirror. 매일 아침 거울을 보며 더 나은 자신을 마주하고 싶어 하는 그 찰나의 순간에서 시작되었습니다.</p>
                     </div>
                     <div class="naming-item">
                         <div style="margin-bottom: 2rem; overflow: hidden; border-radius: 4px;">
-                            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/smqKoUXTKxZAFiNN.avif" alt="Myron" style="width: 100%; height: 350px; object-fit: cover; display: block;">
+                            <img src="myron.jpg" alt="Myron" style="width: 100%; height: 350px; object-fit: cover; display: block;">
                         </div>
                         <p><span class="highlight">가장 오래된 향유.</span> Myron. 고대 남성들이 자신을 가꾸기 위해 몸에 바르던 신성한 기름(μύρον)에서 이름을 따왔습니다.</p>
                     </div>
                     <div class="naming-item">
                         <div style="margin-bottom: 2rem; overflow: hidden; border-radius: 4px;">
-                            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/wMAYwDVKvYJzQkHg.avif" alt="Reflection" style="width: 100%; height: 350px; object-fit: cover; display: block;">
+                            <img src="reflection.jpg" alt="Reflection" style="width: 100%; height: 350px; object-fit: cover; display: block;">
                         </div>
                         <p><span class="highlight">나를 비추는 힘.</span> MY Reflection, Reflect On. 나 자신을 만들고(Make), 그 본질을 온전히 비춰내는(Reflect) 과정의 함축입니다.</p>
                     </div>
@@ -925,7 +878,7 @@
     <!-- Hero -->
     <section class="hero">
         <video id="heroVideo" class="hero-video" autoplay muted loop playsinline preload="auto" poster="">
-            <source src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/ksXQNViyYMgPaVFY.mp4" type="video/mp4">
+            <source src="hero-video.mp4" type="video/mp4">
         </video>
         <div class="mega-logo-container">
             <span class="mega-logo">MYRO</span>
@@ -989,7 +942,7 @@
                     <div class="chugumi-photo-label">SKIN</div>
                 </div>
                 <div class="chugumi-photo-wrap reveal reveal-delay-4">
-                    <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/myYrILYHfBKshyLh.jpg" alt="Style">
+                    <img src="style.jpg" alt="Style">
                     <div class="chugumi-photo-label">STYLE</div>
                 </div>
                 <div class="chugumi-photo-wrap reveal reveal-delay-5">
@@ -1012,27 +965,24 @@
 
     <!-- Naming Section -->
     <section class="naming-section" id="naming-section" style="display:none">
-        <video id="storyVideo" class="naming-video" autoplay muted loop playsinline preload="auto">
-            <source src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/CynFSyMONttkIljQ.mp4" type="video/mp4">
-        </video>
         <div class="container naming-container">
             <h2 class="naming-main-text reveal">MY MIRROR, <br>MYRO.</h2>
             <div class="naming-grid">
                 <div class="naming-item reveal reveal-delay-1">
                     <div style="margin-bottom: 2rem; overflow: hidden; border-radius: 4px;">
-                        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/ZeYYIiMLuDjPjqiI.avif" alt="Mirror" style="width: 100%; height: 350px; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);">
+                        <img src="mirror.jpg" alt="Mirror" style="width: 100%; height: 350px; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);">
                     </div>
                     <p><span class="highlight">거울 속의 나.</span> Mirror. 매일 아침 거울을 보며 더 나은 자신을 마주하고 싶어 하는 그 찰나의 순간에서 시작되었습니다.</p>
                 </div>
                 <div class="naming-item reveal reveal-delay-2">
                     <div style="margin-bottom: 2rem; overflow: hidden; border-radius: 4px;">
-                        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/smqKoUXTKxZAFiNN.avif" alt="Myron" style="width: 100%; height: 350px; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);">
+                        <img src="myron.jpg" alt="Myron" style="width: 100%; height: 350px; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);">
                     </div>
                     <p><span class="highlight">가장 오래된 향유.</span> Myron. 고대 남성들이 자신을 가꾸기 위해 몸에 바르던 신성한 기름(μύρον)에서 이름을 따왔습니다.</p>
                 </div>
                 <div class="naming-item reveal reveal-delay-3">
                     <div style="margin-bottom: 2rem; overflow: hidden; border-radius: 4px;">
-                        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/wMAYwDVKvYJzQkHg.avif" alt="Reflection" style="width: 100%; height: 350px; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);">
+                        <img src="reflection.jpg" alt="Reflection" style="width: 100%; height: 350px; object-fit: cover; display: block; transition: transform 0.8s cubic-bezier(0.2,0.8,0.2,1);">
                     </div>
                     <p><span class="highlight">나를 비추는 힘.</span> MY Reflection, Reflect On. 나 자신을 만들고(Make), 그 본질을 온전히 비춰내는(Reflect) 과정의 함축입니다.</p>
                 </div>
@@ -1181,73 +1131,6 @@
         </div>
     </section>
 
-    <section class="quiz-section" id="quiz-section" style="display:none;">
-        <div class="container quiz-container">
-            <div class="text-center">
-                <h2 class="section-title reveal">Define Your Essence</h2>
-                <p class="section-desc reveal reveal-delay-1" style="margin-bottom: 1rem;">당신이 지향하는 추구미를 선택하세요. 그에 맞는 모든 루틴이 정렬됩니다.</p>
-                <p class="reveal reveal-delay-2" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 3rem; opacity: 0.8;">
-                    * 베타 서비스 이후 10대부터 50대까지 아우르는 연령대별 다양한 추구미 유형과 정교한 루틴들을 제공할 예정입니다.
-                </p>
-            </div>
-            <!-- Highlighted Guidance -->
-            <div class="reveal" style="text-align: center; margin-bottom: 3rem;">
-                <p style="display: inline-block; padding: 0.8rem 2rem; background: rgba(255, 50, 50, 0.15); border: 1px solid rgba(255, 50, 50, 0.5); border-radius: 50px; color: #ff4d4d; font-weight: 700; font-size: 1rem; letter-spacing: 0.05em; animation: pulse 2s infinite;">
-                    원하시는 추구미를 터치하거나 선택하여 루틴을 확인해보세요!
-                </p>
-            </div>
-
-            <div class="quiz-grid">
-                <div class="quiz-card reveal reveal-delay-1" onclick="selectQuiz(this, 'MUSCLE')">
-                    <img class="quiz-card-photo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/RLOUTMRniepnNSeP.jpg" alt="몸으로 말하는 남자">
-                    <div class="quiz-card-photo-overlay"></div>
-                    <div class="quiz-card-body">
-                        <h3>몸으로 말하는 남자</h3>
-                        <div class="quiz-card-slogan">"반팔 입으면 자동 머슬핏, 폼 미쳤다"</div>
-                        <div class="quiz-card-celebs">이준호 · 윤성빈 · 정국</div>
-                        <div class="quiz-card-desc">두꺼운 프레임과 실전 압축 근육으로 남성미가 폭발하는 피지컬. 요즘 2030 남자들이 헬스장에서 가장 자극받는 체형. 흰 티에 청바지만 입어도 끝나는 로망의 몸.</div>
-                    </div>
-                </div>
-                <div class="quiz-card reveal reveal-delay-2" onclick="selectQuiz(this, 'CLEAN')">
-                    <img class="quiz-card-photo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/VdyJOkAVeljxKDEr.jpg" alt="느좋남">
-                    <div class="quiz-card-photo-overlay"></div>
-                    <div class="quiz-card-body">
-                        <h3>느좋남</h3>
-                        <div class="quiz-card-slogan">"딱히 뭐가 아닌데 전체적으로 느낌 좋은"</div>
-                        <div class="quiz-card-celebs">남주혁 · 변우석 · 박서준</div>
-                        <div class="quiz-card-desc">과하게 꾸미지 않아도 비율과 깔끔함, 정돈된 피부, 좋은 향기가 느껴지는 스타일. 인스타 남친룩의 정석.</div>
-                    </div>
-                </div>
-                <div class="quiz-card reveal reveal-delay-3" onclick="selectQuiz(this, 'ROUTINE')">
-                    <img class="quiz-card-photo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/iofSYHcWTEHmPJCw.jpg" alt="갓생남">
-                    <div class="quiz-card-photo-overlay"></div>
-                    <div class="quiz-card-body">
-                        <h3>갓생남</h3>
-                        <div class="quiz-card-slogan">"운동·루틴·자기관리 다 챙기는 찐 갓생러"</div>
-                        <div class="quiz-card-celebs">박보검 · 덱스 · 유지태</div>
-                        <div class="quiz-card-desc">억지로 꾸민 게 아니라 생활 습관 자체가 비주얼이 된 사람. 슬림 탄탄한 라인, 맑고 건강한 안색.</div>
-                    </div>
-                </div>
-                <div class="quiz-card reveal reveal-delay-4" onclick="selectQuiz(this, 'HIP')">
-                    <img class="quiz-card-photo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/jpvUYYwJvXhqeytT.jpg" alt="힙흘남">
-                    <div class="quiz-card-photo-overlay"></div>
-                    <div class="quiz-card-body">
-                        <h3>힙흘남</h3>
-                        <div class="quiz-card-slogan">"힙하려는 게 아닌데 그냥 힙이 흘러나오는"</div>
-                        <div class="quiz-card-celebs">류준열 · 이동휘 · 주우재 · 코드쿤스트</div>
-                        <div class="quiz-card-desc">패션 커뮤니티와 유튜브에서 "남자 사복 패션" 조회수 압도적 1위. 자신만의 확고한 패션 세계로 트렌드를 선도하는 스타일.</div>
-                    </div>
-                </div>
-            </div>
-            
-
-
-            <div class="expansion-notice reveal">
-                <h4>Beyond Beta</h4>
-                <p>베타 테스트 이후, 연령대별 더욱 다양한 추구미 유형과 정교한 루틴들을 제공할 예정입니다.</p>
-            </div>
-        </div>
-    </section>
 
     <!-- Mockup Preview Section -->
     <section class="mockup-section" id="preview-section">
@@ -1421,7 +1304,7 @@
     <!-- Final CTA / Beta Section -->
     <section class="final-cta" id="beta-section">
         <video id="finalVideo" class="final-cta-video" autoplay muted loop playsinline preload="auto">
-            <source src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663509963254/OXEZUMGMxNdwuHpg.mp4" type="video/mp4">
+            <source src="final-cta-video.mp4" type="video/mp4">
         </video>
         <div class="cta-content">
             <h2 class="section-title reveal" style="margin-bottom: 1.5rem;"><span class="cta-text-bg" style="font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; padding: 1rem 2rem;">Define Your Mirror.</span></h2>

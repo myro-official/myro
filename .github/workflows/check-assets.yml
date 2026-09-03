@@ -1,0 +1,19 @@
+name: Check assets
+
+on:
+  push:
+  # 매일 한 번 자동 재검사 — 외부 링크가 push 이후에 나중에 끊기는 경우까지 잡기 위함
+  schedule:
+    - cron: "0 21 * * *"  # 매일 06:00 KST
+  workflow_dispatch:
+
+jobs:
+  check-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run asset checker
+        run: python3 scripts/check_assets.py
