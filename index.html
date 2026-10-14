@@ -605,6 +605,92 @@
         }
         .modal-cta:hover { background: var(--text-muted); color: #fff; }
 
+        /* Maintenance Notice Modal */
+        .notice-modal {
+            position: fixed; inset: 0; z-index: 2100;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+        }
+        .notice-modal.active { opacity: 1; visibility: visible; transition-delay: 0s; }
+        .notice-modal-overlay {
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 40%, rgba(20, 34, 64, 0.75) 0%, rgba(3, 6, 14, 0.94) 70%);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        }
+        .notice-modal-content {
+            position: relative; z-index: 2; width: 88%; max-width: 420px; text-align: center; overflow: hidden;
+            background: linear-gradient(180deg, rgba(16, 28, 52, 0.96) 0%, rgba(8, 14, 28, 0.98) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 22px;
+            padding: clamp(2.4rem, 7vw, 3.2rem) clamp(1.6rem, 6vw, 2.6rem) clamp(1.8rem, 5vw, 2.2rem);
+            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            opacity: 0; transform: translateY(24px) scale(0.96);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .notice-modal.active .notice-modal-content { opacity: 1; transform: translateY(0) scale(1); }
+        .notice-modal-content::before {
+            content: ''; position: absolute; top: 0; left: 50%; width: 60%; height: 1px;
+            transform: translateX(-50%) scaleX(0);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+            transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+        }
+        .notice-modal.active .notice-modal-content::before { transform: translateX(-50%) scaleX(1); }
+        .notice-stagger {
+            opacity: 0; transform: translateY(12px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .notice-modal.active .notice-stagger { opacity: 1; transform: translateY(0); }
+        .notice-modal.active .notice-stagger:nth-child(1) { transition-delay: 0.20s; }
+        .notice-modal.active .notice-stagger:nth-child(2) { transition-delay: 0.28s; }
+        .notice-modal.active .notice-stagger:nth-child(3) { transition-delay: 0.36s; }
+        .notice-modal.active .notice-stagger:nth-child(4) { transition-delay: 0.44s; }
+        .notice-modal.active .notice-stagger:nth-child(5) { transition-delay: 0.52s; }
+        .notice-modal.active .notice-stagger:nth-child(6) { transition-delay: 0.60s; }
+        .notice-brand {
+            font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.32em;
+            padding-left: 0.32em; line-height: 1; display: block; margin-bottom: 1.4rem;
+            color: transparent;
+            background: linear-gradient(100deg, #fff 38%, rgba(255,255,255,0.3) 50%, #fff 62%) 0 0 / 260% 100%;
+            -webkit-background-clip: text; background-clip: text;
+            animation: noticeShimmer 5s ease-in-out infinite;
+        }
+        @keyframes noticeShimmer {
+            0%, 15% { background-position: 100% 0; }
+            65%, 100% { background-position: 0 0; }
+        }
+        .notice-line {
+            position: relative; width: 64px; height: 1px; margin: 0 auto 1.8rem; overflow: hidden;
+            background: rgba(255, 255, 255, 0.14);
+        }
+        .notice-line::after {
+            content: ''; position: absolute; top: 0; left: -40%; width: 40%; height: 100%;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            animation: noticeSweep 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+        }
+        @keyframes noticeSweep { 0% { left: -40%; } 100% { left: 100%; } }
+        .notice-modal-title {
+            font-family: 'Outfit', sans-serif; font-size: 1.45rem; font-weight: 700;
+            line-height: 1.35; color: #fff; margin-bottom: 1rem; letter-spacing: -0.01em; word-break: keep-all;
+        }
+        .notice-modal-text { font-size: 0.92rem; line-height: 1.75; color: rgba(255, 255, 255, 0.82); word-break: keep-all; }
+        .notice-modal-sub { font-size: 0.78rem; line-height: 1.6; color: var(--text-muted); margin-top: 1.1rem; word-break: keep-all; }
+        .notice-modal-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+            width: 100%; margin-top: 1.9rem; padding: 1rem; cursor: pointer;
+            background: #fff; color: #050a14; border: 1px solid #fff; border-radius: 999px;
+            font-family: 'Outfit', 'Inter', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em;
+            transition: background 0.35s ease, color 0.35s ease, transform 0.35s ease;
+        }
+        .notice-modal-btn span { display: inline-block; transition: transform 0.35s ease; }
+        .notice-modal-btn:hover { background: transparent; color: #fff; }
+        .notice-modal-btn:hover span { transform: translateX(4px); }
+        .notice-modal-btn:active { transform: scale(0.98); }
+        @media (prefers-reduced-motion: reduce) {
+            .notice-modal, .notice-modal-content, .notice-stagger, .notice-modal-content::before { transition-duration: 0.01s !important; transition-delay: 0s !important; }
+            .notice-brand, .notice-line::after { animation: none; }
+            .notice-brand { color: #fff; background: none; }
+        }
+
         /* Footer */
         footer { padding: 4rem 1.5rem; background: #000; }
         .footer-content { display: flex; flex-direction: column; align-items: center; gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
@@ -844,6 +930,19 @@
             <div class="modal-footer">
                 <a href="https://myro-official.github.io/myro/app.html" class="modal-cta" onclick="closeModal()">나만의 맞춤 루틴 받기</a>
             </div>
+        </div>
+    </div>
+
+    <!-- Maintenance Notice Modal (개편 준비 중 안내, 시작하기 버튼 클릭 시 표시) -->
+    <div class="notice-modal" id="noticeModal" role="dialog" aria-modal="true" aria-labelledby="noticeTitle">
+        <div class="notice-modal-overlay" onclick="closeNotice()"></div>
+        <div class="notice-modal-content">
+            <span class="notice-brand notice-stagger">MYRO</span>
+            <div class="notice-line notice-stagger"></div>
+            <h3 class="notice-modal-title notice-stagger" id="noticeTitle">더 나은 모습으로<br>개편 준비 중이에요</h3>
+            <p class="notice-modal-text notice-stagger" id="noticeText">새로운 MYRO로 곧 찾아올게요.<br>조금만 기다려 주세요.</p>
+            <p class="notice-modal-sub notice-stagger">출시 소식은 인스타그램 @be.myro 에서 가장 먼저 알려드려요.</p>
+            <button class="notice-modal-btn notice-stagger" onclick="closeNotice()">확인 <span>→</span></button>
         </div>
     </div>
 
@@ -1636,6 +1735,51 @@
             document.getElementById('routineModal').classList.remove('active');
             document.body.style.overflow = ''; // 스크롤 복원
         }
+
+        // 개편 준비 중 안내: 베타 앱(app.html)으로 가는 모든 시작하기 링크를 안내 팝업으로 대체
+        // 개편 완료 후 이 블록과 #noticeModal만 지우면 원래 링크로 복구됨
+        const NOTICE_COPY = {
+            app: {
+                title: '더 나은 모습으로<br>개편 준비 중이에요',
+                text: '새로운 MYRO로 곧 찾아올게요.<br>조금만 기다려 주세요.'
+            },
+            face: {
+                title: '얼굴 체험하러<br>오셨군요!',
+                text: '지금은 분석을 더 똑똑하게 만드는 개편 중이에요.<br>새로워진 얼굴 분석으로 곧 만나요!'
+            }
+        };
+        function openNotice(type) {
+            const copy = NOTICE_COPY[type] || NOTICE_COPY.app;
+            document.getElementById('noticeTitle').innerHTML = copy.title;
+            document.getElementById('noticeText').innerHTML = copy.text;
+            document.getElementById('noticeModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeNotice() {
+            document.getElementById('noticeModal').classList.remove('active');
+            const routineOpen = document.getElementById('routineModal').classList.contains('active');
+            document.body.style.overflow = routineOpen ? 'hidden' : '';
+        }
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a[href$="/app.html"]');
+            if (!link) return;
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = document.getElementById('mobileMenu');
+            if (menu && menu.classList.contains('active')) toggleMenu();
+            openNotice('app');
+        }, true);
+        // 얼굴 분석 체험: 서버 호출 대신 안내 팝업 (사진 선택 창도 열리지 않게 차단)
+        document.addEventListener('click', function(e) {
+            const target = e.target.closest('#frontInput, #sideInput, #analyzeBtn');
+            if (!target) return;
+            e.preventDefault();
+            e.stopPropagation();
+            openNotice('face');
+        }, true);
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeNotice();
+        });
     </script>
 </body>
 </html>
